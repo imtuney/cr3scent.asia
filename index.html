@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cr3scent Network | Rise · Explore · Belong</title>
+    <meta name="description" content="Cr3scent Minecraft Server - Survival RPG Crossplay Java & Bedrock. One World, Three Souls.">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;500;700&family=Playfair+Display:ital,wght@1,600&display=swap" rel="stylesheet">
+    
+    <!-- Icons -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- Background Overlay -->
+    <div class="bg-overlay"></div>
+
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="logo">Cr3scent</div>
+        <div class="nav-links">
+            <a href="#home">Home</a>
+            <a href="#about">About</a>
+            <a href="https://discord.gg/yourinvite" target="_blank">Discord</a>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+        <div class="hero-content">
+            <h1 class="glitch" data-text="Cr3scent">Cr3scent</h1>
+            <p class="tagline">RISE · EXPLORE · BELONG</p>
+            
+            <div class="server-status-card">
+                <div class="status-indicator" id="status-dot"></div>
+                <span id="status-text">Checking Server...</span>
+                <span class="player-count" id="player-count">0 Players</span>
+            </div>
+
+            <div class="ip-container" onclick="copyIP()">
+                <div class="ip-box">
+                    <i class="ph ph-game-controller"></i>
+                    <span id="ip-text">mc.cr3scent.asia</span>
+                </div>
+                <div class="copy-hint">Click to Copy</div>
+            </div>
+            <p class="platform-support">Supports Java 1.21+ & Bedrock</p>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="about">
+        <div class="container">
+            <h2>One World, Three Souls</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <i class="ph ph-tree-evergreen"></i>
+                    <h3>Survival Murni</h3>
+                    <p>Eksplorasi, farming, dan building bebas dengan sistem claim tanah.</p>
+                </div>
+                <div class="feature-card">
+                    <i class="ph ph-users-three"></i>
+                    <h3>SMP Komunitas</h3>
+                    <p>Ekonomi player-driven, trading, auction house, dan event bersama.</p>
+                </div>
+                <div class="feature-card">
+                    <i class="ph ph-mask-happy"></i>
+                    <h3>Roleplay Organik</h3>
+                    <p>Bangun kota, kerajaan, dan faksi secara natural di world yang sama.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <p>&copy; 2026 Cr3scent Network. All Rights Reserved.</p>
+            <div class="credits">
+                <p>Owner: <span>Muhammad Daffy Ramadhan</span></p>
+                <p>Investor: <span>Stevadi</span></p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="script.js"></script>
+</body>
+</html>
