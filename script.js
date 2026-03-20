@@ -211,7 +211,7 @@ function copyIP() {
   const ip  = 'mc.cr3scent.asia';
   const el  = document.getElementById('ipText');
   const orig = el.textContent;
-  const ok = () => { el.textContent = '✓ Copied!'; showToast('IP address copied!'); setTimeout(() => el.textContent = orig, 2200); };
+  const ok = () => { el.textContent = '✓ Copied!'; showToast('IP address copied!'); setTimeout(() => el.textContent = orig, 2200); if (window._launchConfetti) window._launchConfetti(); };
   const fail = () => showToast('Salin manual: ' + ip, 'error');
 
   if (navigator.clipboard && window.isSecureContext) {
@@ -413,3 +413,145 @@ document.addEventListener('DOMContentLoaded', () => {
   });
   start();
 });
+/* ── COUNTER ANIMASI ────────────────────────────────────────── */
+function animateCounter(el, target, duration = 1800) {
+  const start = performance.now();
+  const isDecimal = target % 1 !== 0;
+
+  // Detect suffix like GB, TPS, /7
+  const rawText = el.textContent.trim();
+  const numMatch = rawText.match(/^[\d.]+/);
+  if (!numMatch) return;
+  const suffix = rawText.slice(numMatch[0].length);
+
+  (function update(now) {
+    const elapsed = now - start;
+    const progress = Math.min(elapsed / duration, 1);
+    // Ease out cubic
+    const eased = 1 - Math.pow(1 - progress, 3);
+    const current = eased * target;
+    el.textContent = (isDecimal ? current.toFixed(1) : Math.floor(current)) + suffix;
+    if (progress < 1) requestAnimationFrame(update);
+    else el.textContent = target + suffix;
+  })(start);
+}
+
+// Trigger counters when stats section scrolls into view
+(() => {
+  const stats = document.querySelectorAll('.stat-num');
+  let triggered = false;
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting && !triggered) {
+        triggered = true;
+        stats.forEach(el => {
+          const raw = el.textContent.trim();
+          const num = parseFloat(raw.replace(/[^\d.]/g, ''));
+          if (!isNaN(num) && num > 0) animateCounter(el, num);
+        });
+        obs.disconnect();
+      }
+    });
+  }, { threshold: 0.5 });
+  const statsSection = document.querySelector('.stats-section');
+  if (statsSection) obs.observe(statsSection);
+})();
+
+/* ── CONFETTI ────────────────────────────────────────────────── */
+(() => {
+  const canvas = document.getElementById('confetti-canvas');
+  if (!canvas) return;
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  const ctx = canvas.getContext('2d');
+  let pieces = [], animId = null, running = false;
+
+  const COLORS = ['#c9a84c','#e0c06a','#ffffff','#30d158','#5865F2','#ff9500'];
+  const COUNT = window.innerWidth < 600 ? 60 : 120;
+
+  function resize() {
+    canvas.width  = window.innerWidth;
+    canvas.height = window.innerHeight;
+  }
+  window.addEventListener('resize', resize, { passive: true });
+  resize();
+
+  function spawn() {
+    pieces = [];
+    for (let i = 0; i < COUNT; i++) {
+      pieces.push({
+        x: Math.random() * canvas.width,
+        y: -10 - Math.random() * 200,
+        w: 6 + Math.random() * 8,
+        h: 3 + Math.random() * 5,
+        color: COLORS[Math.floor(Math.random() * COLORS.length)],
+        rot: Math.random() * Math.PI * 2,
+        rotV: (Math.random() - .5) * .15,
+        vx: (Math.random() - .5) * 3,
+        vy: 2 + Math.random() * 4,
+        opacity: 1,
+      });
+    }
+  }
+
+  function draw() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    let alive = false;
+    pieces.forEach(p => {
+      if (p.y > canvas.height + 20) return;
+      alive = true;
+      p.x += p.vx; p.y += p.vy;
+      p.rot += p.rotV;
+      p.vy += .06; // gravity
+      if (p.y > canvas.height * .6) p.opacity = Math.max(0, p.opacity - .015);
+
+      ctx.save();
+      ctx.translate(p.x, p.y);
+      ctx.rotate(p.rot);
+      ctx.globalAlpha = p.opacity;
+      ctx.fillStyle = p.color;
+      ctx.fillRect(-p.w / 2, -p.h / 2, p.w, p.h);
+      ctx.restore();
+    });
+    if (alive) { animId = requestAnimationFrame(draw); }
+    else { stop(); }
+  }
+
+  function stop() {
+    running = false;
+    canvas.style.opacity = '0';
+    cancelAnimationFrame(animId);
+    setTimeout(() => ctx.clearRect(0, 0, canvas.width, canvas.height), 400);
+  }
+
+  window._launchConfetti = function() {
+    if (running) return;
+    running = true;
+    canvas.style.opacity = '1';
+    spawn();
+    animId = requestAnimationFrame(draw);
+    setTimeout(stop, 3500);
+  };
+})();
+
+/* ── CHANGELOG TOGGLE ───────────────────────────────────────── */
+function toggleCL(header) {
+  const body = header.nextElementSibling;
+  const isOpen = body.classList.contains('open');
+  body.classList.toggle('open', !isOpen);
+  header.setAttribute('aria-expanded', String(!isOpen));
+}
+
+/* ── FAQ TOGGLE ─────────────────────────────────────────────── */
+function toggleFAQ(btn) {
+  const answer = btn.nextElementSibling;
+  const isOpen = answer.classList.contains('open');
+  // Close all other open FAQs
+  document.querySelectorAll('.faq-a.open').forEach(a => {
+    a.classList.remove('open');
+    a.previousElementSibling.setAttribute('aria-expanded', 'false');
+  });
+  if (!isOpen) {
+    answer.classList.add('open');
+    btn.setAttribute('aria-expanded', 'true');
+  }
+}
