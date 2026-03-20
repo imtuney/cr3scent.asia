@@ -414,23 +414,14 @@ document.addEventListener('DOMContentLoaded', () => {
   start();
 });
 /* ── COUNTER ANIMASI ────────────────────────────────────────── */
-function animateCounter(el, target, duration = 1800) {
+function animateCounter(el, target, suffix, duration = 1800) {
   const start = performance.now();
-  const isDecimal = target % 1 !== 0;
-
-  // Detect suffix like GB, TPS, /7
-  const rawText = el.textContent.trim();
-  const numMatch = rawText.match(/^[\d.]+/);
-  if (!numMatch) return;
-  const suffix = rawText.slice(numMatch[0].length);
-
   (function update(now) {
     const elapsed = now - start;
     const progress = Math.min(elapsed / duration, 1);
-    // Ease out cubic
     const eased = 1 - Math.pow(1 - progress, 3);
-    const current = eased * target;
-    el.textContent = (isDecimal ? current.toFixed(1) : Math.floor(current)) + suffix;
+    const current = Math.floor(eased * target);
+    el.textContent = current + suffix;
     if (progress < 1) requestAnimationFrame(update);
     else el.textContent = target + suffix;
   })(start);
@@ -438,16 +429,17 @@ function animateCounter(el, target, duration = 1800) {
 
 // Trigger counters when stats section scrolls into view
 (() => {
-  const stats = document.querySelectorAll('.stat-num');
+  const stats = document.querySelectorAll('.stat-num[data-target]');
+  if (!stats.length) return;
   let triggered = false;
   const obs = new IntersectionObserver(entries => {
     entries.forEach(e => {
       if (e.isIntersecting && !triggered) {
         triggered = true;
         stats.forEach(el => {
-          const raw = el.textContent.trim();
-          const num = parseFloat(raw.replace(/[^\d.]/g, ''));
-          if (!isNaN(num) && num > 0) animateCounter(el, num);
+          const target = parseFloat(el.dataset.target);
+          const suffix = el.dataset.suffix || '';
+          if (!isNaN(target)) animateCounter(el, target, suffix);
         });
         obs.disconnect();
       }

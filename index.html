@@ -267,9 +267,9 @@
   <section class="stats-section" aria-label="Server statistics">
     <div class="section-inner">
       <div class="stats-grid">
-        <div class="stat-card reveal" data-d="1"><div class="stat-num">100</div><div class="stat-lbl">Max Players</div></div>
-        <div class="stat-card reveal" data-d="2"><div class="stat-num">8GB</div><div class="stat-lbl">DDR5 RAM</div></div>
-        <div class="stat-card reveal" data-d="3"><div class="stat-num">20</div><div class="stat-lbl">Stable TPS</div></div>
+        <div class="stat-card reveal" data-d="1"><div class="stat-num" data-target="100">0</div><div class="stat-lbl">Max Players</div></div>
+        <div class="stat-card reveal" data-d="2"><div class="stat-num" data-target="8" data-suffix="GB">0GB</div><div class="stat-lbl">DDR5 RAM</div></div>
+        <div class="stat-card reveal" data-d="3"><div class="stat-num" data-target="20">0</div><div class="stat-lbl">Stable TPS</div></div>
         <div class="stat-card reveal" data-d="4"><div class="stat-num">24/7</div><div class="stat-lbl">Uptime</div></div>
       </div>
     </div>
@@ -299,7 +299,12 @@
             <div class="video-card-badge">
               <i class="ph ph-book-open-text"></i> TUTORIAL
             </div>
-            <div class="video-card-ring"><i class="ph ph-play"></i></div>
+            <!-- Real YouTube thumbnail via maxresdefault -->
+            <img src="https://i.ytimg.com/vi/IcPVN8Zms3E/hqdefault.jpg"
+                 alt="Tutorial Cara Join Cr3scent"
+                 style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.6;"
+                 loading="lazy" onerror="this.style.display='none'">
+            <div class="video-card-ring" style="position:relative;z-index:1"><i class="ph ph-play"></i></div>
           </div>
           <div class="video-card-info">
             <div class="video-card-title">Tutorial Cara Join Cr3scent</div>
@@ -323,7 +328,7 @@
           <div class="video-card-info">
             <div class="video-card-title">Gameplay &amp; Server Preview</div>
             <div class="video-card-sub">Lihat serunya main di Cr3scent. Build, PVP, trading, dan momen-momen epik dari server.</div>
-            <div class="video-card-handle"><i class="ph ph-at" aria-hidden="true"></i> @cr3scentdc</div>
+            <div class="video-card-handle"><i class="ph ph-at" aria-hidden="true"></i>cr3scentdc</div>
           </div>
         </div>
 
