@@ -1,0 +1,986 @@
+<!DOCTYPE html>
+<html lang="id" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+
+  <!-- ─── PRIMARY META ─────────────────────────────────────── -->
+  <title>Cr3scent · Survival · No Circle · Social</title>
+  <meta name="description" content="Cr3scent — Minecraft Survival RPG Crossplay Java & Bedrock. Satu dunia, tiga jiwa. Bergabunglah dengan komunitas kami sekarang.">
+  <meta name="keywords" content="minecraft server, minecraft indonesia, cr3scent, survival, rpg, crossplay, java, bedrock, smp">
+  <meta name="author" content="Muhammad Daffy Ramadhan">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://cr3scent.asia/">
+
+  <!-- ─── OPEN GRAPH ────────────────────────────────────────── -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://cr3scent.asia/">
+  <meta property="og:title" content="Cr3scent · Komunitas Gaming Indonesia">
+  <meta property="og:description" content="Komunitas gaming Indonesia yang aktif. Chat, nongkrong, event bareng, dan main Minecraft bersama 1000+ member. Join Discord Cr3scent sekarang!">
+  <meta property="og:image" content="https://cr3scent.asia/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:locale" content="id_ID">
+  <meta property="og:site_name" content="Cr3scent Network">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Cr3scent · Komunitas Gaming Indonesia">
+  <meta name="twitter:description" content="Komunitas gaming Indonesia yang aktif. Chat, nongkrong, event bareng, dan main Minecraft bersama 1000+ member. Join Discord Cr3scent sekarang!">
+  <meta name="twitter:image" content="https://cr3scent.asia/og-image.png">
+
+  <!-- ─── THEME & PWA ───────────────────────────────────────── -->
+  <meta name="theme-color" content="#09090b" media="(prefers-color-scheme: dark)">
+  <meta name="theme-color" content="#f5f5f7" media="(prefers-color-scheme: light)">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Cr3scent">
+  <meta name="mobile-web-app-capable" content="yes">
+  <link rel="manifest" href="manifest.json">
+
+  <!-- SVG favicon — no HTTP request needed -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%23c9a84c'/><text x='16' y='22' text-anchor='middle' font-size='20' fill='%230a0a0c'>&#9790;</text></svg>">
+
+  <!-- ─── FONTS ─────────────────────────────────────────────── -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400;1,600;1,700&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300&display=swap" onload="this.rel='stylesheet'">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400;1,600;1,700&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300&display=swap" rel="stylesheet">
+
+  <!-- ─── ICONS ─────────────────────────────────────────────── -->
+  <script src="https://unpkg.com/@phosphor-icons/web@2.1.1/src/index.js" defer></script>
+
+  <!-- ─── CLOUDFLARE ANALYTICS (privacy-first, no cookies) ──── -->
+  <script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "GANTI_DENGAN_TOKEN_ANALYTICS_KAMU"}'></script>
+
+  <!-- ─── STYLES & SCRIPTS ────────────────────────────────────── -->
+  <link rel="stylesheet" href="style.css">
+
+</head>
+<body>
+
+<!-- PAGE LOADER -->
+<div id="loader" aria-hidden="true">
+  <div class="ldr-inner">
+    <div class="ldr-logo">Cr3scent</div>
+    <div class="ldr-bar"><div class="ldr-fill"></div></div>
+  </div>
+</div>
+
+<!-- CUSTOM CURSOR -->
+<div class="cur-dot" id="curDot" aria-hidden="true"></div>
+<div class="cur-ring" id="curRing" aria-hidden="true"></div>
+
+<!-- AMBIENT -->
+<div class="bg-ambient" aria-hidden="true"></div>
+
+<!-- SKIP LINK -->
+<a href="#main-content" class="skip-link">Skip to content</a>
+
+<!-- NAVBAR -->
+<header>
+  <nav class="navbar" id="navbar" role="navigation" aria-label="Main navigation">
+    <a href="#home" class="nav-logo" aria-label="Cr3scent — Home">
+      <div class="nav-logo-mark" aria-hidden="true">☾</div>
+      <span class="nav-logo-text">Cr3scent</span>
+    </a>
+    <div class="nav-links" role="list">
+      <a href="#home" role="listitem">Home</a>
+      <a href="#features" role="listitem">Features</a>
+      <a href="#preview" role="listitem">Preview</a>
+      <a href="#changelog" role="listitem">Updates</a>
+      <a href="#faq" role="listitem">FAQ</a>
+      <a href="#map" role="listitem">Live Map</a>
+      <a href="#join" role="listitem">Join</a>
+    </div>
+    <div class="nav-right">
+      <button class="nav-theme-btn" id="themeBtn" aria-label="Toggle theme">
+        <i class="ph ph-moon" id="themeIcon" aria-hidden="true"></i>
+      </button>
+      <a href="https://discord.gg/sSEARcnb2T" target="_blank" rel="noopener noreferrer"
+         class="nav-cta">Join Discord</a>
+      <div class="hamburger" id="hamburger"
+           role="button" tabindex="0"
+           aria-label="Open menu" aria-expanded="false" aria-controls="mobileDrawer">
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+      </div>
+    </div>
+  </nav>
+</header>
+
+<div class="drawer-overlay" id="drawerOverlay" aria-hidden="true"></div>
+
+<div class="mobile-drawer" id="mobileDrawer" role="dialog" aria-label="Navigation" aria-modal="true">
+  <nav class="drawer-links">
+    <a href="#home" class="drawer-link"><i class="ph ph-house" aria-hidden="true"></i>Home</a>
+    <a href="#features" class="drawer-link"><i class="ph ph-star" aria-hidden="true"></i>Features</a>
+    <a href="#preview" class="drawer-link"><i class="ph ph-video" aria-hidden="true"></i>Preview</a>
+    <a href="#changelog" class="drawer-link"><i class="ph ph-clock-counter-clockwise" aria-hidden="true"></i>Updates</a>
+    <a href="#staff" class="drawer-link"><i class="ph ph-users" aria-hidden="true"></i>Team</a>
+    <a href="#faq" class="drawer-link"><i class="ph ph-question" aria-hidden="true"></i>FAQ</a>
+    <a href="#map" class="drawer-link"><i class="ph ph-map-trifold" aria-hidden="true"></i>Live Map</a>
+    <a href="#join" class="drawer-link"><i class="ph ph-game-controller" aria-hidden="true"></i>Join</a>
+  </nav>
+  <div class="drawer-sep" aria-hidden="true"></div>
+  <a href="https://discord.gg/sSEARcnb2T" target="_blank" rel="noopener noreferrer" class="drawer-discord">
+    <i class="ph ph-discord-logo" aria-hidden="true"></i>Join Discord Community
+  </a>
+  <div class="drawer-footer">
+    <button class="drawer-theme-btn" id="drawerThemeBtn" aria-label="Toggle theme">
+      <i class="ph ph-moon" id="drawerThemeIcon" aria-hidden="true"></i>
+      <span id="drawerThemeLbl">Dark Mode</span>
+    </button>
+  </div>
+</div>
+
+<!-- MAIN -->
+<main id="main-content">
+
+  <!-- HERO -->
+  <section id="home" class="hero" aria-labelledby="hero-h">
+    <canvas id="particle-canvas" aria-hidden="true"></canvas>
+
+    <div class="hero-eyebrow" role="status">
+      <span class="pulse-dot" aria-hidden="true"></span>
+      Server Live &middot; Since 19 Mar 2026
+    </div>
+
+    <h1 class="hero-title" id="hero-h">
+      <span class="dim" aria-hidden="true">SURVIVAL &middot; NO CIRCLE &middot; SOCIAL</span>
+      <span class="gold">Cr3scent</span>
+    </h1>
+
+    <p class="hero-sub">
+      Minecraft Survival RPG Crossplay untuk Java &amp; Bedrock.
+      Satu dunia, tiga jiwa &mdash; bangun, eksplorasi, dan temukan komunitasmu.
+    </p>
+
+    <div class="hero-actions">
+      <a href="https://discord.gg/sSEARcnb2T" target="_blank" rel="noopener noreferrer"
+         class="btn btn-discord">
+        <i class="ph ph-discord-logo" aria-hidden="true"></i>Join Discord
+      </a>
+      <button class="btn btn-gold" onclick="copyIP()">
+        <i class="ph ph-copy" aria-hidden="true"></i>Copy IP
+      </button>
+      <button class="btn btn-ghost" onclick="openSpecsModal()">
+        <i class="ph ph-cpu" aria-hidden="true"></i>Server Specs
+      </button>
+    </div>
+
+    <div class="status-strip" role="region" aria-label="Server status">
+      <div class="strip-item loading" id="si-status"
+           onclick="checkServerStatus()" role="button" tabindex="0"
+           aria-label="Server status — click to refresh">
+        <div class="strip-label">Status</div>
+        <div class="strip-value strip-status-row">
+          <span class="status-dot" id="statusDot" aria-hidden="true"></span>
+          <span id="statusText">Checking&hellip;</span>
+        </div>
+      </div>
+      <div class="strip-item loading" id="si-players"
+           onclick="checkServerStatus()" role="button" tabindex="0">
+        <div class="strip-label">Players Online</div>
+        <div class="strip-value" id="playerCount" style="color:var(--green)">&mdash;</div>
+      </div>
+      <div class="strip-item" onclick="calculateUptime()" role="button" tabindex="0">
+        <div class="strip-label">Uptime</div>
+        <div class="strip-value" id="uptimeValue">&mdash;</div>
+      </div>
+    </div>
+
+    <div class="ip-card" onclick="copyIP()"
+         role="button" tabindex="0"
+         aria-label="Server address — tap to copy"
+         onkeydown="if(event.key==='Enter'||event.key===' '){copyIP();event.preventDefault();}">
+      <div class="ip-label">Server Address</div>
+      <div class="ip-address">
+        <i class="ph ph-copy" aria-hidden="true"></i>
+        <span id="ipText">mc.cr3scent.asia</span>
+      </div>
+      <div class="ip-hint">Tap to copy &bull; Java &amp; Bedrock supported</div>
+      <div class="ip-divider" aria-hidden="true"></div>
+      <div class="ip-meta">
+        <div class="ip-badge">
+          <i class="ph ph-plug" aria-hidden="true"></i>Bedrock Port: 25655
+          <span class="tag tag-o">Bedrock</span>
+        </div>
+        <div class="ip-badge">
+          Java 1.21.1+<span class="tag tag-g">Java</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FEATURES -->
+  <section id="features" class="features-section" aria-labelledby="feat-h">
+    <div class="section-divider" aria-hidden="true"></div>
+    <div class="section-inner">
+      <div class="reveal">
+        <div class="section-label" aria-hidden="true">Fitur Utama</div>
+        <h2 class="section-heading" id="feat-h">One World,<br><em>Three Souls.</em></h2>
+        <p class="section-body">Tiga gaya bermain dalam satu server. Survival murni, komunitas SMP, dan roleplay organik &mdash; semua tersedia di dunia yang sama.</p>
+      </div>
+      <div class="features-layout">
+        <div class="feature-cards">
+          <article class="feature-card reveal" data-d="1">
+            <div class="feature-card-header">
+              <div class="feature-icon-wrap" aria-hidden="true"><i class="ph ph-tree-evergreen"></i></div>
+              <h3>Survival Murni</h3>
+            </div>
+            <p>Eksplorasi, farming, dan building bebas dengan sistem claim tanah yang adil. Tidak ada griefing.</p>
+          </article>
+          <article class="feature-card reveal" data-d="2">
+            <div class="feature-card-header">
+              <div class="feature-icon-wrap" aria-hidden="true"><i class="ph ph-users-three"></i></div>
+              <h3>SMP Komunitas</h3>
+            </div>
+            <p>Ekonomi player-driven, trading, auction house, dan event bersama. Bangun bisnis dan kolaborasi.</p>
+          </article>
+          <article class="feature-card reveal" data-d="3">
+            <div class="feature-card-header">
+              <div class="feature-icon-wrap" aria-hidden="true"><i class="ph ph-mask-happy"></i></div>
+              <h3>Roleplay Organik</h3>
+            </div>
+            <p>Bangun kota, kerajaan, dan faksi secara natural. Cerita tercipta dari interaksi pemain.</p>
+          </article>
+          <article class="feature-card reveal" data-d="4">
+            <div class="feature-card-header">
+              <div class="feature-icon-wrap" aria-hidden="true"><i class="ph ph-devices"></i></div>
+              <h3>Full Crossplay</h3>
+            </div>
+            <p>Java &amp; Bedrock terhubung di satu dunia via Geyser + Floodgate. Main dari platform manapun.</p>
+          </article>
+        </div>
+        <div class="features-visual reveal" aria-label="Plugin stack">
+          <div class="vis-header">
+            <div class="vis-title">Plugin Stack</div>
+            <div class="vis-badge">All Free &amp; OSS</div>
+          </div>
+          <div class="plugin-list" role="list">
+            <div class="plugin-row" role="listitem"><i class="ph ph-shield-check"></i><div><div class="plugin-name">LuckPerms</div><div class="plugin-desc">Permission management</div></div></div>
+            <div class="plugin-row" role="listitem"><i class="ph ph-map-pin"></i><div><div class="plugin-name">WorldGuard</div><div class="plugin-desc">Region protection</div></div></div>
+            <div class="plugin-row" role="listitem"><i class="ph ph-chart-line-up"></i><div><div class="plugin-name">AuraSkills</div><div class="plugin-desc">RPG skill progression</div></div></div>
+            <div class="plugin-row" role="listitem"><i class="ph ph-storefront"></i><div><div class="plugin-name">AuctionHouse</div><div class="plugin-desc">Player marketplace</div></div></div>
+            <div class="plugin-row" role="listitem"><i class="ph ph-briefcase"></i><div><div class="plugin-name">Jobs Reborn</div><div class="plugin-desc">Professions &amp; economy</div></div></div>
+            <div class="plugin-row" role="listitem"><i class="ph ph-plugs-connected"></i><div><div class="plugin-name">Geyser + Floodgate</div><div class="plugin-desc">Bedrock crossplay</div></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- STATS -->
+  <section class="stats-section" aria-label="Server statistics">
+    <div class="section-inner">
+      <div class="stats-grid">
+        <div class="stat-card reveal" data-d="1"><div class="stat-num" data-target="100">0</div><div class="stat-lbl">Max Players</div></div>
+        <div class="stat-card reveal" data-d="2"><div class="stat-num" data-target="8" data-suffix="GB">0GB</div><div class="stat-lbl">DDR5 RAM</div></div>
+        <div class="stat-card reveal" data-d="3"><div class="stat-num" data-target="20">0</div><div class="stat-lbl">Stable TPS</div></div>
+        <div class="stat-card reveal" data-d="4"><div class="stat-num">24/7</div><div class="stat-lbl">Uptime</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- VIDEO -->
+  <section id="preview" class="video-section" aria-labelledby="vid-h">
+    <div class="section-inner">
+      <div class="reveal">
+        <div class="section-label" aria-hidden="true">Preview &amp; Tutorial</div>
+        <h2 class="section-heading" id="vid-h">Tonton &amp; Langsung<br><em>Join.</em></h2>
+        <p class="section-body">Tutorial cara join tersedia di YouTube. Gameplay &amp; konten server ada di TikTok kami.</p>
+      </div>
+
+      <div class="video-dual">
+
+        <!-- Tutorial Card — HIGHLIGHTED -->
+        <div class="video-card tutorial reveal" data-d="1"
+             onclick="openTutorialVideo()"
+             role="button" tabindex="0"
+             aria-label="Tonton tutorial cara join Cr3scent di YouTube"
+             onkeydown="if(event.key==='Enter'||event.key===' '){openTutorialVideo();event.preventDefault();}">
+          <div class="video-card-thumb">
+            <div class="video-card-platform">
+              <i class="ph ph-youtube-logo" style="color:#ff0000"></i> YouTube Shorts
+            </div>
+            <div class="video-card-badge">
+              <i class="ph ph-book-open-text"></i> TUTORIAL
+            </div>
+            <!-- Real YouTube thumbnail via maxresdefault -->
+            <img src="https://i.ytimg.com/vi/IcPVN8Zms3E/hqdefault.jpg"
+                 alt="Tutorial Cara Join Cr3scent"
+                 style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.6;"
+                 loading="lazy" onerror="this.style.display='none'">
+            <div class="video-card-ring" style="position:relative;z-index:1"><i class="ph ph-play"></i></div>
+          </div>
+          <div class="video-card-info">
+            <div class="video-card-title">Tutorial Cara Join Cr3scent</div>
+            <div class="video-card-sub">Panduan lengkap cara masuk server untuk Java &amp; Bedrock. Ikutin step by step, dijamin bisa connect!</div>
+            <div class="video-card-handle"><i class="ph ph-clock" aria-hidden="true"></i> YouTube Shorts</div>
+          </div>
+        </div>
+
+        <!-- TikTok Gameplay Card -->
+        <div class="video-card tiktok reveal" data-d="2"
+             onclick="openTikTok()"
+             role="button" tabindex="0"
+             aria-label="Tonton gameplay Cr3scent di TikTok @cr3scentdc"
+             onkeydown="if(event.key==='Enter'||event.key===' '){openTikTok();event.preventDefault();}">
+          <div class="video-card-thumb">
+            <div class="video-card-platform">
+              <i class="ph ph-tiktok-logo" style="color:#fff"></i> TikTok
+            </div>
+            <div class="video-card-ring"><i class="ph ph-play"></i></div>
+          </div>
+          <div class="video-card-info">
+            <div class="video-card-title">Gameplay &amp; Server Preview</div>
+            <div class="video-card-sub">Lihat serunya main di Cr3scent. Build, PVP, trading, dan momen-momen epik dari server.</div>
+            <div class="video-card-handle"><i class="ph ph-at" aria-hidden="true"></i>cr3scentdc</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- LIVE MAP -->
+  <section id="map" class="map-section" aria-labelledby="map-h">
+    <div class="section-inner">
+      <div class="reveal">
+        <div class="section-label" aria-hidden="true">Dunia Cr3scent</div>
+        <h2 class="section-heading" id="map-h">Live<br><em>World Map.</em></h2>
+        <p class="section-body">Peta dunia Cr3scent secara real-time. Lihat posisi pemain, biome, dan bangunan yang sudah dibuat komunitas.</p>
+      </div>
+
+      <!-- MAP CARD -->
+      <div class="map-card reveal" id="mapCard">
+        <div class="map-preview" id="mapPreview" onclick="openMapFull()" role="button" tabindex="0"
+             aria-label="Buka peta dunia Cr3scent" onkeydown="if(event.key==='Enter'||event.key===' '){openMapFull();event.preventDefault();}">
+
+          <!-- LIVE mini iframe — real dynmap tiles, dimmed as background -->
+          <div class="map-preview-bg" aria-hidden="true">
+            <iframe
+              id="mapMiniIframe"
+              src=""
+              title=""
+              aria-hidden="true"
+              tabindex="-1"
+              loading="lazy"
+              sandbox="allow-scripts allow-same-origin"
+              style="position:absolute;inset:0;width:100%;height:100%;border:none;pointer-events:none;opacity:0;transition:opacity 1.2s ease;"
+            ></iframe>
+            <!-- fallback grid shown until iframe loads -->
+            <div class="map-grid-lines" id="mapPreviewGrid" aria-hidden="true"></div>
+            <div class="map-dot pulsing" style="top:48%;left:50%" aria-hidden="true"></div>
+            <div class="map-coord-label" style="top:47%;left:51%" aria-hidden="true">Spawn</div>
+          </div>
+
+          <div class="map-preview-overlay">
+            <div class="map-preview-badge">
+              <span class="pulse-dot" aria-hidden="true"></span>
+              LIVE · Real-time
+            </div>
+            <div class="map-preview-cta">
+              <div class="map-scroll-icon" aria-hidden="true">
+                <i class="ph ph-map-trifold"></i>
+              </div>
+              <span>Tap untuk buka peta penuh</span>
+              <i class="ph ph-arrow-right" aria-hidden="true"></i>
+            </div>
+          </div>
+
+          <div class="map-preview-corner tl" aria-hidden="true"></div>
+          <div class="map-preview-corner tr" aria-hidden="true"></div>
+          <div class="map-preview-corner bl" aria-hidden="true"></div>
+          <div class="map-preview-corner br" aria-hidden="true"></div>
+        </div>
+
+        <div class="map-meta">
+          <div class="map-meta-item">
+            <i class="ph ph-users" aria-hidden="true"></i>
+            <span id="mapPlayerCount">— pemain online</span>
+          </div>
+          <div class="map-meta-item">
+            <i class="ph ph-globe-hemisphere-east" aria-hidden="true"></i>
+            <span>Overworld · Nether · End</span>
+          </div>
+          <div class="map-meta-item">
+            <i class="ph ph-clock" aria-hidden="true"></i>
+            <span>Update setiap 2 detik</span>
+          </div>
+          <a href="https://map.cr3scent.asia" target="_blank" rel="noopener noreferrer"
+             id="mapExternalBtn" class="btn btn-ghost map-external-btn" onclick="event.stopPropagation()">
+            <i class="ph ph-arrow-square-out" aria-hidden="true"></i>
+            Buka di Tab Baru
+          </a>
+        </div>
+        <!-- Online Player List -->
+        <div class="map-players" id="mapPlayerList" aria-label="Pemain online" aria-live="polite"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MAP LIGHTBOX -->
+  <div class="map-lightbox" id="mapLightbox" aria-hidden="true" role="dialog" aria-modal="true" aria-label="Peta dunia Cr3scent">
+    <div class="map-lightbox-backdrop" onclick="closeMapFull()" aria-hidden="true"></div>
+    <div class="map-lightbox-sheet" id="mapSheet">
+      <div class="map-lightbox-handle" aria-hidden="true"></div>
+      <div class="map-lightbox-header">
+        <div class="map-lightbox-title">
+          <i class="ph ph-map-trifold" aria-hidden="true"></i>
+          <span>Cr3scent · Live World Map</span>
+          <span class="map-live-badge"><span class="pulse-dot" aria-hidden="true"></span>Live</span>
+        </div>
+        <div class="map-lightbox-actions">
+          <a href="https://map.cr3scent.asia" target="_blank" rel="noopener noreferrer"
+             class="map-lb-btn" aria-label="Buka di tab baru">
+            <i class="ph ph-arrow-square-out"></i>
+          </a>
+          <button class="map-lb-btn" onclick="closeMapFull()" aria-label="Tutup peta">
+            <i class="ph ph-x"></i>
+          </button>
+        </div>
+      </div>
+      <div class="map-lightbox-body">
+        <iframe id="mapIframe"
+                src=""
+                title="Cr3scent Live World Map"
+                allow="fullscreen"
+                sandbox="allow-scripts allow-same-origin allow-popups allow-forms allow-modals allow-top-navigation-by-user-activation"
+                loading="lazy"
+                referrerpolicy="no-referrer-when-downgrade">
+        </iframe>
+        <div class="map-loading" id="mapLoading" aria-live="polite">
+          <div class="map-loading-inner">
+            <div class="map-spinner" aria-hidden="true"></div>
+            <span id="mapLoadingMsg">Memuat peta dunia…</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- JOIN -->
+  <section id="join" class="join-section" aria-labelledby="join-h">
+    <div class="section-inner">
+      <div class="reveal">
+        <div class="section-label" aria-hidden="true">Gabung Sekarang</div>
+        <h2 class="section-heading" id="join-h">Mulai<br><em>Petualanganmu.</em></h2>
+      </div>
+      <div class="join-grid">
+        <article class="join-card reveal" data-d="1"
+                 onclick="window.open('https://discord.gg/sSEARcnb2T','_blank','noopener')"
+                 role="button" tabindex="0">
+          <div class="join-card-icon discord" aria-hidden="true"><i class="ph ph-discord-logo"></i></div>
+          <h3>Join Discord</h3>
+          <p>Connect dengan 960+ anggota aktif, dapat update, dan ikut event komunitas.</p>
+          <a href="https://discord.gg/sSEARcnb2T" target="_blank" rel="noopener noreferrer"
+             class="btn btn-discord" onclick="event.stopPropagation()">
+            <i class="ph ph-arrow-right" aria-hidden="true"></i>Gabung
+          </a>
+        </article>
+        <article class="join-card reveal" data-d="2"
+                 onclick="copyIP()" role="button" tabindex="0">
+          <div class="join-card-icon mc" aria-hidden="true"><i class="ph ph-game-controller"></i></div>
+          <h3>Main Minecraft</h3>
+          <p>Connect ke mc.cr3scent.asia dan mulai petualanganmu. Java &amp; Bedrock tersupport.</p>
+          <button class="btn btn-gold" onclick="copyIP();event.stopPropagation()">
+            <i class="ph ph-copy" aria-hidden="true"></i>Copy IP
+          </button>
+        </article>
+        <article class="join-card reveal" data-d="3"
+                 onclick="window.open('https://minecraft-mp.com/server-s355797','_blank','noopener')"
+                 role="button" tabindex="0">
+          <div class="join-card-icon vote" aria-hidden="true"><i class="ph ph-star"></i></div>
+          <h3>Vote for Us</h3>
+          <p>Support Cr3scent dengan vote harian dan dapatkan reward eksklusif in-game.</p>
+          <a href="https://minecraft-mp.com/server-s355797" target="_blank" rel="noopener noreferrer"
+             class="btn btn-ghost" onclick="event.stopPropagation()">
+            <i class="ph ph-thumbs-up" aria-hidden="true"></i>Vote
+          </a>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- STAFF -->
+  <section id="staff" class="staff-section" aria-labelledby="staff-h">
+    <div class="section-inner">
+      <div class="reveal">
+        <div class="section-label" aria-hidden="true">Tim Kami</div>
+        <h2 class="section-heading" id="staff-h">Di Balik<br><em>Cr3scent.</em></h2>
+      </div>
+      <div class="staff-grid">
+        <article class="staff-card reveal" data-d="1">
+          <div class="staff-avatar" aria-hidden="true"><i class="ph ph-crown"></i></div>
+          <div class="staff-info">
+            <div class="staff-name">Muhammad Daffy Ramadhan</div>
+            <div class="staff-role owner">Owner &amp; Founder</div>
+            <div class="staff-desc">Bertanggung jawab atas visi, arah, dan keberlangsungan Cr3scent Network.</div>
+          </div>
+        </article>
+        <article class="staff-card reveal" data-d="2">
+          <div class="staff-avatar" aria-hidden="true"><i class="ph ph-bank"></i></div>
+          <div class="staff-info">
+            <div class="staff-name">Stevadi</div>
+            <div class="staff-role investor">Investor</div>
+            <div class="staff-desc">Mendukung pertumbuhan infrastruktur dan pengembangan server.</div>
+          </div>
+        </article>
+        <article class="staff-card reveal" data-d="3">
+          <div class="staff-avatar" aria-hidden="true"><i class="ph ph-code"></i></div>
+          <div class="staff-info">
+            <div class="staff-name">Sanopalz</div>
+            <div class="staff-role dev">Developer</div>
+            <div class="staff-desc">Mengelola plugin, konfigurasi server, dan pengembangan teknis.</div>
+          </div>
+        </article>
+        <article class="staff-card reveal" data-d="4">
+          <div class="staff-avatar" aria-hidden="true"><i class="ph ph-code"></i></div>
+          <div class="staff-info">
+            <div class="staff-name">Kevin</div>
+            <div class="staff-role dev">Developer</div>
+            <div class="staff-desc">Membantu pengembangan dan pemeliharaan sistem server.</div>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- CHANGELOG -->
+  <section id="changelog" class="changelog-section" aria-labelledby="cl-h">
+    <div class="section-inner">
+      <div class="reveal">
+        <div class="section-label" aria-hidden="true">Update Log</div>
+        <h2 class="section-heading" id="cl-h">Riwayat<br><em>Pembaruan.</em></h2>
+        <p class="section-body">Semua perubahan dan pembaruan yang telah diterapkan pada server dan website Cr3scent.</p>
+      </div>
+      <div class="changelog-list reveal">
+
+        <div class="cl-item">
+          <div class="cl-dot new" aria-hidden="true"></div>
+          <div class="cl-content">
+            <div class="cl-header" onclick="toggleCL(this)" role="button" tabindex="0" aria-expanded="true"
+                 onkeydown="if(event.key==='Enter'||event.key===' '){toggleCL(this);event.preventDefault();}">
+              <div class="cl-meta">
+                <span class="cl-version">v1.3</span>
+                <span class="cl-badge new-badge">Terbaru</span>
+              </div>
+              <div class="cl-title">Live World Map &amp; Website Optimization</div>
+              <div class="cl-date"><i class="ph ph-calendar-blank"></i> Mar 2026</div>
+              <i class="ph ph-caret-down cl-chevron"></i>
+            </div>
+            <div class="cl-body open">
+              <div class="cl-entry add"><i class="ph ph-plus-circle"></i> Live World Map — Dynmap real-time via Cloudflare Worker HTTPS</div>
+              <div class="cl-entry add"><i class="ph ph-plus-circle"></i> Preview peta langsung di website dengan player tracking</div>
+              <div class="cl-entry add"><i class="ph ph-plus-circle"></i> Online player list di map section</div>
+              <div class="cl-entry add"><i class="ph ph-plus-circle"></i> Scroll progress bar &amp; back to top button</div>
+              <div class="cl-entry add"><i class="ph ph-plus-circle"></i> PWA manifest — website bisa di-install ke home screen</div>
+              <div class="cl-entry add"><i class="ph ph-plus-circle"></i> Cloudflare Web Analytics — privacy-first tracking</div>
+              <div class="cl-entry fix"><i class="ph ph-wrench"></i> Fix alert popup dari iframe Dynmap</div>
+              <div class="cl-entry fix"><i class="ph ph-wrench"></i> Fix font loading — preload untuk performa lebih baik</div>
+              <div class="cl-entry change"><i class="ph ph-pencil-simple"></i> Domain DNS dipindah ke Cloudflare untuk HTTPS &amp; performance</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="cl-item">
+          <div class="cl-dot" aria-hidden="true"></div>
+          <div class="cl-content">
+            <div class="cl-header" onclick="toggleCL(this)" role="button" tabindex="0" aria-expanded="false"
+                 onkeydown="if(event.key==='Enter'||event.key===' '){toggleCL(this);event.preventDefault();}">
+              <div class="cl-meta">
+                <span class="cl-version">v1.2</span>
+              </div>
+              <div class="cl-title">Website Redesign &amp; Tutorial Popup</div>
+              <div class="cl-date"><i class="ph ph-calendar-blank"></i> Mar 2026</div>
+              <i class="ph ph-caret-down cl-chevron"></i>
+            </div>
+            <div class="cl-body">
+              <div class="cl-entry add"><i class="ph ph-plus-circle"></i> Welcome popup tutorial join untuk Java &amp; Bedrock</div>
+              <div class="cl-entry add"><i class="ph ph-plus-circle"></i> Section preview dual video — Tutorial YouTube &amp; TikTok</div>
+              <div class="cl-entry add"><i class="ph ph-plus-circle"></i> Custom cursor, particle canvas, page loader animasi</div>
+              <div class="cl-entry add"><i class="ph ph-plus-circle"></i> Open Graph meta tags — embed Discord &amp; WA</div>
+              <div class="cl-entry add"><i class="ph ph-plus-circle"></i> Staff, FAQ, Changelog, Counter animasi</div>
+              <div class="cl-entry fix"><i class="ph ph-wrench"></i> Fix copy IP fallback untuk HTTP &amp; browser lama</div>
+              <div class="cl-entry fix"><i class="ph ph-wrench"></i> Fix scroll lock bug saat modal terbuka di iOS</div>
+              <div class="cl-entry change"><i class="ph ph-pencil-simple"></i> Struktur kode dipisah: index.html · style.css · script.js</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="cl-item">
+          <div class="cl-dot" aria-hidden="true"></div>
+          <div class="cl-content">
+            <div class="cl-header" onclick="toggleCL(this)" role="button" tabindex="0" aria-expanded="false"
+                 onkeydown="if(event.key==='Enter'||event.key===' '){toggleCL(this);event.preventDefault();}">
+              <div class="cl-meta">
+                <span class="cl-version">v1.1</span>
+              </div>
+              <div class="cl-title">Website Launch &amp; Server Go Live</div>
+              <div class="cl-date"><i class="ph ph-calendar-blank"></i> 19 Mar 2026</div>
+              <i class="ph ph-caret-down cl-chevron"></i>
+            </div>
+            <div class="cl-body">
+              <div class="cl-entry add"><i class="ph ph-plus-circle"></i> Server Cr3scent resmi live — mc.cr3scent.asia</div>
+              <div class="cl-entry add"><i class="ph ph-plus-circle"></i> Crossplay Java &amp; Bedrock via Geyser + Floodgate</div>
+              <div class="cl-entry add"><i class="ph ph-plus-circle"></i> Plugin stack: EssentialsX, LuckPerms, AuraSkills, Jobs Reborn, dll</div>
+              <div class="cl-entry add"><i class="ph ph-plus-circle"></i> Website pertama cr3scent.asia diluncurkan</div>
+              <div class="cl-entry add"><i class="ph ph-plus-circle"></i> Discord community dibuka untuk publik</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="cl-item">
+          <div class="cl-dot" aria-hidden="true"></div>
+          <div class="cl-content">
+            <div class="cl-header" onclick="toggleCL(this)" role="button" tabindex="0" aria-expanded="false"
+                 onkeydown="if(event.key==='Enter'||event.key===' '){toggleCL(this);event.preventDefault();}">
+              <div class="cl-meta">
+                <span class="cl-version">v1.0</span>
+              </div>
+              <div class="cl-title">Persiapan &amp; Setup Awal</div>
+              <div class="cl-date"><i class="ph ph-calendar-blank"></i> Mar 2026</div>
+              <i class="ph ph-caret-down cl-chevron"></i>
+            </div>
+            <div class="cl-body">
+              <div class="cl-entry add"><i class="ph ph-plus-circle"></i> Setup server Raehost 8GB DDR5 NVMe</div>
+              <div class="cl-entry add"><i class="ph ph-plus-circle"></i> Konfigurasi domain cr3scent.asia via Hostinger</div>
+              <div class="cl-entry add"><i class="ph ph-plus-circle"></i> Instalasi Paper 1.21.1 &amp; plugin dasar</div>
+              <div class="cl-entry add"><i class="ph ph-plus-circle"></i> Konversi world Bedrock ke Java</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section id="faq" class="faq-section" aria-labelledby="faq-h">
+    <div class="section-inner">
+      <div class="reveal">
+        <div class="section-label" aria-hidden="true">FAQ</div>
+        <h2 class="section-heading" id="faq-h">Pertanyaan<br><em>Umum.</em></h2>
+      </div>
+      <div class="faq-list reveal">
+
+        <div class="faq-item">
+          <button class="faq-q" onclick="toggleFAQ(this)" aria-expanded="false">
+            <span>Versi Minecraft apa yang didukung?</span>
+            <i class="ph ph-plus faq-icon"></i>
+          </button>
+          <div class="faq-a">
+            Java Edition <strong>1.21.1 ke atas</strong> dan Bedrock Edition (PE, Windows 10/11, Console) semua didukung via crossplay Geyser + Floodgate.
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-q" onclick="toggleFAQ(this)" aria-expanded="false">
+            <span>Kenapa Bedrock tidak bisa connect?</span>
+            <i class="ph ph-plus faq-icon"></i>
+          </button>
+          <div class="faq-a">
+            Bedrock <strong>wajib mengisi port 25655</strong> di kolom port saat menambahkan server. Tanpa port, koneksi akan gagal. IP: <strong>mc.cr3scent.asia</strong> · Port: <strong>25655</strong>.
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-q" onclick="toggleFAQ(this)" aria-expanded="false">
+            <span>Apakah server gratis untuk dimainkan?</span>
+            <i class="ph ph-plus faq-icon"></i>
+          </button>
+          <div class="faq-a">
+            Ya, <strong>100% gratis</strong>. Tidak ada pay-to-win. Semua pemain mulai dari titik yang sama. Donasi opsional untuk mendukung biaya server.
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-q" onclick="toggleFAQ(this)" aria-expanded="false">
+            <span>Bagaimana cara register dan login?</span>
+            <i class="ph ph-plus faq-icon"></i>
+          </button>
+          <div class="faq-a">
+            Saat pertama kali masuk, ketik <code>/register [password] [password]</code> di chat. Untuk login berikutnya, ketik <code>/login [password]</code>. Gunakan password yang mudah diingat tapi aman.
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-q" onclick="toggleFAQ(this)" aria-expanded="false">
+            <span>Apakah ada rules yang harus diikuti?</span>
+            <i class="ph ph-plus faq-icon"></i>
+          </button>
+          <div class="faq-a">
+            Ya. Intinya: tidak ada griefing di luar area PvP, tidak boleh menggunakan cheat/hack, hormati sesama pemain. Rules lengkap tersedia di Discord kami.
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-q" onclick="toggleFAQ(this)" aria-expanded="false">
+            <span>Server lag atau sering down?</span>
+            <i class="ph ph-plus faq-icon"></i>
+          </button>
+          <div class="faq-a">
+            Server berjalan di infrastruktur Raehost dengan <strong>8GB DDR5 RAM, 24GB NVMe SSD, dan TPS stabil 20</strong>. Server 24/7 dan dioptimalkan untuk pemain Indonesia dengan ping rendah.
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-q" onclick="toggleFAQ(this)" aria-expanded="false">
+            <span>Bagaimana cara bergabung Discord?</span>
+            <i class="ph ph-plus faq-icon"></i>
+          </button>
+          <div class="faq-a">
+            Klik tombol <strong>Join Discord</strong> di halaman ini atau langsung ke <strong>discord.gg/sSEARcnb2T</strong>. Community Discord adalah tempat utama untuk update, event, dan diskusi.
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- FOOTER -->
+<footer role="contentinfo">
+  <div class="footer-inner">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <a href="#home" class="nav-logo">
+          <div class="nav-logo-mark" aria-hidden="true">☾</div>
+          <span class="nav-logo-text">Cr3scent</span>
+        </a>
+        <p>Rise &middot; Explore &middot; Belong. One World, Three Souls. Server Minecraft survival RPG crossplay untuk komunitas Indonesia.</p>
+        <div class="footer-socials">
+          <a href="https://tiktok.com/@cr3scentdc" target="_blank" rel="noopener noreferrer"
+             class="footer-social" aria-label="TikTok">
+            <i class="ph ph-tiktok-logo" aria-hidden="true"></i>
+          </a>
+          <a href="https://discord.gg/sSEARcnb2T" target="_blank" rel="noopener noreferrer"
+             class="footer-social" aria-label="Discord">
+            <i class="ph ph-discord-logo" aria-hidden="true"></i>
+          </a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h5>Navigation</h5>
+        <ul>
+          <li><a href="#home">Home</a></li>
+          <li><a href="#features">Features</a></li>
+          <li><a href="#preview">Preview</a></li>
+          <li><a href="#changelog">Updates</a></li>
+          <li><a href="#staff">Team</a></li>
+          <li><a href="#faq">FAQ</a></li>
+          <li><a href="#map">Live Map</a></li>
+          <li><a href="#join">Join</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h5>Server Info</h5>
+        <ul>
+          <li><span>mc.cr3scent.asia</span></li>
+          <li><span>Bedrock Port: 25655</span></li>
+          <li><span>Java 1.21.1+</span></li>
+          <li><span>Crossplay Enabled</span></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p class="footer-copy">&copy; 2026 Cr3scent Network. All rights reserved.</p>
+      <div class="credits-row">
+        <span class="credit-chip"><strong>Muhammad Daffy Ramadhan</strong><span>Owner &amp; Founder</span></span>
+        <span class="credit-chip"><strong>Stevadi</strong><span>Investor</span></span>
+        <span class="credit-chip"><strong>Sanopalz</strong><span>Developer</span></span>
+        <span class="credit-chip"><strong>Kevin</strong><span>Developer</span></span>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- SPECS MODAL -->
+<div class="modal-backdrop" id="modalBackdrop" aria-hidden="true"></div>
+<div class="modal" id="specsModal" role="dialog" aria-labelledby="specsTitle" aria-modal="true">
+  <div class="modal-head">
+    <h3 id="specsTitle">Server Specifications</h3>
+    <button class="modal-close" onclick="closeSpecsModal()" aria-label="Close">
+      <i class="ph ph-x" aria-hidden="true"></i>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="modal-specs-grid">
+      <div class="modal-spec"><i class="ph ph-server"></i><div class="ms-val">Raehost</div><div class="ms-lbl">Provider</div></div>
+      <div class="modal-spec"><i class="ph ph-memory"></i><div class="ms-val">8GB DDR5</div><div class="ms-lbl">RAM</div></div>
+      <div class="modal-spec"><i class="ph ph-hard-drive"></i><div class="ms-val">24GB NVMe</div><div class="ms-lbl">Storage</div></div>
+      <div class="modal-spec"><i class="ph ph-cpu"></i><div class="ms-val">400% CPU</div><div class="ms-lbl">Priority</div></div>
+      <div class="modal-spec"><i class="ph ph-battery-high"></i><div class="ms-val">Stable 20</div><div class="ms-lbl">TPS</div></div>
+      <div class="modal-spec"><i class="ph ph-users"></i><div class="ms-val">100</div><div class="ms-lbl">Max Players</div></div>
+      <div class="modal-spec"><i class="ph ph-code"></i><div class="ms-val">1.21.1</div><div class="ms-lbl">Java</div></div>
+      <div class="modal-spec"><i class="ph ph-plugs-connected"></i><div class="ms-val">Geyser</div><div class="ms-lbl">Crossplay</div></div>
+    </div>
+    <div class="modal-sect">
+      <h4>Core Plugins</h4>
+      <div class="plugin-grid">
+        <div class="plugin-item"><i class="ph ph-check-circle"></i><span><strong>EssentialsX</strong> &mdash; Core commands &amp; features</span></div>
+        <div class="plugin-item"><i class="ph ph-check-circle"></i><span><strong>LuckPerms</strong> &mdash; Advanced permission system</span></div>
+        <div class="plugin-item"><i class="ph ph-check-circle"></i><span><strong>WorldGuard</strong> &mdash; Region protection</span></div>
+        <div class="plugin-item"><i class="ph ph-check-circle"></i><span><strong>CoreProtect</strong> &mdash; Rollback &amp; logging</span></div>
+        <div class="plugin-item"><i class="ph ph-check-circle"></i><span><strong>AuraSkills</strong> &mdash; RPG skill progression</span></div>
+        <div class="plugin-item"><i class="ph ph-check-circle"></i><span><strong>Jobs Reborn</strong> &mdash; Player professions</span></div>
+        <div class="plugin-item"><i class="ph ph-check-circle"></i><span><strong>AuctionHouse</strong> &mdash; Player marketplace</span></div>
+        <div class="plugin-item"><i class="ph ph-check-circle"></i><span><strong>DiscordSRV</strong> &mdash; Discord-Minecraft bridge</span></div>
+        <div class="plugin-item"><i class="ph ph-check-circle"></i><span><strong>GrimAC</strong> &mdash; Advanced anti-cheat</span></div>
+        <div class="plugin-item"><i class="ph ph-check-circle"></i><span><strong>AuthMe</strong> &mdash; Login authentication</span></div>
+      </div>
+    </div>
+    <div class="modal-sect">
+      <h4>Monthly Investment</h4>
+      <div class="plugin-grid">
+        <div class="plugin-item"><i class="ph ph-currency-circle-dollar"></i><span><strong>Rp 179.200</strong> &mdash; Raehost hosting (8GB DDR5)</span></div>
+        <div class="plugin-item"><i class="ph ph-lightbulb"></i><span>Semua core plugin gratis &amp; open-source</span></div>
+        <div class="plugin-item"><i class="ph ph-trend-up"></i><span>Upgrade path tersedia seiring pertumbuhan komunitas</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- WELCOME TUTORIAL POPUP -->
+<div class="welcome-backdrop" id="welcomeBackdrop"></div>
+<div class="welcome-modal" id="welcomeModal" role="dialog" aria-labelledby="welcomeTitle" aria-modal="true">
+  <div class="welcome-head">
+    <div class="welcome-crown" aria-hidden="true">☾</div>
+    <h2 id="welcomeTitle">Selamat Datang di Cr3scent!</h2>
+    <p>Server Minecraft Survival RPG crossplay Java &amp; Bedrock. Ikuti panduan di bawah untuk langsung bergabung.</p>
+  </div>
+
+  <div class="welcome-body">
+    <div class="tut-heading">Tutorial Bergabung</div>
+
+    <!-- Platform Tabs -->
+    <div class="tut-tabs" role="tablist" aria-label="Platform">
+      <button class="tut-tab active" id="tab-java" role="tab" aria-selected="true" aria-controls="panel-java" onclick="switchTab('java')">
+        <i class="ph ph-monitor" aria-hidden="true"></i> Java
+      </button>
+      <button class="tut-tab" id="tab-bedrock" role="tab" aria-selected="false" aria-controls="panel-bedrock" onclick="switchTab('bedrock')">
+        <i class="ph ph-device-mobile" aria-hidden="true"></i> Bedrock / PE
+      </button>
+    </div>
+
+    <!-- Java Panel -->
+    <div class="tut-panel active" id="panel-java" role="tabpanel" aria-labelledby="tab-java">
+      <div class="tut-step">
+        <div class="tut-step-num">1</div>
+        <div class="tut-step-content">
+          <div class="tut-step-title">Buka Minecraft Java Edition</div>
+          <div class="tut-step-desc">Pastikan versi <strong>1.21.1 ke atas</strong>. Klik <strong>Multiplayer</strong> &rarr; <strong>Add Server</strong>.</div>
+        </div>
+      </div>
+      <div class="tut-step">
+        <div class="tut-step-num">2</div>
+        <div class="tut-step-content">
+          <div class="tut-step-title">Masukkan Server Address</div>
+          <div class="tut-step-desc">Paste IP di kolom Server Address:</div>
+          <div class="tut-step-code" onclick="copyIPPopup()" role="button" tabindex="0" aria-label="Copy IP address">
+            <i class="ph ph-copy" aria-hidden="true"></i>
+            mc.cr3scent.asia
+          </div>
+        </div>
+      </div>
+      <div class="tut-step">
+        <div class="tut-step-num">3</div>
+        <div class="tut-step-content">
+          <div class="tut-step-title">Klik Done &amp; Join</div>
+          <div class="tut-step-desc">Klik <strong>Done</strong>, pilih server Cr3scent, lalu klik <strong>Join Server</strong>. Selesai!</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bedrock Panel -->
+    <div class="tut-panel" id="panel-bedrock" role="tabpanel" aria-labelledby="tab-bedrock">
+      <div class="tut-warn">
+        <i class="ph ph-warning" aria-hidden="true"></i>
+        <span>Bedrock <strong>wajib pakai port</strong>. Kalau ga diisi, tidak akan bisa connect!</span>
+      </div>
+      <div class="tut-step">
+        <div class="tut-step-num">1</div>
+        <div class="tut-step-content">
+          <div class="tut-step-title">Buka Minecraft (PE / Console / Win10)</div>
+          <div class="tut-step-desc">Klik <strong>Play</strong> &rarr; tab <strong>Servers</strong> &rarr; scroll bawah &rarr; <strong>Add Server</strong>.</div>
+        </div>
+      </div>
+      <div class="tut-step">
+        <div class="tut-step-num">2</div>
+        <div class="tut-step-content">
+          <div class="tut-step-title">Isi Server Address + Port</div>
+          <div class="tut-step-desc">Isi dua kolom ini dengan benar:</div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:6px;">
+            <div class="tut-step-code" onclick="copyIPPopup()" role="button" tabindex="0" aria-label="Copy IP">
+              <i class="ph ph-copy" aria-hidden="true"></i> mc.cr3scent.asia
+            </div>
+            <div class="tut-step-code" onclick="copyPortPopup()" role="button" tabindex="0" aria-label="Copy Port">
+              <i class="ph ph-copy" aria-hidden="true"></i> Port: 25655
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="tut-step">
+        <div class="tut-step-num">3</div>
+        <div class="tut-step-content">
+          <div class="tut-step-title">Save &amp; Connect</div>
+          <div class="tut-step-desc">Klik <strong>Save</strong>, pilih server Cr3scent dari list, lalu klik <strong>Connect</strong>.</div>
+        </div>
+      </div>
+      <div class="tut-step">
+        <div class="tut-step-num">4</div>
+        <div class="tut-step-content">
+          <div class="tut-step-title">Register Akun (pertama kali)</div>
+          <div class="tut-step-desc">Ketik <code style="background:var(--surface2);padding:2px 6px;border-radius:5px;font-size:.82rem;">/register [password] [password]</code> di chat untuk mendaftar.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tutorial Video -->
+    <div>
+      <div class="tut-heading" style="margin-bottom:10px;">Video Tutorial</div>
+      <div class="tut-video-wrap" onclick="openTutorialVideo()" role="button" tabindex="0"
+           aria-label="Tonton tutorial cara join di YouTube"
+           onkeydown="if(event.key==='Enter'||event.key===' '){openTutorialVideo();event.preventDefault();}">
+        <div class="tut-video-thumb">
+          <div class="tut-yt-badge"><i class="ph ph-youtube-logo"></i> YouTube Shorts</div>
+          <div class="tut-play-btn"><i class="ph ph-play"></i></div>
+          <div class="tut-video-label">Tutorial cara join Cr3scent</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Actions -->
+    <div class="welcome-actions">
+      <button class="btn btn-gold" onclick="closeWelcome()" style="flex:1;justify-content:center;">
+        <i class="ph ph-game-controller" aria-hidden="true"></i> Siap, Main Sekarang!
+      </button>
+    </div>
+    <label class="welcome-dont-show">
+      <input type="checkbox" id="dontShowAgain"> Jangan tampilkan lagi
+    </label>
+  </div>
+</div>
+
+<!-- CONFETTI CANVAS -->
+<canvas id="confetti-canvas" aria-hidden="true" style="position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:99990;opacity:0;transition:opacity .3s;"></canvas>
+
+<!-- TOAST -->
+<div class="toast" id="toast" role="status" aria-live="polite" aria-atomic="true">
+  <i class="ph ph-check-circle" id="toastIcon" aria-hidden="true"></i>
+  <span id="toastMsg"></span>
+</div>
+
+<!-- SCROLL PROGRESS -->
+<div class="scroll-progress" id="scrollProgress" aria-hidden="true"></div>
+
+<!-- BACK TO TOP -->
+<button class="back-to-top" id="backToTop" aria-label="Kembali ke atas" onclick="window.scrollTo({top:0,behavior:'smooth'})">
+  <i class="ph ph-arrow-up" aria-hidden="true"></i>
+</button>
+
+<script src="script.js"></script>
+</body>
+</html>
