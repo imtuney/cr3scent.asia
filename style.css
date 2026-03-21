@@ -1225,13 +1225,30 @@
 /* ── PREVIEW THUMBNAIL ─────────────────────────────── */
 .map-preview {
   position: relative;
-  height: 280px;
+  height: 56vw;       /* fluid: ~56% viewport width */
+  min-height: 260px;
+  max-height: 480px;
   cursor: pointer;
   overflow: hidden;
   background: #0a1a0f;
   transition: filter .3s var(--ease);
 }
-@media(min-width:768px) { .map-preview { height: 360px; } }
+/* mobile: a bit taller relative to screen */
+@media(max-width:480px) {
+  .map-preview { height: 64vw; min-height: 240px; }
+}
+/* tablet */
+@media(min-width:481px) and (max-width:767px) {
+  .map-preview { height: 56vw; }
+}
+/* desktop */
+@media(min-width:768px) {
+  .map-preview { height: 420px; max-height: 520px; }
+}
+/* large desktop */
+@media(min-width:1100px) {
+  .map-preview { height: 480px; }
+}
 
 .map-preview:hover { filter: brightness(1.08); }
 .map-preview:hover .map-scroll-icon { transform: scale(1.12) rotate(-5deg); }
@@ -1548,18 +1565,30 @@
   overflow: hidden;
 }
 
-/* iframe mini: zoomed out, dimmed, non-interactive */
+/* iframe mini: zoomed out, centered, dimmed, non-interactive */
 #mapMiniIframe {
-  transform: scale(0.38) translate(-84%, -84%);
-  transform-origin: top left;
-  width: 264% !important;
-  height: 264% !important;
-  filter: brightness(0.55) saturate(0.8);
+  position: absolute;
+  width: 300% !important;
+  height: 300% !important;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0.42);
+  transform-origin: center center;
+  filter: brightness(0.65) saturate(0.88);
   pointer-events: none !important;
   border: none !important;
 }
 #mapMiniIframe.mini-loaded {
-  opacity: 0.75 !important;
+  opacity: 0.85 !important;
+}
+@media(min-width:768px) {
+  #mapMiniIframe {
+    width: 280% !important;
+    height: 280% !important;
+    transform: translate(-50%, -50%) scale(0.46);
+    filter: brightness(0.7) saturate(0.9);
+  }
+  #mapMiniIframe.mini-loaded { opacity: 0.88 !important; }
 }
 
 /* hide grid once iframe loads */
