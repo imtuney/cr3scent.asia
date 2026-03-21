@@ -567,16 +567,18 @@ const mapLoadingMsg  = document.getElementById('mapLoadingMsg');
 const mapPlayerCount = document.getElementById('mapPlayerCount');
 const mapExternalBtn = document.getElementById('mapExternalBtn');
 
-// Probe whether the Cloudflare Worker is live
+// Worker confirmed live at map.cr3scent.asia — always use HTTPS
 async function probeWorker() {
   if (mapWorkerReady !== null) return mapWorkerReady;
   try {
-    const res = await fetch(`${DYNMAP_HTTPS}/up/configuration`, {
-      signal: AbortSignal.timeout(3500)
+    const res = await fetch(`${DYNMAP_HTTPS}/up/world/world/0`, {
+      signal: AbortSignal.timeout(5000),
+      mode: 'cors'
     });
     mapWorkerReady = res.ok;
   } catch {
-    mapWorkerReady = false;
+    // If fetch fails (CORS etc), still try embedding — worker is confirmed live
+    mapWorkerReady = true;
   }
   return mapWorkerReady;
 }
@@ -590,28 +592,19 @@ async function openMapFull() {
 
   if (!mapLoaded) {
     mapLoaded = true;
+    if (mapLoadingMsg) mapLoadingMsg.textContent = 'Memuat peta dunia…';
 
-    // Show loading state
-    if (mapLoadingMsg) mapLoadingMsg.textContent = 'Menghubungkan ke peta dunia…';
-
-    const workerOk = await probeWorker();
-    const src = workerOk ? DYNMAP_HTTPS : null;
-
-    if (src) {
-      // embed via HTTPS worker
-      mapIframe.src = src;
-      mapIframe.onload = () => {
-        mapIframe.classList.add('loaded');
-        if (mapLoading) mapLoading.classList.add('hidden');
-      };
-      setTimeout(() => {
-        mapIframe.classList.add('loaded');
-        if (mapLoading) mapLoading.classList.add('hidden');
-      }, 6000);
-    } else {
-      // Worker not ready — show friendly fallback
-      showMapFallback();
-    }
+    // Always load HTTPS worker iframe directly
+    mapIframe.src = DYNMAP_HTTPS;
+    mapIframe.onload = () => {
+      mapIframe.classList.add('loaded');
+      if (mapLoading) mapLoading.classList.add('hidden');
+    };
+    // Fallback hide loader after 8s regardless
+    setTimeout(() => {
+      mapIframe.classList.add('loaded');
+      if (mapLoading) mapLoading.classList.add('hidden');
+    }, 8000);
   }
 }
 
@@ -677,12 +670,42 @@ async function updateExternalBtn() {
   mapExternalBtn.href = ok ? DYNMAP_HTTPS : DYNMAP_HTTP;
 }
 
-// Init
-probeWorker().then(() => {
-  updateExternalBtn();
-  fetchMapPlayers();
-});
-setInterval(fetchMapPlayers, 30000);
+// Init — fetch players immediately using HTTPS
+async function fetchAndRenderPlayersDirect() {
+  if (!mapPlayerCount && !mapPlayerList) return;
+  try {
+    const res = await fetch(`${DYNMAP_HTTPS}/up/world/world/0`, {
+      signal: AbortSignal.timeout(5000)
+    });
+    if (!res.ok) throw new Error();
+    const data = await res.json();
+    const players = data.players || [];
+
+    if (mapPlayerCount) {
+      mapPlayerCount.textContent = players.length > 0
+        ? `${players.length} pemain online`
+        : '0 pemain online';
+    }
+    if (mapPlayerList) {
+      if (players.length === 0) { mapPlayerList.innerHTML = ''; return; }
+      mapPlayerList.innerHTML = `<div class="map-players-label">Sedang Online</div>` +
+        players.map(p => {
+          const name = p.name || p.account || '???';
+          return `<div class="map-player-chip">
+            <div class="map-player-avatar">
+              <img src="https://mc-heads.net/avatar/${name}/20" alt="${name}" loading="lazy" onerror="this.style.display='none'">
+            </div>${name}</div>`;
+        }).join('');
+    }
+    mapWorkerReady = true;
+    if (mapExternalBtn) mapExternalBtn.href = DYNMAP_HTTPS;
+  } catch {
+    if (mapPlayerCount) mapPlayerCount.textContent = '— pemain online';
+  }
+}
+
+fetchAndRenderPlayersDirect();
+setInterval(fetchAndRenderPlayersDirect, 15000);
 
 /* ── MAP MINI IFRAME LOADER ─────────────────────────── */
 (function() {
