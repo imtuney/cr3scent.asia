@@ -83,6 +83,7 @@
       <a href="#preview" role="listitem">Preview</a>
       <a href="#changelog" role="listitem">Updates</a>
       <a href="#faq" role="listitem">FAQ</a>
+      <a href="#map" role="listitem">Live Map</a>
       <a href="#join" role="listitem">Join</a>
     </div>
     <div class="nav-right">
@@ -112,6 +113,7 @@
     <a href="#changelog" class="drawer-link"><i class="ph ph-clock-counter-clockwise" aria-hidden="true"></i>Updates</a>
     <a href="#staff" class="drawer-link"><i class="ph ph-users" aria-hidden="true"></i>Team</a>
     <a href="#faq" class="drawer-link"><i class="ph ph-question" aria-hidden="true"></i>FAQ</a>
+    <a href="#map" class="drawer-link"><i class="ph ph-map-trifold" aria-hidden="true"></i>Live Map</a>
     <a href="#join" class="drawer-link"><i class="ph ph-game-controller" aria-hidden="true"></i>Join</a>
   </nav>
   <div class="drawer-sep" aria-hidden="true"></div>
@@ -335,6 +337,112 @@
       </div>
     </div>
   </section>
+
+  <!-- LIVE MAP -->
+  <section id="map" class="map-section" aria-labelledby="map-h">
+    <div class="section-inner">
+      <div class="reveal">
+        <div class="section-label" aria-hidden="true">Dunia Cr3scent</div>
+        <h2 class="section-heading" id="map-h">Live<br><em>World Map.</em></h2>
+        <p class="section-body">Peta dunia Cr3scent secara real-time. Lihat posisi pemain, biome, dan bangunan yang sudah dibuat komunitas.</p>
+      </div>
+
+      <!-- MAP CARD -->
+      <div class="map-card reveal" id="mapCard">
+        <div class="map-preview" id="mapPreview" onclick="openMapFull()" role="button" tabindex="0"
+             aria-label="Buka peta dunia Cr3scent" onkeydown="if(event.key==='Enter'||event.key===' '){openMapFull();event.preventDefault();}">
+
+          <!-- preview thumbnail via iframe snapshot feel -->
+          <div class="map-preview-bg" aria-hidden="true">
+            <div class="map-grid-lines" aria-hidden="true"></div>
+            <div class="map-dot" style="top:38%;left:42%" aria-hidden="true"></div>
+            <div class="map-dot" style="top:55%;left:61%" aria-hidden="true"></div>
+            <div class="map-dot" style="top:29%;left:70%" aria-hidden="true"></div>
+            <div class="map-dot pulsing" style="top:48%;left:50%" aria-hidden="true"></div>
+            <div class="map-coord-label" style="top:47%;left:51%" aria-hidden="true">Spawn</div>
+          </div>
+
+          <div class="map-preview-overlay">
+            <div class="map-preview-badge">
+              <span class="pulse-dot" aria-hidden="true"></span>
+              LIVE · Real-time
+            </div>
+            <div class="map-preview-cta">
+              <div class="map-scroll-icon" aria-hidden="true">
+                <i class="ph ph-map-trifold"></i>
+              </div>
+              <span>Tap untuk buka peta penuh</span>
+              <i class="ph ph-arrow-right" aria-hidden="true"></i>
+            </div>
+          </div>
+
+          <div class="map-preview-corner tl" aria-hidden="true"></div>
+          <div class="map-preview-corner tr" aria-hidden="true"></div>
+          <div class="map-preview-corner bl" aria-hidden="true"></div>
+          <div class="map-preview-corner br" aria-hidden="true"></div>
+        </div>
+
+        <div class="map-meta">
+          <div class="map-meta-item">
+            <i class="ph ph-users" aria-hidden="true"></i>
+            <span id="mapPlayerCount">— pemain online</span>
+          </div>
+          <div class="map-meta-item">
+            <i class="ph ph-globe-hemisphere-east" aria-hidden="true"></i>
+            <span>Overworld · Nether · End</span>
+          </div>
+          <div class="map-meta-item">
+            <i class="ph ph-clock" aria-hidden="true"></i>
+            <span>Update setiap 2 detik</span>
+          </div>
+          <a href="http://premium3.raehost.com:8123" target="_blank" rel="noopener noreferrer"
+             id="mapExternalBtn" class="btn btn-ghost map-external-btn" href="http://premium3.raehost.com:19321" onclick="event.stopPropagation()">
+            <i class="ph ph-arrow-square-out" aria-hidden="true"></i>
+            Buka di Tab Baru
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MAP LIGHTBOX -->
+  <div class="map-lightbox" id="mapLightbox" aria-hidden="true" role="dialog" aria-modal="true" aria-label="Peta dunia Cr3scent">
+    <div class="map-lightbox-backdrop" onclick="closeMapFull()" aria-hidden="true"></div>
+    <div class="map-lightbox-sheet" id="mapSheet">
+      <div class="map-lightbox-handle" aria-hidden="true"></div>
+      <div class="map-lightbox-header">
+        <div class="map-lightbox-title">
+          <i class="ph ph-map-trifold" aria-hidden="true"></i>
+          <span>Cr3scent · Live World Map</span>
+          <span class="map-live-badge"><span class="pulse-dot" aria-hidden="true"></span>Live</span>
+        </div>
+        <div class="map-lightbox-actions">
+          <a href="http://premium3.raehost.com:8123" target="_blank" rel="noopener noreferrer"
+             class="map-lb-btn" aria-label="Buka di tab baru">
+            <i class="ph ph-arrow-square-out"></i>
+          </a>
+          <button class="map-lb-btn" onclick="closeMapFull()" aria-label="Tutup peta">
+            <i class="ph ph-x"></i>
+          </button>
+        </div>
+      </div>
+      <div class="map-lightbox-body">
+        <iframe id="mapIframe"
+                src=""
+                title="Cr3scent Live World Map"
+                allow="fullscreen"
+                loading="lazy"
+                referrerpolicy="no-referrer-when-downgrade">
+        </iframe>
+        <div class="map-loading" id="mapLoading" aria-live="polite">
+          <div class="map-loading-inner">
+            <div class="map-spinner" aria-hidden="true"></div>
+            <span id="mapLoadingMsg">Memuat peta dunia…</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <!-- JOIN -->
   <section id="join" class="join-section" aria-labelledby="join-h">

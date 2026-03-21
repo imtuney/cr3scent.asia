@@ -547,3 +547,139 @@ function toggleFAQ(btn) {
     btn.setAttribute('aria-expanded', 'true');
   }
 }
+
+/* ═══ LIVE MAP ═══════════════════════════════════════════════ */
+// Primary: HTTPS subdomain via Cloudflare Worker (no mixed content)
+// Fallback: direct HTTP (works only if user opens in new tab)
+const DYNMAP_HTTPS = 'https://map.cr3scent.asia';
+const DYNMAP_HTTP  = 'http://premium3.raehost.com:19321';
+
+let mapOpen   = false;
+let mapLoaded = false;
+let touchStartY = 0;
+let mapWorkerReady = null; // null = unknown, true/false after probe
+
+const mapLightbox    = document.getElementById('mapLightbox');
+const mapSheet       = document.getElementById('mapSheet');
+const mapIframe      = document.getElementById('mapIframe');
+const mapLoading     = document.getElementById('mapLoading');
+const mapLoadingMsg  = document.getElementById('mapLoadingMsg');
+const mapPlayerCount = document.getElementById('mapPlayerCount');
+const mapExternalBtn = document.getElementById('mapExternalBtn');
+
+// Probe whether the Cloudflare Worker is live
+async function probeWorker() {
+  if (mapWorkerReady !== null) return mapWorkerReady;
+  try {
+    const res = await fetch(`${DYNMAP_HTTPS}/up/configuration`, {
+      signal: AbortSignal.timeout(3500)
+    });
+    mapWorkerReady = res.ok;
+  } catch {
+    mapWorkerReady = false;
+  }
+  return mapWorkerReady;
+}
+
+async function openMapFull() {
+  mapLightbox.classList.add('open');
+  mapLightbox.setAttribute('aria-hidden', 'false');
+  document.body.style.overflow = 'hidden';
+  mapOpen = true;
+  setTimeout(() => mapSheet.querySelector('.map-lb-btn')?.focus(), 60);
+
+  if (!mapLoaded) {
+    mapLoaded = true;
+
+    // Show loading state
+    if (mapLoadingMsg) mapLoadingMsg.textContent = 'Menghubungkan ke peta dunia…';
+
+    const workerOk = await probeWorker();
+    const src = workerOk ? DYNMAP_HTTPS : null;
+
+    if (src) {
+      // embed via HTTPS worker
+      mapIframe.src = src;
+      mapIframe.onload = () => {
+        mapIframe.classList.add('loaded');
+        if (mapLoading) mapLoading.classList.add('hidden');
+      };
+      setTimeout(() => {
+        mapIframe.classList.add('loaded');
+        if (mapLoading) mapLoading.classList.add('hidden');
+      }, 6000);
+    } else {
+      // Worker not ready — show friendly fallback
+      showMapFallback();
+    }
+  }
+}
+
+function showMapFallback() {
+  if (mapLoading) {
+    mapLoading.innerHTML = `
+      <div class="map-loading-inner">
+        <div style="font-size:2.4rem;line-height:1">🗺️</div>
+        <div style="color:var(--gold);font-weight:600;font-size:.95rem">Peta belum bisa di-embed</div>
+        <div style="color:var(--muted);font-size:.8rem;text-align:center;max-width:260px;line-height:1.5">
+          Cloudflare Worker belum aktif.<br>Buka peta di tab baru untuk sementara.
+        </div>
+        <a href="${DYNMAP_HTTP}" target="_blank" rel="noopener noreferrer"
+           class="btn btn-gold" style="margin-top:6px;font-size:.82rem;padding:10px 20px;text-decoration:none;display:inline-flex;align-items:center;gap:8px;border-radius:12px">
+          <i class="ph ph-arrow-square-out"></i> Buka Peta Sekarang
+        </a>
+      </div>`;
+  }
+}
+
+function closeMapFull() {
+  mapLightbox.classList.remove('open');
+  mapLightbox.setAttribute('aria-hidden', 'true');
+  document.body.style.overflow = '';
+  mapOpen = false;
+}
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape' && mapOpen) closeMapFull();
+});
+
+if (mapSheet) {
+  mapSheet.addEventListener('touchstart', e => {
+    touchStartY = e.touches[0].clientY;
+  }, { passive: true });
+  mapSheet.addEventListener('touchend', e => {
+    if (e.changedTouches[0].clientY - touchStartY > 80) closeMapFull();
+  }, { passive: true });
+}
+
+// Live player count from Dynmap JSON API
+async function fetchMapPlayers() {
+  if (!mapPlayerCount) return;
+  try {
+    // Try HTTPS worker first, fall back to HTTP (CORS-friendly for JSON)
+    const base = (await probeWorker()) ? DYNMAP_HTTPS : DYNMAP_HTTP;
+    const res = await fetch(`${base}/up/world/world/0`, {
+      signal: AbortSignal.timeout(4000)
+    });
+    if (!res.ok) throw new Error();
+    const data = await res.json();
+    const count = (data.players || []).length;
+    mapPlayerCount.textContent = `${count} pemain online`;
+  } catch {
+    mapPlayerCount.textContent = '— pemain online';
+  }
+}
+
+// Update external button href based on worker availability
+async function updateExternalBtn() {
+  if (!mapExternalBtn) return;
+  const ok = await probeWorker();
+  mapExternalBtn.href = ok ? DYNMAP_HTTPS : DYNMAP_HTTP;
+}
+
+// Init
+probeWorker().then(() => {
+  updateExternalBtn();
+  fetchMapPlayers();
+});
+setInterval(fetchMapPlayers, 30000);
