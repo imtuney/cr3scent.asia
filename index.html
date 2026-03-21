@@ -34,6 +34,7 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="Cr3scent">
   <meta name="mobile-web-app-capable" content="yes">
+  <link rel="manifest" href="manifest.json">
 
   <!-- SVG favicon — no HTTP request needed -->
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%23c9a84c'/><text x='16' y='22' text-anchor='middle' font-size='20' fill='%230a0a0c'>&#9790;</text></svg>">
@@ -41,10 +42,14 @@
   <!-- ─── FONTS ─────────────────────────────────────────────── -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400;1,600;1,700&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300&display=swap" onload="this.rel='stylesheet'">
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400;1,600;1,700&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300&display=swap" rel="stylesheet">
 
   <!-- ─── ICONS ─────────────────────────────────────────────── -->
   <script src="https://unpkg.com/@phosphor-icons/web@2.1.1/src/index.js" defer></script>
+
+  <!-- ─── CLOUDFLARE ANALYTICS (privacy-first, no cookies) ──── -->
+  <script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "GANTI_DENGAN_TOKEN_ANALYTICS_KAMU"}'></script>
 
   <!-- ─── STYLES & SCRIPTS ────────────────────────────────────── -->
   <link rel="stylesheet" href="style.css">
@@ -356,11 +361,12 @@
           <div class="map-preview-bg" aria-hidden="true">
             <iframe
               id="mapMiniIframe"
-              src="https://map.cr3scent.asia"
+              src=""
               title=""
               aria-hidden="true"
               tabindex="-1"
               loading="lazy"
+              sandbox="allow-scripts allow-same-origin"
               style="position:absolute;inset:0;width:100%;height:100%;border:none;pointer-events:none;opacity:0;transition:opacity 1.2s ease;"
             ></iframe>
             <!-- fallback grid shown until iframe loads -->
@@ -408,6 +414,8 @@
             Buka di Tab Baru
           </a>
         </div>
+        <!-- Online Player List -->
+        <div class="map-players" id="mapPlayerList" aria-label="Pemain online" aria-live="polite"></div>
       </div>
     </div>
   </section>
@@ -438,6 +446,7 @@
                 src=""
                 title="Cr3scent Live World Map"
                 allow="fullscreen"
+                sandbox="allow-scripts allow-same-origin allow-popups allow-forms"
                 loading="lazy"
                 referrerpolicy="no-referrer-when-downgrade">
         </iframe>
@@ -554,14 +563,40 @@
             <div class="cl-header" onclick="toggleCL(this)" role="button" tabindex="0" aria-expanded="true"
                  onkeydown="if(event.key==='Enter'||event.key===' '){toggleCL(this);event.preventDefault();}">
               <div class="cl-meta">
-                <span class="cl-version">v1.2</span>
+                <span class="cl-version">v1.3</span>
                 <span class="cl-badge new-badge">Terbaru</span>
+              </div>
+              <div class="cl-title">Live World Map &amp; Website Optimization</div>
+              <div class="cl-date"><i class="ph ph-calendar-blank"></i> Mar 2026</div>
+              <i class="ph ph-caret-down cl-chevron"></i>
+            </div>
+            <div class="cl-body open">
+              <div class="cl-entry add"><i class="ph ph-plus-circle"></i> Live World Map — Dynmap real-time via Cloudflare Worker HTTPS</div>
+              <div class="cl-entry add"><i class="ph ph-plus-circle"></i> Preview peta langsung di website dengan player tracking</div>
+              <div class="cl-entry add"><i class="ph ph-plus-circle"></i> Online player list di map section</div>
+              <div class="cl-entry add"><i class="ph ph-plus-circle"></i> Scroll progress bar &amp; back to top button</div>
+              <div class="cl-entry add"><i class="ph ph-plus-circle"></i> PWA manifest — website bisa di-install ke home screen</div>
+              <div class="cl-entry add"><i class="ph ph-plus-circle"></i> Cloudflare Web Analytics — privacy-first tracking</div>
+              <div class="cl-entry fix"><i class="ph ph-wrench"></i> Fix alert popup dari iframe Dynmap</div>
+              <div class="cl-entry fix"><i class="ph ph-wrench"></i> Fix font loading — preload untuk performa lebih baik</div>
+              <div class="cl-entry change"><i class="ph ph-pencil-simple"></i> Domain DNS dipindah ke Cloudflare untuk HTTPS &amp; performance</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="cl-item">
+          <div class="cl-dot" aria-hidden="true"></div>
+          <div class="cl-content">
+            <div class="cl-header" onclick="toggleCL(this)" role="button" tabindex="0" aria-expanded="false"
+                 onkeydown="if(event.key==='Enter'||event.key===' '){toggleCL(this);event.preventDefault();}">
+              <div class="cl-meta">
+                <span class="cl-version">v1.2</span>
               </div>
               <div class="cl-title">Website Redesign &amp; Tutorial Popup</div>
               <div class="cl-date"><i class="ph ph-calendar-blank"></i> Mar 2026</div>
               <i class="ph ph-caret-down cl-chevron"></i>
             </div>
-            <div class="cl-body open">
+            <div class="cl-body">
               <div class="cl-entry add"><i class="ph ph-plus-circle"></i> Welcome popup tutorial join untuk Java &amp; Bedrock</div>
               <div class="cl-entry add"><i class="ph ph-plus-circle"></i> Section preview dual video — Tutorial YouTube &amp; TikTok</div>
               <div class="cl-entry add"><i class="ph ph-plus-circle"></i> Custom cursor, particle canvas, page loader animasi</div>
@@ -736,6 +771,7 @@
           <li><a href="#changelog">Updates</a></li>
           <li><a href="#staff">Team</a></li>
           <li><a href="#faq">FAQ</a></li>
+          <li><a href="#map">Live Map</a></li>
           <li><a href="#join">Join</a></li>
         </ul>
       </div>
@@ -936,6 +972,14 @@
   <i class="ph ph-check-circle" id="toastIcon" aria-hidden="true"></i>
   <span id="toastMsg"></span>
 </div>
+
+<!-- SCROLL PROGRESS -->
+<div class="scroll-progress" id="scrollProgress" aria-hidden="true"></div>
+
+<!-- BACK TO TOP -->
+<button class="back-to-top" id="backToTop" aria-label="Kembali ke atas" onclick="window.scrollTo({top:0,behavior:'smooth'})">
+  <i class="ph ph-arrow-up" aria-hidden="true"></i>
+</button>
 
 <script src="script.js"></script>
 </body>

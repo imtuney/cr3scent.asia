@@ -704,3 +704,67 @@ setInterval(fetchMapPlayers, 30000);
     mini.src = 'https://map.cr3scent.asia';
   }, 2000);
 })();
+
+/* ═══ SCROLL PROGRESS + BACK TO TOP ════════════════════════ */
+const scrollProgress = document.getElementById('scrollProgress');
+const backToTop = document.getElementById('backToTop');
+
+window.addEventListener('scroll', () => {
+  const scrolled = window.scrollY;
+  const total = document.documentElement.scrollHeight - window.innerHeight;
+  if (scrollProgress) scrollProgress.style.width = (scrolled / total * 100) + '%';
+  if (backToTop) backToTop.classList.toggle('visible', scrolled > 300);
+}, { passive: true });
+
+/* ═══ ONLINE PLAYER LIST ════════════════════════════════════ */
+const mapPlayerList = document.getElementById('mapPlayerList');
+
+async function fetchAndRenderPlayers() {
+  if (!mapPlayerCount && !mapPlayerList) return;
+  try {
+    const base = (await probeWorker()) ? DYNMAP_HTTPS : DYNMAP_HTTP;
+    const res = await fetch(`${base}/up/world/world/0`, {
+      signal: AbortSignal.timeout(4000)
+    });
+    if (!res.ok) throw new Error();
+    const data = await res.json();
+    const players = data.players || [];
+
+    // Update count
+    if (mapPlayerCount) {
+      mapPlayerCount.textContent = players.length > 0
+        ? `${players.length} pemain online`
+        : '0 pemain online';
+    }
+
+    // Render player chips
+    if (mapPlayerList) {
+      if (players.length === 0) {
+        mapPlayerList.innerHTML = '';
+        return;
+      }
+      mapPlayerList.innerHTML = `<div class="map-players-label">Sedang Online</div>` +
+        players.map(p => {
+          const name = p.name || p.account || '???';
+          const avatarUrl = `https://mc-heads.net/avatar/${name}/20`;
+          return `<div class="map-player-chip">
+            <div class="map-player-avatar">
+              <img src="${avatarUrl}" alt="${name}" loading="lazy"
+                   onerror="this.style.display='none'">
+            </div>
+            ${name}
+          </div>`;
+        }).join('');
+    }
+  } catch {
+    if (mapPlayerCount) mapPlayerCount.textContent = '— pemain online';
+    if (mapPlayerList) mapPlayerList.innerHTML = '';
+  }
+}
+
+// Override fetchMapPlayers with the new combined function
+probeWorker().then(() => {
+  updateExternalBtn();
+  fetchAndRenderPlayers();
+});
+setInterval(fetchAndRenderPlayers, 15000);
