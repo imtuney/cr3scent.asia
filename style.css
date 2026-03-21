@@ -1541,3 +1541,38 @@
 @media(max-width:767px) {
   .map-lightbox-sheet { touch-action: pan-y; }
 }
+
+/* ── MAP MINI IFRAME (live preview in card) ─────────── */
+.map-preview-bg {
+  position: absolute; inset: 0;
+  overflow: hidden;
+}
+
+/* iframe mini: zoomed out, dimmed, non-interactive */
+#mapMiniIframe {
+  transform: scale(0.38) translate(-84%, -84%);
+  transform-origin: top left;
+  width: 264% !important;
+  height: 264% !important;
+  filter: brightness(0.55) saturate(0.8);
+  pointer-events: none !important;
+  border: none !important;
+}
+#mapMiniIframe.mini-loaded {
+  opacity: 0.75 !important;
+}
+
+/* hide grid once iframe loads */
+#mapPreviewGrid {
+  transition: opacity .8s ease;
+}
+#mapPreviewGrid.hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* keep dots/label on top of iframe */
+.map-dot, .map-coord-label {
+  position: absolute;
+  z-index: 2;
+}

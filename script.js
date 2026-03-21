@@ -683,3 +683,24 @@ probeWorker().then(() => {
   fetchMapPlayers();
 });
 setInterval(fetchMapPlayers, 30000);
+
+/* ── MAP MINI IFRAME LOADER ─────────────────────────── */
+(function() {
+  const mini = document.getElementById('mapMiniIframe');
+  const grid = document.getElementById('mapPreviewGrid');
+  if (!mini) return;
+
+  // Load mini iframe after page settles (don't block main content)
+  setTimeout(() => {
+    mini.onload = () => {
+      mini.classList.add('mini-loaded');
+      if (grid) grid.classList.add('hidden');
+    };
+    // Cross-origin iframe won't fire onload reliably — fallback
+    setTimeout(() => {
+      mini.classList.add('mini-loaded');
+      if (grid) grid.classList.add('hidden');
+    }, 5000);
+    mini.src = 'https://map.cr3scent.asia';
+  }, 2000);
+})();
