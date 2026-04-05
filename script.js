@@ -1,5 +1,13 @@
 'use strict';
 
+/* ════════════════════════════════════════════════════════════
+   CONFIG — edit di sini untuk setup map nanti
+   Set MAP_ENABLED = true dan isi MAP_URL setelah Dynmap siap
+════════════════════════════════════════════════════════════ */
+const MAP_ENABLED = false;                        // ← ganti true kalau map sudah aktif
+const MAP_URL     = 'https://map.cr3scent.asia';  // ← URL Dynmap kamu
+/* ═══════════════════════════════════════════════════════════ */
+
 /* ── PAGE LOAD ──────────────────────────────────────────────── */
 document.addEventListener('DOMContentLoaded', () => {
   document.documentElement.classList.add('ready');
@@ -281,7 +289,7 @@ function legacyCopy(text) {
   if (!ok) throw new Error('execCommand failed');
 }
 
-/* ── SERVER STATUS ──────────────────────────────────────────── */
+/* ── SERVER STATUS — Bedrock endpoint ──────────────────────── */
 let abortCtrl = null;
 async function checkServerStatus() {
   const dot   = document.getElementById('statusDot');
@@ -294,7 +302,8 @@ async function checkServerStatus() {
   siS.classList.add('loading'); siP.classList.add('loading');
   stxt.textContent = '…'; dot.className = 'status-dot';
   try {
-    const res = await fetch('https://api.mcsrvstat.us/3/mc.cr3scent.asia', {
+    // Bedrock server — use bedrock API endpoint
+    const res = await fetch('https://api.mcsrvstat.us/bedrock/3/mc.cr3scent.asia', {
       signal: abortCtrl.signal, cache: 'no-cache'
     });
     if (!res.ok) throw new Error();
@@ -302,7 +311,7 @@ async function checkServerStatus() {
     if (d.online) {
       dot.className = 'status-dot online';
       stxt.textContent = 'Online';
-      pcnt.textContent = String(d.players?.online ?? 0);
+      pcnt.textContent = `${d.players?.online ?? 0}`;
     } else {
       dot.className = 'status-dot offline';
       stxt.textContent = 'Offline';
@@ -602,73 +611,30 @@ function toggleFAQ(btn) {
   if (!isOpen) { answer.classList.add('open'); btn.setAttribute('aria-expanded', 'true'); }
 }
 
-/* ═══ LIVE MAP ═══════════════════════════════════════════════ */
-const DYNMAP_HTTPS = 'https://map.cr3scent.asia';
-const DYNMAP_HTTP  = 'http://premium3.raehost.com:19321';
-
+/* ═══ MAP — CONFIG-DRIVEN ═══════════════════════════════════
+   MAP_ENABLED di atas menentukan apakah map aktif atau coming soon.
+   Kalau MAP_ENABLED = true, openMapFull() akan buka lightbox.
+   Kalau false, dia redirect ke MAP_URL di tab baru.
+════════════════════════════════════════════════════════════ */
 let mapOpen   = false;
-let mapLoaded = false;
-let touchStartY = 0;
-let mapWorkerReady = null;
 
-const mapLightbox    = document.getElementById('mapLightbox');
-const mapSheet       = document.getElementById('mapSheet');
-const mapIframe      = document.getElementById('mapIframe');
-const mapLoading     = document.getElementById('mapLoading');
-const mapLoadingMsg  = document.getElementById('mapLoadingMsg');
+// Stub — dipanggil dari float bar & keyboard shortcut "M"
+function openMapFull() {
+  if (MAP_ENABLED) {
+    // Nanti implementasi lightbox kalau map sudah aktif
+    window.open(MAP_URL, '_blank', 'noopener');
+  } else {
+    window.open(MAP_URL, '_blank', 'noopener');
+    showToast('Map sedang dalam setup, cek langsung…');
+  }
+}
+function closeMapFull() { mapOpen = false; }
+
+/* ── Player count dari mcsrvstat Bedrock API (bukan Dynmap) ── */
 const mapPlayerCount = document.getElementById('mapPlayerCount');
-const mapExternalBtn = document.getElementById('mapExternalBtn');
 const mapPlayerList  = document.getElementById('mapPlayerList');
 const heroPlayersWrap = document.getElementById('heroPlayersWrap');
 
-async function probeWorker() {
-  if (mapWorkerReady !== null) return mapWorkerReady;
-  try {
-    const res = await fetch(`${DYNMAP_HTTPS}/up/world/world/0`, {
-      signal: AbortSignal.timeout(5000), mode: 'cors'
-    });
-    mapWorkerReady = res.ok;
-  } catch { mapWorkerReady = true; }
-  return mapWorkerReady;
-}
-
-async function openMapFull() {
-  mapLightbox.classList.add('open');
-  mapLightbox.setAttribute('aria-hidden', 'false');
-  document.body.style.overflow = 'hidden';
-  mapOpen = true;
-  setTimeout(() => mapSheet.querySelector('.map-lb-btn')?.focus(), 60);
-
-  if (!mapLoaded) {
-    mapLoaded = true;
-    if (mapLoadingMsg) mapLoadingMsg.textContent = 'Memuat peta dunia…';
-    mapIframe.src = DYNMAP_HTTPS;
-    mapIframe.onload = () => {
-      mapIframe.classList.add('loaded');
-      if (mapLoading) mapLoading.classList.add('hidden');
-    };
-    setTimeout(() => {
-      mapIframe.classList.add('loaded');
-      if (mapLoading) mapLoading.classList.add('hidden');
-    }, 8000);
-  }
-}
-
-function closeMapFull() {
-  mapLightbox.classList.remove('open');
-  mapLightbox.setAttribute('aria-hidden', 'true');
-  document.body.style.overflow = '';
-  mapOpen = false;
-}
-
-if (mapSheet) {
-  mapSheet.addEventListener('touchstart', e => { touchStartY = e.touches[0].clientY; }, { passive: true });
-  mapSheet.addEventListener('touchend', e => {
-    if (e.changedTouches[0].clientY - touchStartY > 80) closeMapFull();
-  }, { passive: true });
-}
-
-/* ── PLAYER CHIP BUILDER ────────────────────────────────────── */
 function buildPlayerChips(players) {
   if (!players.length) return '';
   return `<div class="map-players-label">Sedang Online</div>` +
@@ -695,61 +661,44 @@ function buildHeroPlayers(players) {
   </div>`;
 }
 
-/* ── FETCH & RENDER PLAYERS ─────────────────────────────────── */
 async function fetchAndRenderPlayers() {
   try {
-    const res = await fetch(`${DYNMAP_HTTPS}/up/world/world/0`, {
+    // Use mcsrvstat Bedrock API since Dynmap not active
+    const res = await fetch('https://api.mcsrvstat.us/bedrock/3/mc.cr3scent.asia', {
       signal: AbortSignal.timeout(5000)
     });
     if (!res.ok) throw new Error();
     const data = await res.json();
-    const players = data.players || [];
+    const players = data.players?.list || [];
+    const online  = data.players?.online ?? 0;
 
-    // map player count label
     if (mapPlayerCount) {
-      mapPlayerCount.textContent = players.length > 0
-        ? `${players.length} pemain online`
-        : '0 pemain online';
+      mapPlayerCount.textContent = online > 0 ? `${online} pemain online` : '0 pemain online';
     }
-
-    // map card player list (below map preview, above meta)
     if (mapPlayerList) {
       mapPlayerList.innerHTML = players.length ? buildPlayerChips(players) : '';
     }
-
-    // hero player list (below IP card)
     if (heroPlayersWrap) {
       heroPlayersWrap.innerHTML = players.length ? buildHeroPlayers(players) : '';
     }
-
-    mapWorkerReady = true;
-    if (mapExternalBtn) mapExternalBtn.href = DYNMAP_HTTPS;
   } catch {
     if (mapPlayerCount) mapPlayerCount.textContent = '— pemain online';
-    if (mapPlayerList) mapPlayerList.innerHTML = '';
-    if (heroPlayersWrap) heroPlayersWrap.innerHTML = '';
   }
 }
 
-// run immediately and on interval
 fetchAndRenderPlayers();
-setInterval(fetchAndRenderPlayers, 15000);
+setInterval(fetchAndRenderPlayers, 30000); // 30s cukup untuk mcsrvstat (rate limit friendly)
 
-/* ── MAP MINI IFRAME LOADER ─────────────────────────── */
+/* ── Mini iframe — disabled when map not enabled ── */
 (function() {
+  if (!MAP_ENABLED) return; // skip if coming soon
   const mini = document.getElementById('mapMiniIframe');
   const grid = document.getElementById('mapPreviewGrid');
   if (!mini) return;
   setTimeout(() => {
-    mini.onload = () => {
-      mini.classList.add('mini-loaded');
-      if (grid) grid.classList.add('hidden');
-    };
-    setTimeout(() => {
-      mini.classList.add('mini-loaded');
-      if (grid) grid.classList.add('hidden');
-    }, 5000);
-    mini.src = 'https://map.cr3scent.asia';
+    mini.onload = () => { mini.classList.add('mini-loaded'); if (grid) grid.classList.add('hidden'); };
+    setTimeout(() => { mini.classList.add('mini-loaded'); if (grid) grid.classList.add('hidden'); }, 5000);
+    mini.src = MAP_URL;
   }, 2000);
 })();
 

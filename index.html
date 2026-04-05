@@ -142,7 +142,10 @@
 
     <div class="hero-eyebrow" role="status">
       <span class="pulse-dot" aria-hidden="true"></span>
-      Server Live &middot; Since 19 Mar 2026
+      Bedrock Live &middot; Java <em style="font-style:normal;opacity:.7">OTW</em>
+      <span class="eyebrow-sep" aria-hidden="true">·</span>
+      <i class="ph ph-star-fill" style="color:#f5c842;font-size:.8em" aria-hidden="true"></i>
+      <span style="color:var(--gold-hi);font-weight:700">1046</span>
     </div>
 
     <!-- LIVE AGE TICKER -->
@@ -212,15 +215,16 @@
         <i class="ph ph-copy" aria-hidden="true"></i>
         <span id="ipText">mc.cr3scent.asia</span>
       </div>
-      <div class="ip-hint">Tap to copy &bull; Java &amp; Bedrock supported</div>
+      <div class="ip-hint">Tap to copy &bull; Bedrock aktif &bull; Java segera hadir</div>
       <div class="ip-divider" aria-hidden="true"></div>
       <div class="ip-meta">
         <div class="ip-badge">
-          <i class="ph ph-plug" aria-hidden="true"></i>Bedrock Port: 25655
-          <span class="tag tag-o">Bedrock</span>
+          <i class="ph ph-plug" aria-hidden="true"></i>Port: 25655
+          <span class="tag tag-o">Bedrock ✓</span>
         </div>
         <div class="ip-badge">
-          Java 1.21.1+<span class="tag tag-g">Java</span>
+          <i class="ph ph-clock" aria-hidden="true"></i>
+          Java<span class="tag" style="background:rgba(255,255,255,.07);color:var(--muted);border:1px solid var(--border)">OTW</span>
         </div>
       </div>
     </div>
@@ -274,7 +278,7 @@
           <div class="info-tile-icon" aria-hidden="true"><i class="ph ph-chart-bar"></i></div>
           <div class="info-tile-body">
             <div class="info-tile-title">Statistik</div>
-            <div class="info-tile-sub">100 slots · Rp 179k/mo</div>
+            <div class="info-tile-sub">67 slots · Rp 179k/mo</div>
           </div>
           <i class="ph ph-arrow-right info-tile-arrow" aria-hidden="true"></i>
         </div>
@@ -349,54 +353,40 @@
       <div>
         <div class="section-label" aria-hidden="true">Dunia Cr3scent</div>
         <h2 class="section-heading" id="map-h">Live<br><em>World Map.</em></h2>
-        <p class="section-body">Peta dunia Cr3scent secara real-time. Lihat posisi pemain, biome, dan bangunan yang sudah dibuat komunitas.</p>
+        <p class="section-body">Peta dunia real-time akan hadir segera. Saat ini dalam proses setup untuk Season 2.</p>
       </div>
 
-      <!-- MAP CARD -->
-      <div class="map-card" id="mapCard">
-        <div class="map-preview" id="mapPreview" onclick="openMapFull()" role="button" tabindex="0"
-             aria-label="Buka peta dunia Cr3scent" onkeydown="if(event.key==='Enter'||event.key===' '){openMapFull();event.preventDefault();}">
-
-          <div class="map-preview-bg" aria-hidden="true">
-            <iframe
-              id="mapMiniIframe"
-              src=""
-              title=""
-              aria-hidden="true"
-              tabindex="-1"
-              loading="lazy"
-              sandbox="allow-scripts allow-same-origin"
-              style="position:absolute;inset:0;width:100%;height:100%;border:none;pointer-events:none;opacity:0;transition:opacity 1.2s ease;"
-            ></iframe>
-            <div class="map-grid-lines" id="mapPreviewGrid" aria-hidden="true"></div>
-            <div class="map-dot pulsing" style="top:48%;left:50%" aria-hidden="true"></div>
-            <div class="map-coord-label" style="top:47%;left:51%" aria-hidden="true">Spawn</div>
-          </div>
-
-          <div class="map-preview-overlay">
-            <div class="map-preview-badge">
-              <span class="pulse-dot" aria-hidden="true"></span>
-              LIVE · Real-time
-            </div>
-            <div class="map-preview-cta">
-              <div class="map-scroll-icon" aria-hidden="true">
-                <i class="ph ph-map-trifold"></i>
-              </div>
-              <span>Tap untuk buka peta penuh</span>
-              <i class="ph ph-arrow-right" aria-hidden="true"></i>
-            </div>
-          </div>
-
-          <div class="map-preview-corner tl" aria-hidden="true"></div>
-          <div class="map-preview-corner tr" aria-hidden="true"></div>
-          <div class="map-preview-corner bl" aria-hidden="true"></div>
-          <div class="map-preview-corner br" aria-hidden="true"></div>
+      <div class="map-cs-card" id="mapCard">
+        <div class="map-cs-visual" aria-hidden="true">
+          <!-- animated placeholder grid -->
+          <div class="map-cs-grid"></div>
+          <div class="map-cs-orb orb1"></div>
+          <div class="map-cs-orb orb2"></div>
+          <div class="map-cs-dot pulsing" style="top:45%;left:50%"></div>
+          <div class="map-cs-label" style="top:44%;left:51%">Spawn</div>
+          <!-- corner brackets -->
+          <div class="map-preview-corner tl"></div>
+          <div class="map-preview-corner tr"></div>
+          <div class="map-preview-corner bl"></div>
+          <div class="map-preview-corner br"></div>
         </div>
 
-        <!-- Online Player List — right below map preview -->
-        <div class="map-players" id="mapPlayerList" aria-label="Pemain online" aria-live="polite"></div>
+        <div class="map-cs-body">
+          <div class="map-cs-badge">
+            <i class="ph ph-clock" aria-hidden="true"></i>
+            SEGERA HADIR
+          </div>
+          <div class="map-cs-title">Dynmap sedang dalam setup</div>
+          <p class="map-cs-desc">Live Map akan aktif setelah konfigurasi Dynmap selesai untuk Season 2. Kamu bisa pantau posisi pemain, biome, dan bangunan secara real-time.</p>
 
-        <div class="map-meta">
+          <a href="https://map.cr3scent.asia" target="_blank" rel="noopener noreferrer"
+             class="btn btn-ghost map-cs-btn" id="mapExternalBtn">
+            <i class="ph ph-arrow-square-out" aria-hidden="true"></i>
+            Cek Status Map
+          </a>
+        </div>
+
+        <div class="map-cs-meta">
           <div class="map-meta-item">
             <i class="ph ph-users" aria-hidden="true"></i>
             <span id="mapPlayerCount">— pemain online</span>
@@ -405,59 +395,13 @@
             <i class="ph ph-globe-hemisphere-east" aria-hidden="true"></i>
             <span>Overworld · Nether · End</span>
           </div>
-          <div class="map-meta-item">
-            <i class="ph ph-clock" aria-hidden="true"></i>
-            <span>Update setiap 2 detik</span>
-          </div>
-          <a href="https://map.cr3scent.asia" target="_blank" rel="noopener noreferrer"
-             id="mapExternalBtn" class="btn btn-ghost map-external-btn" onclick="event.stopPropagation()">
-            <i class="ph ph-arrow-square-out" aria-hidden="true"></i>
-            Buka di Tab Baru
-          </a>
         </div>
+
+        <!-- Player list still works via API -->
+        <div class="map-players" id="mapPlayerList" aria-label="Pemain online" aria-live="polite"></div>
       </div>
     </div>
   </section>
-
-  <!-- MAP LIGHTBOX -->
-  <div class="map-lightbox" id="mapLightbox" aria-hidden="true" role="dialog" aria-modal="true" aria-label="Peta dunia Cr3scent">
-    <div class="map-lightbox-backdrop" onclick="closeMapFull()" aria-hidden="true"></div>
-    <div class="map-lightbox-sheet" id="mapSheet">
-      <div class="map-lightbox-handle" aria-hidden="true"></div>
-      <div class="map-lightbox-header">
-        <div class="map-lightbox-title">
-          <i class="ph ph-map-trifold" aria-hidden="true"></i>
-          <span>Cr3scent · Live World Map</span>
-          <span class="map-live-badge"><span class="pulse-dot" aria-hidden="true"></span>Live</span>
-        </div>
-        <div class="map-lightbox-actions">
-          <a href="https://map.cr3scent.asia" target="_blank" rel="noopener noreferrer"
-             class="map-lb-btn" aria-label="Buka di tab baru">
-            <i class="ph ph-arrow-square-out"></i>
-          </a>
-          <button class="map-lb-btn" onclick="closeMapFull()" aria-label="Tutup peta">
-            <i class="ph ph-x"></i>
-          </button>
-        </div>
-      </div>
-      <div class="map-lightbox-body">
-        <iframe id="mapIframe"
-                src=""
-                title="Cr3scent Live World Map"
-                allow="fullscreen"
-                sandbox="allow-scripts allow-same-origin allow-popups allow-forms allow-modals allow-top-navigation-by-user-activation"
-                loading="lazy"
-                referrerpolicy="no-referrer-when-downgrade">
-        </iframe>
-        <div class="map-loading" id="mapLoading" aria-live="polite">
-          <div class="map-loading-inner">
-            <div class="map-spinner" aria-hidden="true"></div>
-            <span id="mapLoadingMsg">Memuat peta dunia…</span>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
 
   <!-- JOIN -->
   <section id="join" class="join-section" aria-labelledby="join-h">
@@ -561,11 +505,23 @@
             <div class="cl-header" onclick="toggleCL(this)" role="button" tabindex="0" aria-expanded="true"
                  onkeydown="if(event.key==='Enter'||event.key===' '){toggleCL(this);event.preventDefault();}">
               <div class="cl-meta">
-                <span class="cl-version">v1.4</span>
-                <span class="cl-badge new-badge">Terbaru</span>
+                <span class="cl-version">S2</span>
+                <span class="cl-badge new-badge">Season 2</span>
               </div>
-              <div class="cl-title">Website Rebuild &amp; UX Overhaul</div>
+              <div class="cl-title">Season 2 — Tiny Takeover · v1.26.12</div>
               <div class="cl-date"><i class="ph ph-calendar-blank"></i> Apr 2026</div>
+              <i class="ph ph-caret-down cl-chevron"></i>
+            </div>
+            <div class="cl-body open">
+              <div class="cl-entry add"><i class="ph ph-plus-circle"></i> Server diupgrade ke Minecraft 1.26.12 "Tiny Takeover"</div>
+              <div class="cl-entry add"><i class="ph ph-plus-circle"></i> World reset Season 2 — fresh start untuk semua pemain</div>
+              <div class="cl-entry add"><i class="ph ph-plus-circle"></i> Mekanik baru: craftable name tags, baby mob overhaul, golden dandelion</div>
+              <div class="cl-entry add"><i class="ph ph-plus-circle"></i> Server rating tembus 1046 ⭐ di MinecraftPocket-Servers</div>
+              <div class="cl-entry change"><i class="ph ph-pencil-simple"></i> Max capacity disesuaikan ke 67 slot optimal</div>
+              <div class="cl-entry change"><i class="ph ph-pencil-simple"></i> Semua plugin dikonfigurasi ulang untuk versi baru</div>
+            </div>
+          </div>
+        </div>
               <i class="ph ph-caret-down cl-chevron"></i>
             </div>
             <div class="cl-body open">
@@ -667,7 +623,7 @@
             <div class="cl-body">
               <div class="cl-entry add"><i class="ph ph-plus-circle"></i> Setup server Raehost 8GB DDR5 NVMe</div>
               <div class="cl-entry add"><i class="ph ph-plus-circle"></i> Konfigurasi domain cr3scent.asia via Hostinger</div>
-              <div class="cl-entry add"><i class="ph ph-plus-circle"></i> Instalasi Paper 1.21.1 &amp; plugin dasar</div>
+              <div class="cl-entry add"><i class="ph ph-plus-circle"></i> Instalasi Paper 1.26.12 &amp; plugin dasar</div>
               <div class="cl-entry add"><i class="ph ph-plus-circle"></i> Konversi world Bedrock ke Java</div>
             </div>
           </div>
@@ -692,7 +648,7 @@
             <i class="ph ph-plus faq-icon"></i>
           </button>
           <div class="faq-a">
-            Java Edition <strong>1.21.1 ke atas</strong> dan Bedrock Edition (PE, Windows 10/11, Console) semua didukung via crossplay Geyser + Floodgate.
+            Saat ini <strong>Bedrock Edition aktif</strong> (PE, Windows 10/11, Console) via port 25655. Java Edition sedang menyusul — Geyser belum support 1.26.12, akan tersedia segera.
           </div>
         </div>
 
@@ -702,7 +658,7 @@
             <i class="ph ph-plus faq-icon"></i>
           </button>
           <div class="faq-a">
-            Bedrock <strong>wajib mengisi port 25655</strong> di kolom port saat menambahkan server. Tanpa port, koneksi akan gagal. IP: <strong>mc.cr3scent.asia</strong> · Port: <strong>25655</strong>.
+            Isi IP <strong>mc.cr3scent.asia</strong> dan port <strong>25655</strong> di kolom terpisah. Saat ini server berjalan Bedrock-only, Java akan tersedia setelah Geyser update support untuk 1.26.12.
           </div>
         </div>
 
@@ -801,7 +757,7 @@
         <ul>
           <li><span>mc.cr3scent.asia</span></li>
           <li><span>Bedrock Port: 25655</span></li>
-          <li><span>Java 1.21.1+</span></li>
+          <li><span>Java 1.26.12+</span></li>
           <li><span>Crossplay Enabled</span></li>
         </ul>
       </div>
@@ -921,8 +877,8 @@
         <div class="modal-spec"><i class="ph ph-hard-drive"></i><div class="ms-val">24GB NVMe</div><div class="ms-lbl">Storage</div></div>
         <div class="modal-spec"><i class="ph ph-cpu"></i><div class="ms-val">400% CPU</div><div class="ms-lbl">Priority</div></div>
         <div class="modal-spec"><i class="ph ph-battery-high"></i><div class="ms-val">Stable 20</div><div class="ms-lbl">TPS</div></div>
-        <div class="modal-spec"><i class="ph ph-users"></i><div class="ms-val">100</div><div class="ms-lbl">Max Players</div></div>
-        <div class="modal-spec"><i class="ph ph-code"></i><div class="ms-val">1.21.1</div><div class="ms-lbl">Java</div></div>
+        <div class="modal-spec"><i class="ph ph-users"></i><div class="ms-val">67</div><div class="ms-lbl">Max Players</div></div>
+        <div class="modal-spec"><i class="ph ph-code"></i><div class="ms-val">1.26.12</div><div class="ms-lbl">Java</div></div>
         <div class="modal-spec"><i class="ph ph-plugs-connected"></i><div class="ms-val">Geyser</div><div class="ms-lbl">Crossplay</div></div>
       </div>
       <div class="ip-invest-box">
@@ -940,9 +896,9 @@
         <h3 class="ip-tab-heading">Angka yang<br><em>Bicara.</em></h3>
       </div>
       <div class="stats-grid">
-        <div class="stat-card"><div class="stat-num" data-target="100">0</div><div class="stat-lbl">Max Players</div></div>
+        <div class="stat-card"><div class="stat-num" data-target="67">0</div><div class="stat-lbl">Max Players</div></div>
         <div class="stat-card"><div class="stat-num" data-target="8" data-suffix="GB">0GB</div><div class="stat-lbl">DDR5 RAM</div></div>
-        <div class="stat-card"><div class="stat-num" data-target="20">0</div><div class="stat-lbl">Stable TPS</div></div>
+        <div class="stat-card"><div class="stat-num" data-target="1046">0</div><div class="stat-lbl">Server Rating</div></div>
         <div class="stat-card"><div class="stat-num">24/7</div><div class="stat-lbl">Uptime</div></div>
       </div>
     </div>
@@ -966,8 +922,8 @@
       <div class="modal-spec"><i class="ph ph-hard-drive"></i><div class="ms-val">24GB NVMe</div><div class="ms-lbl">Storage</div></div>
       <div class="modal-spec"><i class="ph ph-cpu"></i><div class="ms-val">400% CPU</div><div class="ms-lbl">Priority</div></div>
       <div class="modal-spec"><i class="ph ph-battery-high"></i><div class="ms-val">Stable 20</div><div class="ms-lbl">TPS</div></div>
-      <div class="modal-spec"><i class="ph ph-users"></i><div class="ms-val">100</div><div class="ms-lbl">Max Players</div></div>
-      <div class="modal-spec"><i class="ph ph-code"></i><div class="ms-val">1.21.1</div><div class="ms-lbl">Java</div></div>
+      <div class="modal-spec"><i class="ph ph-users"></i><div class="ms-val">67</div><div class="ms-lbl">Max Players</div></div>
+      <div class="modal-spec"><i class="ph ph-code"></i><div class="ms-val">1.26.12</div><div class="ms-lbl">Java</div></div>
       <div class="modal-spec"><i class="ph ph-plugs-connected"></i><div class="ms-val">Geyser</div><div class="ms-lbl">Crossplay</div></div>
     </div>
     <div class="modal-sect">
@@ -1022,7 +978,7 @@
         <div class="tut-step-num">1</div>
         <div class="tut-step-content">
           <div class="tut-step-title">Buka Minecraft Java Edition</div>
-          <div class="tut-step-desc">Pastikan versi <strong>1.21.1 ke atas</strong>. Klik <strong>Multiplayer</strong> &rarr; <strong>Add Server</strong>.</div>
+          <div class="tut-step-desc">Pastikan versi <strong>1.26.12 ke atas</strong>. Klik <strong>Multiplayer</strong> &rarr; <strong>Add Server</strong>.</div>
         </div>
       </div>
       <div class="tut-step">

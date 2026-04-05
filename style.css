@@ -1862,3 +1862,296 @@ html, body {
 @media print {
   .float-bar, .mobile-bottom-nav, .kb-hint, .kb-modal, .kb-backdrop { display: none !important; }
 }
+
+/* ═══════════════════════════════════════════════════════════════
+   UI COMPACT OPTIMIZATION v1.5
+   Smaller, efficient, flexible — optimized for PC/Android/iOS 26
+═══════════════════════════════════════════════════════════════ */
+
+/* Eyebrow sep */
+.eyebrow-sep { opacity: .45; margin: 0 2px; }
+
+/* ── Hero: more compact vertical rhythm ── */
+.hero {
+  padding-top: calc(var(--nav-h) + 40px);
+  padding-bottom: calc(60px + env(safe-area-inset-bottom));
+}
+.hero-eyebrow { margin-bottom: 18px; font-size: .72rem; }
+.hero-age-ticker { margin-bottom: 18px; }
+.hero-title { margin-bottom: 16px; }
+.hero-sub { margin-bottom: 32px; font-size: clamp(.88rem, 2vw, 1rem); }
+.hero-actions { margin-bottom: 40px; gap: 8px; }
+
+/* Compact buttons */
+.btn { padding: 11px 22px; font-size: .84rem; border-radius: 12px; }
+
+/* Compact status strip */
+.status-strip { max-width: 500px; border-radius: 15px; }
+.strip-item { padding: 12px 10px; }
+.strip-label { font-size: .64rem; margin-bottom: 4px; }
+.strip-value { font-size: 1.05rem; }
+
+/* Compact IP card */
+.ip-card { padding: 18px 18px; margin-top: 10px; border-radius: 17px; max-width: 500px; }
+.ip-address { font-size: clamp(1.15rem, 3.5vw, 1.65rem); margin-bottom: 3px; }
+.ip-hint { font-size: .74rem; margin-bottom: 10px; }
+.ip-divider { margin: 10px 0; }
+.ip-badge { font-size: .74rem; }
+
+/* Hero players compact */
+.hero-players-wrap { max-width: 500px; margin-top: 9px; }
+.hero-players-inner { padding: 8px 12px; border-radius: 12px; gap: 5px; }
+
+/* ── Info tiles: compact ── */
+.info-tiles-section { padding: 36px 0 48px; }
+.info-tile { padding: 13px 14px; gap: 11px; border-radius: 15px; }
+.info-tile-icon { width: 38px; height: 38px; font-size: 1.05rem; border-radius: 11px; }
+.info-tile-title { font-size: .84rem; }
+.info-tile-sub { font-size: .7rem; }
+
+/* ── Section spacing compact ── */
+.video-section { padding: 48px 0 80px; }
+.join-section { padding: 0 0 80px; }
+.staff-section { padding: 80px 0 0; }
+.changelog-section { padding: 80px 0 0; }
+.faq-section { padding: 80px 0; }
+.map-section { padding: 60px 0; }
+
+/* ── Section heading compact ── */
+.section-heading { font-size: clamp(2rem, 4.5vw, 3.2rem); margin-bottom: 14px; }
+.section-body { font-size: .92rem; }
+.section-label { font-size: .68rem; margin-bottom: 10px; }
+
+/* ── Join cards compact ── */
+.join-card { padding: 24px 18px; border-radius: 20px; }
+.join-card-icon { width: 48px; height: 48px; border-radius: 15px; font-size: 1.35rem; margin-bottom: 14px; }
+.join-card h3 { font-size: .94rem; }
+.join-card p { font-size: .81rem; margin-bottom: 16px; }
+
+/* ── Staff cards compact ── */
+.staff-card { padding: 18px 14px; gap: 11px; border-radius: 15px; }
+.staff-avatar { width: 46px; height: 46px; border-radius: 14px; font-size: 1.25rem; }
+.staff-name { font-size: .86rem; }
+.staff-desc { font-size: .78rem; }
+
+/* ── Stats compact ── */
+.stat-card { padding: 20px 14px; border-radius: 14px; }
+.stat-num { font-size: 2.2rem; }
+.stat-lbl { font-size: .76rem; }
+
+/* ── FAQ compact ── */
+.faq-q { padding: 15px 18px; font-size: .9rem; }
+.faq-a { font-size: .85rem; }
+.faq-a.open { padding: 0 18px 15px; }
+
+/* ── Changelog compact ── */
+.cl-header { padding: 12px 14px; }
+.cl-title { font-size: .87rem; }
+.cl-version { font-size: .74rem; }
+
+/* ── Modal compact ── */
+.modal-body { padding: 18px 20px; gap: 16px; }
+.modal-spec { padding: 12px 8px; border-radius: 11px; }
+.ms-val { font-size: .82rem; }
+.ms-lbl { font-size: .67rem; }
+
+/* ── Info panel compact ── */
+.info-panel-body { padding: 16px 18px; }
+.ip-tab-heading { font-size: clamp(1.6rem, 3.5vw, 2.4rem); margin-bottom: 10px; }
+.ip-tab-body { font-size: .88rem; }
+.ip-tab-intro { margin-bottom: 18px; }
+.ip-feature-card { padding: 14px; gap: 11px; border-radius: 13px; }
+.ip-feature-card h4 { font-size: .88rem; }
+.ip-feature-card p { font-size: .79rem; }
+.ipt { padding: 8px 14px; font-size: .79rem; border-radius: 10px; }
+.info-panel-header { padding: 13px 18px; }
+
+/* ── Footer compact ── */
+footer { padding: 44px 24px calc(28px + env(safe-area-inset-bottom)); }
+.footer-top { gap: 32px; margin-bottom: 32px; }
+.footer-brand p { font-size: .82rem; }
+
+/* ── Float bar compact ── */
+.float-bar { bottom: 20px; }
+.fb-btn { padding: 8px 14px; font-size: .79rem; }
+.fb-btn i { font-size: .95rem; }
+
+/* ── iOS 26 glass refinement (Liquid Glass aesthetic) ── */
+@supports (backdrop-filter: blur(1px)) {
+  .navbar,
+  .mobile-drawer,
+  .float-bar,
+  .mobile-bottom-nav,
+  .info-panel {
+    backdrop-filter: blur(40px) saturate(200%) brightness(1.04);
+    -webkit-backdrop-filter: blur(40px) saturate(200%) brightness(1.04);
+  }
+  .ip-card,
+  .feature-card,
+  .stat-card,
+  .join-card,
+  .staff-card,
+  .cl-header {
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+  }
+}
+
+/* ── Android Chrome: address bar height compensation ── */
+@media (max-width: 768px) {
+  .hero { min-height: 100svh; } /* svh = small viewport height, excludes address bar */
+}
+
+/* ── iPhone 16 / 16 Pro specific (393px, 430px) ── */
+@media (min-width: 390px) and (max-width: 430px) {
+  .hero-title { font-size: 4.2rem; }
+  .status-strip { max-width: 100%; }
+  .ip-card { max-width: 100%; }
+  .hero-players-wrap { max-width: 100%; }
+}
+
+/* ── iPad Pro 11" & 13" (1024px+) ── */
+@media (min-width: 1024px) {
+  .hero-title { font-size: clamp(6rem, 9vw, 9.5rem); }
+  .section-inner { max-width: 1100px; }
+}
+
+/* ── Ultra wide (1440px+) ── */
+@media (min-width: 1440px) {
+  :root { --max-w: 1200px; }
+  .hero-title { font-size: 9.5rem; }
+}
+
+/* ── Mobile: reduce vertical spacing everywhere ── */
+@media (max-width: 560px) {
+  .hero { padding-top: calc(var(--nav-h) + 28px); padding-bottom: 44px; }
+  .hero-eyebrow { margin-bottom: 14px; }
+  .hero-age-ticker { margin-bottom: 14px; gap: 4px; }
+  .hero-title { margin-bottom: 12px; }
+  .hero-sub { margin-bottom: 22px; }
+  .hero-actions { margin-bottom: 28px; }
+  .info-tiles-section { padding: 24px 0 36px; }
+  .video-section { padding: 40px 0 60px; }
+  .join-section { padding: 0 0 60px; }
+  .staff-section { padding: 60px 0 0; }
+  .changelog-section { padding: 60px 0 0; }
+  .faq-section { padding: 60px 0; }
+  .map-section { padding: 44px 0; }
+  .section-inner { padding: 0 16px; }
+  .join-card { padding: 20px 14px; border-radius: 17px; }
+  .map-card { border-radius: 20px; }
+}
+
+/* ── Status strip mobile: horizontal on small screens ── */
+@media (min-width: 400px) and (max-width: 560px) {
+  .status-strip { flex-direction: row; }
+  .strip-item { border-bottom: none; border-right: 1px solid var(--border); }
+  .strip-item:last-child { border-right: none; }
+}
+
+/* ═══ MAP COMING SOON CARD ═══════════════════════════════════ */
+.map-cs-card {
+  margin-top: 36px;
+  border-radius: var(--r-xl);
+  overflow: hidden;
+  border: 1px solid var(--border2);
+  background: var(--surface);
+}
+
+/* Visual placeholder area */
+.map-cs-visual {
+  position: relative;
+  height: 220px;
+  background: #0a1a0f;
+  overflow: hidden;
+}
+@media (min-width: 768px) { .map-cs-visual { height: 280px; } }
+
+.map-cs-grid {
+  position: absolute; inset: 0;
+  background-image:
+    linear-gradient(rgba(201,168,76,.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(201,168,76,.05) 1px, transparent 1px);
+  background-size: 36px 36px;
+  animation: gridDrift 24s linear infinite;
+}
+
+/* Glowing orbs for depth */
+.map-cs-orb {
+  position: absolute; border-radius: 50%; filter: blur(40px); pointer-events: none;
+}
+.orb1 {
+  width: 200px; height: 200px; top: -60px; left: -40px;
+  background: radial-gradient(circle, rgba(201,168,76,.12) 0%, transparent 70%);
+  animation: orbFloat 8s ease-in-out infinite;
+}
+.orb2 {
+  width: 160px; height: 160px; bottom: -40px; right: 10%;
+  background: radial-gradient(circle, rgba(48,209,88,.08) 0%, transparent 70%);
+  animation: orbFloat 11s ease-in-out infinite reverse;
+}
+@keyframes orbFloat {
+  0%,100% { transform: translate(0,0); }
+  50%      { transform: translate(12px, -14px); }
+}
+
+/* Spawn dot & label — reuse from map */
+.map-cs-dot {
+  position: absolute; width: 8px; height: 8px;
+  background: var(--gold); border-radius: 50%; box-shadow: 0 0 10px var(--gold-glow);
+  transform: translate(-50%,-50%); z-index: 2;
+}
+.map-cs-dot.pulsing::after {
+  content: ''; position: absolute; inset: -6px; border-radius: 50%;
+  border: 2px solid var(--gold); animation: mapPulse 2s ease-out infinite; opacity: 0;
+}
+.map-cs-label {
+  position: absolute; transform: translate(-50%,-160%);
+  font-size: .6rem; color: var(--gold); letter-spacing: .08em; text-transform: uppercase;
+  background: rgba(0,0,0,.5); padding: 2px 6px; border-radius: 4px; white-space: nowrap; z-index: 2;
+}
+
+/* Coming soon overlay overlay */
+.map-cs-visual::after {
+  content: '';
+  position: absolute; inset: 0;
+  background: linear-gradient(to bottom, rgba(10,26,15,.1) 0%, rgba(10,26,15,.7) 100%);
+}
+
+/* Body below visual */
+.map-cs-body {
+  padding: 24px 22px 20px;
+  display: flex; flex-direction: column; align-items: flex-start; gap: 10px;
+}
+
+.map-cs-badge {
+  display: inline-flex; align-items: center; gap: 7px;
+  background: rgba(255,149,0,.1); border: 1px solid rgba(255,149,0,.25);
+  color: #ff9500; border-radius: 100px;
+  padding: 5px 13px; font-size: .68rem; font-weight: 700; letter-spacing: 1.2px;
+}
+.map-cs-badge i { font-size: .85rem; }
+
+.map-cs-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.25rem; font-weight: 600; font-style: italic; color: var(--text);
+}
+
+.map-cs-desc {
+  font-size: .84rem; color: var(--muted); line-height: 1.65; max-width: 500px;
+}
+
+.map-cs-btn { font-size: .81rem; padding: 9px 18px; border-radius: 11px; }
+
+.map-cs-meta {
+  display: flex; flex-wrap: wrap; align-items: center; gap: 8px 20px;
+  padding: 14px 22px; border-top: 1px solid var(--border); background: var(--surface2);
+}
+
+@media (max-width: 480px) {
+  .map-cs-visual { height: 170px; }
+  .map-cs-body { padding: 18px 16px 16px; gap: 8px; }
+  .map-cs-title { font-size: 1.1rem; }
+  .map-cs-desc { font-size: .8rem; }
+  .map-cs-meta { padding: 12px 16px; }
+}
