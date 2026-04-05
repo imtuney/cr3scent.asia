@@ -91,7 +91,6 @@ hamburger.addEventListener('keydown', e => {
 drawerOvl.addEventListener('click', closeDrawer);
 document.querySelectorAll('.drawer-link').forEach(l => l.addEventListener('click', closeDrawer));
 
-// Focus trap inside drawer
 mobileDrawer.addEventListener('keydown', e => {
   if (!drawerOpen || e.key !== 'Tab') return;
   const focusable = [...mobileDrawer.querySelectorAll('a, button')];
@@ -102,7 +101,13 @@ mobileDrawer.addEventListener('keydown', e => {
 
 /* ── ESC ────────────────────────────────────────────────────── */
 document.addEventListener('keydown', e => {
-  if (e.key === 'Escape') { closeDrawer(); closeSpecsModal(); closeWelcome(); }
+  if (e.key === 'Escape') {
+    closeDrawer();
+    closeSpecsModal();
+    closeWelcome();
+    closeInfoPanel();
+    if (mapOpen) closeMapFull();
+  }
 });
 
 /* ── RESIZE ─────────────────────────────────────────────────── */
@@ -110,20 +115,88 @@ window.addEventListener('resize', () => {
   if (window.innerWidth > 960 && drawerOpen) closeDrawer();
 }, { passive: true });
 
-/* ── SCROLL REVEAL ──────────────────────────────────────────── */
-new IntersectionObserver(entries => {
-  entries.forEach(e => {
-    if (e.isIntersecting) {
-      e.target.classList.add('visible');
-      e.target._revealObs?.unobserve(e.target);
+/* ══════════════════════════════════════════════════════════════
+   CUSTOM CURSOR — REWRITTEN
+   Uses transform: translate() for zero-jitter positioning.
+   scale() for hover/click states so position isn't affected.
+   Event delegation for hover detection (no stale element lists).
+═══════════════════════════════════════════════════════════════ */
+(() => {
+  // Only on pointer:fine (mouse) devices
+  if (!window.matchMedia('(pointer: fine)').matches) return;
+
+  const dot  = document.getElementById('curDot');
+  const ring = document.getElementById('curRing');
+  if (!dot || !ring) return;
+
+  let mx = -400, my = -400; // off-screen until first move
+  let rx = -400, ry = -400;
+  let cursorVisible = false;
+  let rafId = null;
+
+  // Show cursor on first mouse move
+  function showCursor() {
+    if (!cursorVisible) {
+      cursorVisible = true;
+      dot.style.opacity  = '1';
+      ring.style.opacity = '1';
+    }
+  }
+
+  document.addEventListener('mousemove', e => {
+    mx = e.clientX;
+    my = e.clientY;
+    showCursor();
+  }, { passive: true });
+
+  document.addEventListener('mouseleave', () => {
+    dot.style.opacity  = '0';
+    ring.style.opacity = '0';
+  });
+  document.addEventListener('mouseenter', () => {
+    if (cursorVisible) {
+      dot.style.opacity  = '1';
+      ring.style.opacity = '1';
     }
   });
-}, { threshold: 0.1, rootMargin: '0px 0px -48px 0px' })
-.observe && (() => {
-  const obs = new IntersectionObserver(entries => {
-    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); } });
-  }, { threshold: 0.1, rootMargin: '0px 0px -48px 0px' });
-  document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+
+  function lerp(a, b, t) { return a + (b - a) * t; }
+
+  function tick() {
+    // Dot snaps instantly
+    dot.style.transform  = `translate(${mx}px, ${my}px) translateZ(0)`;
+    // Ring lerps for trailing effect
+    rx = lerp(rx, mx, 0.14);
+    ry = lerp(ry, my, 0.14);
+    ring.style.transform = `translate(${rx}px, ${ry}px) translateZ(0)`;
+    rafId = requestAnimationFrame(tick);
+  }
+  tick();
+
+  // ── Hover detection via event delegation ──────────────────
+  const HOVER_SEL = [
+    'a', 'button', '[role="button"]', '[tabindex="0"]',
+    '.ip-card', '.strip-item', '.join-card', '.feature-card',
+    '.video-card', '.modal-close', '.plugin-row', '.stat-card',
+    '.info-tile', '.ipt', '.map-preview', '.cl-header', '.faq-q',
+    '.back-to-top', '.map-lb-btn', '.tut-step-code', '.tut-tab',
+  ].join(', ');
+
+  document.addEventListener('mouseover', e => {
+    if (e.target.closest(HOVER_SEL)) {
+      dot.classList.add('h');
+      ring.classList.add('h');
+    }
+  });
+  document.addEventListener('mouseout', e => {
+    if (e.target.closest(HOVER_SEL)) {
+      dot.classList.remove('h');
+      ring.classList.remove('h');
+    }
+  });
+
+  document.addEventListener('mousedown', () => { dot.classList.add('c'); ring.classList.add('c'); });
+  document.addEventListener('mouseup',   () => { dot.classList.remove('c'); ring.classList.remove('c'); });
 })();
 
 /* ── PARTICLES ──────────────────────────────────────────────── */
@@ -164,34 +237,6 @@ new IntersectionObserver(entries => {
   draw();
 })();
 
-/* ── CUSTOM CURSOR ──────────────────────────────────────────── */
-(() => {
-  if (!window.matchMedia('(pointer: fine)').matches) return;
-  const dot = document.getElementById('curDot');
-  const ring = document.getElementById('curRing');
-  let mx = -200, my = -200, rx = -200, ry = -200;
-
-  document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; }, { passive: true });
-
-  function lerp(a, b, t) { return a + (b - a) * t; }
-  (function tick() {
-    rx = lerp(rx, mx, .15); ry = lerp(ry, my, .15);
-    dot.style.left = mx + 'px'; dot.style.top = my + 'px';
-    ring.style.left = rx + 'px'; ring.style.top = ry + 'px';
-    requestAnimationFrame(tick);
-  })();
-
-  const hoverSel = 'a, button, [role="button"], [tabindex="0"], .ip-card, .strip-item, .join-card, .feature-card, .video-box, .modal-close, .plugin-row, .stat-card';
-  document.querySelectorAll(hoverSel).forEach(el => {
-    el.addEventListener('mouseenter', () => { dot.classList.add('h'); ring.classList.add('h'); });
-    el.addEventListener('mouseleave', () => { dot.classList.remove('h'); ring.classList.remove('h'); });
-  });
-  document.addEventListener('mousedown', () => dot.classList.add('c'));
-  document.addEventListener('mouseup',   () => dot.classList.remove('c'));
-  document.addEventListener('mouseleave', () => { dot.style.opacity = '0'; ring.style.opacity = '0'; });
-  document.addEventListener('mouseenter', () => { dot.style.opacity = '1'; ring.style.opacity = '1'; });
-})();
-
 /* ── TOAST ──────────────────────────────────────────────────── */
 let toastTimer = null;
 function showToast(msg, type = 'success') {
@@ -211,7 +256,12 @@ function copyIP() {
   const ip  = 'mc.cr3scent.asia';
   const el  = document.getElementById('ipText');
   const orig = el.textContent;
-  const ok = () => { el.textContent = '✓ Copied!'; showToast('IP address copied!'); setTimeout(() => el.textContent = orig, 2200); if (window._launchConfetti) window._launchConfetti(); };
+  const ok = () => {
+    el.textContent = '✓ Copied!';
+    showToast('IP address copied!');
+    setTimeout(() => el.textContent = orig, 2200);
+    if (window._launchConfetti) window._launchConfetti();
+  };
   const fail = () => showToast('Salin manual: ' + ip, 'error');
 
   if (navigator.clipboard && window.isSecureContext) {
@@ -242,7 +292,7 @@ async function checkServerStatus() {
   if (abortCtrl) abortCtrl.abort();
   abortCtrl = new AbortController();
   siS.classList.add('loading'); siP.classList.add('loading');
-  stxt.textContent = '\u2026'; dot.className = 'status-dot';
+  stxt.textContent = '…'; dot.className = 'status-dot';
   try {
     const res = await fetch('https://api.mcsrvstat.us/3/mc.cr3scent.asia', {
       signal: abortCtrl.signal, cache: 'no-cache'
@@ -300,7 +350,6 @@ function closeSpecsModal() {
 }
 backdrop.addEventListener('click', closeSpecsModal);
 
-// Focus trap
 specsModal.addEventListener('keydown', e => {
   if (e.key !== 'Tab') return;
   const f = [...specsModal.querySelectorAll('button, a, [tabindex="0"]')];
@@ -310,15 +359,68 @@ specsModal.addEventListener('keydown', e => {
   else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
 });
 
-/* ── TIKTOK ─────────────────────────────────────────────────── */
+/* ── TIKTOK / YOUTUBE ───────────────────────────────────────── */
 function openTikTok() {
   window.open('https://www.tiktok.com/@cr3scentdc', '_blank', 'noopener,noreferrer');
-  showToast('Opening TikTok @cr3scentdc\u2026');
+  showToast('Opening TikTok @cr3scentdc…');
 }
-
 function openTutorialVideo() {
   window.open('https://youtube.com/shorts/IcPVN8Zms3E', '_blank', 'noopener,noreferrer');
-  showToast('Opening tutorial di YouTube\u2026');
+  showToast('Opening tutorial di YouTube…');
+}
+
+/* ════════════════════════════════════════════════════════════
+   INFO PANEL — replaces Features & Stats sections
+   Opened via info-tile cards, nav links, or programmatically.
+════════════════════════════════════════════════════════════ */
+const infoPanel        = document.getElementById('infoPanel');
+const infoPanelBdrop   = document.getElementById('infoPanelBackdrop');
+let infoPanelOpen      = false;
+let infoPanelLastFocus = null;
+let statsAnimated      = false;
+
+function openInfoPanel(tab = 'features') {
+  infoPanelLastFocus = document.activeElement;
+  switchInfoTab(tab);
+  infoPanelBdrop.classList.add('open');
+  infoPanel.classList.add('open');
+  infoPanel.removeAttribute('aria-hidden');
+  document.body.style.overflow = 'hidden';
+  infoPanelOpen = true;
+  setTimeout(() => infoPanel.querySelector('.info-panel-close')?.focus(), 80);
+  // animate stats on first open of that tab
+  if (tab === 'stats' && !statsAnimated) { statsAnimated = true; animateAllCounters(); }
+}
+
+function closeInfoPanel() {
+  infoPanelBdrop.classList.remove('open');
+  infoPanel.classList.remove('open');
+  infoPanel.setAttribute('aria-hidden', 'true');
+  document.body.style.overflow = '';
+  infoPanelOpen = false;
+  infoPanelLastFocus?.focus();
+}
+
+function switchInfoTab(tab) {
+  document.querySelectorAll('.ipt').forEach(btn => {
+    const active = btn.dataset.tab === tab;
+    btn.classList.toggle('active', active);
+    btn.setAttribute('aria-selected', active ? 'true' : 'false');
+  });
+  document.querySelectorAll('.ip-tab').forEach(panel => {
+    panel.classList.toggle('active', panel.id === `iptab-${tab}`);
+  });
+  // trigger counter animation when stats tab opened
+  if (tab === 'stats' && !statsAnimated) { statsAnimated = true; animateAllCounters(); }
+}
+
+// touch swipe to close on mobile
+if (infoPanel) {
+  let ipTouchY = 0;
+  infoPanel.addEventListener('touchstart', e => { ipTouchY = e.touches[0].clientY; }, { passive: true });
+  infoPanel.addEventListener('touchend', e => {
+    if (e.changedTouches[0].clientY - ipTouchY > 90) closeInfoPanel();
+  }, { passive: true });
 }
 
 /* ── WELCOME POPUP ──────────────────────────────────────────── */
@@ -336,9 +438,7 @@ function openWelcome() {
 
 function closeWelcome() {
   const dontShow = document.getElementById('dontShowAgain');
-  if (dontShow && dontShow.checked) {
-    localStorage.setItem('cr3-welcome-seen', '1');
-  }
+  if (dontShow && dontShow.checked) localStorage.setItem('cr3-welcome-seen', '1');
   welcomeBackdrop.classList.remove('open');
   welcomeModal.classList.remove('open');
   document.body.style.overflow = '';
@@ -362,9 +462,7 @@ function copyIPPopup() {
   const fail = () => showToast('Salin manual: ' + ip, 'error');
   if (navigator.clipboard && window.isSecureContext) {
     navigator.clipboard.writeText(ip).then(ok).catch(fail);
-  } else {
-    try { legacyCopy(ip); ok(); } catch { fail(); }
-  }
+  } else { try { legacyCopy(ip); ok(); } catch { fail(); } }
 }
 
 function copyPortPopup() {
@@ -373,12 +471,9 @@ function copyPortPopup() {
   const fail = () => showToast('Port: ' + port, 'error');
   if (navigator.clipboard && window.isSecureContext) {
     navigator.clipboard.writeText(port).then(ok).catch(fail);
-  } else {
-    try { legacyCopy(port); ok(); } catch { fail(); }
-  }
+  } else { try { legacyCopy(port); ok(); } catch { fail(); } }
 }
 
-// Focus trap inside welcome modal
 welcomeModal.addEventListener('keydown', e => {
   if (e.key !== 'Tab') return;
   const f = [...welcomeModal.querySelectorAll('button, a, [tabindex="0"], input')];
@@ -393,12 +488,8 @@ document.addEventListener('DOMContentLoaded', () => {
   checkServerStatus();
   calculateUptime();
 
-  // Show welcome popup — only once (localStorage gate)
   const seen = localStorage.getItem('cr3-welcome-seen');
-  if (!seen) {
-    // Small delay so page loader finishes first
-    setTimeout(openWelcome, 1400);
-  }
+  if (!seen) setTimeout(openWelcome, 1400);
 
   let iStatus, iUptime;
   function start() {
@@ -413,7 +504,8 @@ document.addEventListener('DOMContentLoaded', () => {
   });
   start();
 });
-/* ── COUNTER ANIMASI ────────────────────────────────────────── */
+
+/* ── COUNTER ANIMATION ──────────────────────────────────────── */
 function animateCounter(el, target, suffix, duration = 1800) {
   const start = performance.now();
   (function update(now) {
@@ -427,27 +519,13 @@ function animateCounter(el, target, suffix, duration = 1800) {
   })(start);
 }
 
-// Trigger counters when stats section scrolls into view
-(() => {
-  const stats = document.querySelectorAll('.stat-num[data-target]');
-  if (!stats.length) return;
-  let triggered = false;
-  const obs = new IntersectionObserver(entries => {
-    entries.forEach(e => {
-      if (e.isIntersecting && !triggered) {
-        triggered = true;
-        stats.forEach(el => {
-          const target = parseFloat(el.dataset.target);
-          const suffix = el.dataset.suffix || '';
-          if (!isNaN(target)) animateCounter(el, target, suffix);
-        });
-        obs.disconnect();
-      }
-    });
-  }, { threshold: 0.5 });
-  const statsSection = document.querySelector('.stats-section');
-  if (statsSection) obs.observe(statsSection);
-})();
+function animateAllCounters() {
+  document.querySelectorAll('.stat-num[data-target]').forEach(el => {
+    const target = parseFloat(el.dataset.target);
+    const suffix = el.dataset.suffix || '';
+    if (!isNaN(target)) animateCounter(el, target, suffix);
+  });
+}
 
 /* ── CONFETTI ────────────────────────────────────────────────── */
 (() => {
@@ -456,14 +534,10 @@ function animateCounter(el, target, suffix, duration = 1800) {
   if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
   const ctx = canvas.getContext('2d');
   let pieces = [], animId = null, running = false;
-
   const COLORS = ['#c9a84c','#e0c06a','#ffffff','#30d158','#5865F2','#ff9500'];
   const COUNT = window.innerWidth < 600 ? 60 : 120;
 
-  function resize() {
-    canvas.width  = window.innerWidth;
-    canvas.height = window.innerHeight;
-  }
+  function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
   window.addEventListener('resize', resize, { passive: true });
   resize();
 
@@ -471,16 +545,11 @@ function animateCounter(el, target, suffix, duration = 1800) {
     pieces = [];
     for (let i = 0; i < COUNT; i++) {
       pieces.push({
-        x: Math.random() * canvas.width,
-        y: -10 - Math.random() * 200,
-        w: 6 + Math.random() * 8,
-        h: 3 + Math.random() * 5,
+        x: Math.random() * canvas.width, y: -10 - Math.random() * 200,
+        w: 6 + Math.random() * 8, h: 3 + Math.random() * 5,
         color: COLORS[Math.floor(Math.random() * COLORS.length)],
-        rot: Math.random() * Math.PI * 2,
-        rotV: (Math.random() - .5) * .15,
-        vx: (Math.random() - .5) * 3,
-        vy: 2 + Math.random() * 4,
-        opacity: 1,
+        rot: Math.random() * Math.PI * 2, rotV: (Math.random() - .5) * .15,
+        vx: (Math.random() - .5) * 3, vy: 2 + Math.random() * 4, opacity: 1,
       });
     }
   }
@@ -491,35 +560,24 @@ function animateCounter(el, target, suffix, duration = 1800) {
     pieces.forEach(p => {
       if (p.y > canvas.height + 20) return;
       alive = true;
-      p.x += p.vx; p.y += p.vy;
-      p.rot += p.rotV;
-      p.vy += .06; // gravity
+      p.x += p.vx; p.y += p.vy; p.rot += p.rotV; p.vy += .06;
       if (p.y > canvas.height * .6) p.opacity = Math.max(0, p.opacity - .015);
-
-      ctx.save();
-      ctx.translate(p.x, p.y);
-      ctx.rotate(p.rot);
-      ctx.globalAlpha = p.opacity;
-      ctx.fillStyle = p.color;
-      ctx.fillRect(-p.w / 2, -p.h / 2, p.w, p.h);
-      ctx.restore();
+      ctx.save(); ctx.translate(p.x, p.y); ctx.rotate(p.rot);
+      ctx.globalAlpha = p.opacity; ctx.fillStyle = p.color;
+      ctx.fillRect(-p.w / 2, -p.h / 2, p.w, p.h); ctx.restore();
     });
-    if (alive) { animId = requestAnimationFrame(draw); }
-    else { stop(); }
+    if (alive) animId = requestAnimationFrame(draw);
+    else stop();
   }
 
   function stop() {
-    running = false;
-    canvas.style.opacity = '0';
-    cancelAnimationFrame(animId);
+    running = false; canvas.style.opacity = '0'; cancelAnimationFrame(animId);
     setTimeout(() => ctx.clearRect(0, 0, canvas.width, canvas.height), 400);
   }
 
   window._launchConfetti = function() {
     if (running) return;
-    running = true;
-    canvas.style.opacity = '1';
-    spawn();
+    running = true; canvas.style.opacity = '1'; spawn();
     animId = requestAnimationFrame(draw);
     setTimeout(stop, 3500);
   };
@@ -537,27 +595,21 @@ function toggleCL(header) {
 function toggleFAQ(btn) {
   const answer = btn.nextElementSibling;
   const isOpen = answer.classList.contains('open');
-  // Close all other open FAQs
   document.querySelectorAll('.faq-a.open').forEach(a => {
     a.classList.remove('open');
     a.previousElementSibling.setAttribute('aria-expanded', 'false');
   });
-  if (!isOpen) {
-    answer.classList.add('open');
-    btn.setAttribute('aria-expanded', 'true');
-  }
+  if (!isOpen) { answer.classList.add('open'); btn.setAttribute('aria-expanded', 'true'); }
 }
 
 /* ═══ LIVE MAP ═══════════════════════════════════════════════ */
-// Primary: HTTPS subdomain via Cloudflare Worker (no mixed content)
-// Fallback: direct HTTP (works only if user opens in new tab)
 const DYNMAP_HTTPS = 'https://map.cr3scent.asia';
 const DYNMAP_HTTP  = 'http://premium3.raehost.com:19321';
 
 let mapOpen   = false;
 let mapLoaded = false;
 let touchStartY = 0;
-let mapWorkerReady = null; // null = unknown, true/false after probe
+let mapWorkerReady = null;
 
 const mapLightbox    = document.getElementById('mapLightbox');
 const mapSheet       = document.getElementById('mapSheet');
@@ -566,20 +618,17 @@ const mapLoading     = document.getElementById('mapLoading');
 const mapLoadingMsg  = document.getElementById('mapLoadingMsg');
 const mapPlayerCount = document.getElementById('mapPlayerCount');
 const mapExternalBtn = document.getElementById('mapExternalBtn');
+const mapPlayerList  = document.getElementById('mapPlayerList');
+const heroPlayersWrap = document.getElementById('heroPlayersWrap');
 
-// Worker confirmed live at map.cr3scent.asia — always use HTTPS
 async function probeWorker() {
   if (mapWorkerReady !== null) return mapWorkerReady;
   try {
     const res = await fetch(`${DYNMAP_HTTPS}/up/world/world/0`, {
-      signal: AbortSignal.timeout(5000),
-      mode: 'cors'
+      signal: AbortSignal.timeout(5000), mode: 'cors'
     });
     mapWorkerReady = res.ok;
-  } catch {
-    // If fetch fails (CORS etc), still try embedding — worker is confirmed live
-    mapWorkerReady = true;
-  }
+  } catch { mapWorkerReady = true; }
   return mapWorkerReady;
 }
 
@@ -593,35 +642,15 @@ async function openMapFull() {
   if (!mapLoaded) {
     mapLoaded = true;
     if (mapLoadingMsg) mapLoadingMsg.textContent = 'Memuat peta dunia…';
-
-    // Always load HTTPS worker iframe directly
     mapIframe.src = DYNMAP_HTTPS;
     mapIframe.onload = () => {
       mapIframe.classList.add('loaded');
       if (mapLoading) mapLoading.classList.add('hidden');
     };
-    // Fallback hide loader after 8s regardless
     setTimeout(() => {
       mapIframe.classList.add('loaded');
       if (mapLoading) mapLoading.classList.add('hidden');
     }, 8000);
-  }
-}
-
-function showMapFallback() {
-  if (mapLoading) {
-    mapLoading.innerHTML = `
-      <div class="map-loading-inner">
-        <div style="font-size:2.4rem;line-height:1">🗺️</div>
-        <div style="color:var(--gold);font-weight:600;font-size:.95rem">Peta belum bisa di-embed</div>
-        <div style="color:var(--muted);font-size:.8rem;text-align:center;max-width:260px;line-height:1.5">
-          Cloudflare Worker belum aktif.<br>Buka peta di tab baru untuk sementara.
-        </div>
-        <a href="${DYNMAP_HTTP}" target="_blank" rel="noopener noreferrer"
-           class="btn btn-gold" style="margin-top:6px;font-size:.82rem;padding:10px 20px;text-decoration:none;display:inline-flex;align-items:center;gap:8px;border-radius:12px">
-          <i class="ph ph-arrow-square-out"></i> Buka Peta Sekarang
-        </a>
-      </div>`;
   }
 }
 
@@ -632,47 +661,42 @@ function closeMapFull() {
   mapOpen = false;
 }
 
-document.addEventListener('keydown', e => {
-  if (e.key === 'Escape' && mapOpen) closeMapFull();
-});
-
 if (mapSheet) {
-  mapSheet.addEventListener('touchstart', e => {
-    touchStartY = e.touches[0].clientY;
-  }, { passive: true });
+  mapSheet.addEventListener('touchstart', e => { touchStartY = e.touches[0].clientY; }, { passive: true });
   mapSheet.addEventListener('touchend', e => {
     if (e.changedTouches[0].clientY - touchStartY > 80) closeMapFull();
   }, { passive: true });
 }
 
-// Live player count from Dynmap JSON API
-async function fetchMapPlayers() {
-  if (!mapPlayerCount) return;
-  try {
-    // Try HTTPS worker first, fall back to HTTP (CORS-friendly for JSON)
-    const base = (await probeWorker()) ? DYNMAP_HTTPS : DYNMAP_HTTP;
-    const res = await fetch(`${base}/up/world/world/0`, {
-      signal: AbortSignal.timeout(4000)
-    });
-    if (!res.ok) throw new Error();
-    const data = await res.json();
-    const count = (data.players || []).length;
-    mapPlayerCount.textContent = `${count} pemain online`;
-  } catch {
-    mapPlayerCount.textContent = '— pemain online';
-  }
+/* ── PLAYER CHIP BUILDER ────────────────────────────────────── */
+function buildPlayerChips(players) {
+  if (!players.length) return '';
+  return `<div class="map-players-label">Sedang Online</div>` +
+    players.map(p => {
+      const name = p.name || p.account || '???';
+      return `<div class="map-player-chip">
+        <div class="map-player-avatar">
+          <img src="https://mc-heads.net/avatar/${name}/20" alt="${name}" loading="lazy" onerror="this.style.display='none'">
+        </div>${name}</div>`;
+    }).join('');
 }
 
-// Update external button href based on worker availability
-async function updateExternalBtn() {
-  if (!mapExternalBtn) return;
-  const ok = await probeWorker();
-  mapExternalBtn.href = ok ? DYNMAP_HTTPS : DYNMAP_HTTP;
+function buildHeroPlayers(players) {
+  if (!players.length) return '';
+  return `<div class="hero-players-inner">
+    <div class="hero-players-label">Online Sekarang</div>
+    ${players.map(p => {
+      const name = p.name || p.account || '???';
+      return `<div class="map-player-chip">
+        <div class="map-player-avatar">
+          <img src="https://mc-heads.net/avatar/${name}/20" alt="${name}" loading="lazy" onerror="this.style.display='none'">
+        </div>${name}</div>`;
+    }).join('')}
+  </div>`;
 }
 
-// Init — fetch players immediately using HTTPS
-async function fetchAndRenderPlayersDirect() {
-  if (!mapPlayerCount && !mapPlayerList) return;
+/* ── FETCH & RENDER PLAYERS ─────────────────────────────────── */
+async function fetchAndRenderPlayers() {
   try {
     const res = await fetch(`${DYNMAP_HTTPS}/up/world/world/0`, {
       signal: AbortSignal.timeout(5000)
@@ -681,45 +705,46 @@ async function fetchAndRenderPlayersDirect() {
     const data = await res.json();
     const players = data.players || [];
 
+    // map player count label
     if (mapPlayerCount) {
       mapPlayerCount.textContent = players.length > 0
         ? `${players.length} pemain online`
         : '0 pemain online';
     }
+
+    // map card player list (below map preview, above meta)
     if (mapPlayerList) {
-      if (players.length === 0) { mapPlayerList.innerHTML = ''; return; }
-      mapPlayerList.innerHTML = `<div class="map-players-label">Sedang Online</div>` +
-        players.map(p => {
-          const name = p.name || p.account || '???';
-          return `<div class="map-player-chip">
-            <div class="map-player-avatar">
-              <img src="https://mc-heads.net/avatar/${name}/20" alt="${name}" loading="lazy" onerror="this.style.display='none'">
-            </div>${name}</div>`;
-        }).join('');
+      mapPlayerList.innerHTML = players.length ? buildPlayerChips(players) : '';
     }
+
+    // hero player list (below IP card)
+    if (heroPlayersWrap) {
+      heroPlayersWrap.innerHTML = players.length ? buildHeroPlayers(players) : '';
+    }
+
     mapWorkerReady = true;
     if (mapExternalBtn) mapExternalBtn.href = DYNMAP_HTTPS;
   } catch {
     if (mapPlayerCount) mapPlayerCount.textContent = '— pemain online';
+    if (mapPlayerList) mapPlayerList.innerHTML = '';
+    if (heroPlayersWrap) heroPlayersWrap.innerHTML = '';
   }
 }
 
-fetchAndRenderPlayersDirect();
-setInterval(fetchAndRenderPlayersDirect, 15000);
+// run immediately and on interval
+fetchAndRenderPlayers();
+setInterval(fetchAndRenderPlayers, 15000);
 
 /* ── MAP MINI IFRAME LOADER ─────────────────────────── */
 (function() {
   const mini = document.getElementById('mapMiniIframe');
   const grid = document.getElementById('mapPreviewGrid');
   if (!mini) return;
-
-  // Load mini iframe after page settles (don't block main content)
   setTimeout(() => {
     mini.onload = () => {
       mini.classList.add('mini-loaded');
       if (grid) grid.classList.add('hidden');
     };
-    // Cross-origin iframe won't fire onload reliably — fallback
     setTimeout(() => {
       mini.classList.add('mini-loaded');
       if (grid) grid.classList.add('hidden');
@@ -728,7 +753,7 @@ setInterval(fetchAndRenderPlayersDirect, 15000);
   }, 2000);
 })();
 
-/* ═══ SCROLL PROGRESS + BACK TO TOP ════════════════════════ */
+/* ── SCROLL PROGRESS + BACK TO TOP ─────────────────────────── */
 const scrollProgress = document.getElementById('scrollProgress');
 const backToTop = document.getElementById('backToTop');
 
@@ -739,55 +764,233 @@ window.addEventListener('scroll', () => {
   if (backToTop) backToTop.classList.toggle('visible', scrolled > 300);
 }, { passive: true });
 
-/* ═══ ONLINE PLAYER LIST ════════════════════════════════════ */
-const mapPlayerList = document.getElementById('mapPlayerList');
+/* ════════════════════════════════════════════════════════════
+   ENGAGEMENT FEATURES v1.4
+   – Live age ticker
+   – Web Share API
+   – Keyboard shortcuts
+   – Mouse parallax hero
+   – Floating quick bar
+   – Mobile bottom nav active state
+   – Discord member count
+════════════════════════════════════════════════════════════ */
 
-async function fetchAndRenderPlayers() {
-  if (!mapPlayerCount && !mapPlayerList) return;
-  try {
-    const base = (await probeWorker()) ? DYNMAP_HTTPS : DYNMAP_HTTP;
-    const res = await fetch(`${base}/up/world/world/0`, {
-      signal: AbortSignal.timeout(4000)
-    });
-    if (!res.ok) throw new Error();
-    const data = await res.json();
-    const players = data.players || [];
+/* ── LIVE AGE TICKER ─────────────────────────────────────── */
+(function initAgeTicker() {
+  const LAUNCH = new Date('2026-03-19T00:00:00+07:00').getTime();
+  const elDays  = document.getElementById('tickDays');
+  const elHours = document.getElementById('tickHours');
+  const elMins  = document.getElementById('tickMins');
+  const elSecs  = document.getElementById('tickSecs');
+  if (!elDays) return;
 
-    // Update count
-    if (mapPlayerCount) {
-      mapPlayerCount.textContent = players.length > 0
-        ? `${players.length} pemain online`
-        : '0 pemain online';
+  function pad(n) { return String(n).padStart(2, '0'); }
+
+  function tick() {
+    const diff = Date.now() - LAUNCH;
+    if (diff < 0) return;
+    const totalSecs = Math.floor(diff / 1000);
+    const days  = Math.floor(totalSecs / 86400);
+    const hours = Math.floor((totalSecs % 86400) / 3600);
+    const mins  = Math.floor((totalSecs % 3600) / 60);
+    const secs  = totalSecs % 60;
+    elDays.textContent  = days;
+    elHours.textContent = pad(hours);
+    elMins.textContent  = pad(mins);
+    elSecs.textContent  = pad(secs);
+  }
+  tick();
+  setInterval(tick, 1000);
+})();
+
+/* ── WEB SHARE API ───────────────────────────────────────── */
+(function initShare() {
+  const btn = document.getElementById('shareBtn');
+  if (btn && navigator.share) {
+    btn.classList.add('supported');
+  }
+})();
+
+function shareServer() {
+  const data = {
+    title: 'Cr3scent · Minecraft Survival RPG',
+    text: 'Main bareng di Cr3scent! Server Minecraft crossplay Java & Bedrock. IP: mc.cr3scent.asia',
+    url: 'https://cr3scent.asia'
+  };
+  if (navigator.share) {
+    navigator.share(data).catch(() => {});
+  } else {
+    // Fallback: copy URL
+    const ok = () => showToast('Link copied to clipboard!');
+    const fail = () => showToast('https://cr3scent.asia', 'error');
+    if (navigator.clipboard && window.isSecureContext) {
+      navigator.clipboard.writeText('https://cr3scent.asia').then(ok).catch(fail);
+    } else {
+      try { legacyCopy('https://cr3scent.asia'); ok(); } catch { fail(); }
     }
-
-    // Render player chips
-    if (mapPlayerList) {
-      if (players.length === 0) {
-        mapPlayerList.innerHTML = '';
-        return;
-      }
-      mapPlayerList.innerHTML = `<div class="map-players-label">Sedang Online</div>` +
-        players.map(p => {
-          const name = p.name || p.account || '???';
-          const avatarUrl = `https://mc-heads.net/avatar/${name}/20`;
-          return `<div class="map-player-chip">
-            <div class="map-player-avatar">
-              <img src="${avatarUrl}" alt="${name}" loading="lazy"
-                   onerror="this.style.display='none'">
-            </div>
-            ${name}
-          </div>`;
-        }).join('');
-    }
-  } catch {
-    if (mapPlayerCount) mapPlayerCount.textContent = '— pemain online';
-    if (mapPlayerList) mapPlayerList.innerHTML = '';
   }
 }
 
-// Override fetchMapPlayers with the new combined function
-probeWorker().then(() => {
-  updateExternalBtn();
-  fetchAndRenderPlayers();
-});
-setInterval(fetchAndRenderPlayers, 15000);
+/* ── FLOATING QUICK BAR ──────────────────────────────────── */
+(function initFloatBar() {
+  const bar = document.getElementById('floatBar');
+  if (!bar) return;
+  let heroBottom = 0;
+
+  function measureHero() {
+    const hero = document.getElementById('home');
+    if (hero) heroBottom = hero.offsetTop + hero.offsetHeight;
+  }
+  measureHero();
+  window.addEventListener('resize', measureHero, { passive: true });
+
+  window.addEventListener('scroll', () => {
+    const visible = window.scrollY > heroBottom - 100;
+    bar.classList.toggle('visible', visible);
+  }, { passive: true });
+})();
+
+/* ── KEYBOARD SHORTCUTS ──────────────────────────────────── */
+(function initKeyboard() {
+  // Only on desktop (pointer:fine)
+  if (!window.matchMedia('(pointer: fine)').matches) return;
+
+  const hint = document.getElementById('kbHint');
+  const modal = document.getElementById('kbModal');
+  const backdrop = document.getElementById('kbBackdrop');
+
+  // Show hint after 3s
+  setTimeout(() => { if (hint) hint.classList.add('visible'); }, 3000);
+
+  function openKbModal() {
+    if (!modal) return;
+    modal.classList.add('open');
+    backdrop.classList.add('open');
+    if (hint) hint.classList.remove('visible');
+    setTimeout(() => modal.querySelector('button')?.focus(), 80);
+  }
+  function closeKbModal() {
+    modal?.classList.remove('open');
+    backdrop?.classList.remove('open');
+  }
+  window.closeKbModal = closeKbModal;
+
+  document.addEventListener('keydown', e => {
+    // Skip if user is typing
+    const tag = document.activeElement?.tagName;
+    if (tag === 'INPUT' || tag === 'TEXTAREA' || document.activeElement?.isContentEditable) return;
+    // Skip if modifier key
+    if (e.metaKey || e.ctrlKey || e.altKey) return;
+
+    switch (e.key.toLowerCase()) {
+      case 'c': copyIP(); break;
+      case 'd': window.open('https://discord.gg/sSEARcnb2T', '_blank', 'noopener'); showToast('Opening Discord…'); break;
+      case 'm': openMapFull(); break;
+      case 's': shareServer(); break;
+      case 'f': openInfoPanel('features'); break;
+      case 't': toggleTheme(); break;
+      case '?': openKbModal(); break;
+      case 'escape':
+        closeKbModal();
+        closeInfoPanel();
+        if (mapOpen) closeMapFull();
+        closeDrawer();
+        closeSpecsModal();
+        closeWelcome();
+        break;
+    }
+  });
+})();
+
+/* ── MOUSE PARALLAX ON HERO ──────────────────────────────── */
+(function initParallax() {
+  if (!window.matchMedia('(pointer: fine)').matches) return;
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+  const hero = document.querySelector('.hero');
+  const title = document.querySelector('.hero-title');
+  const sub = document.querySelector('.hero-sub');
+  const eyebrow = document.querySelector('.hero-eyebrow');
+  const ticker = document.querySelector('.hero-age-ticker');
+  if (!hero || !title) return;
+
+  let targetX = 0, targetY = 0, currentX = 0, currentY = 0;
+  let active = false;
+
+  hero.addEventListener('mousemove', e => {
+    const rect = hero.getBoundingClientRect();
+    // -1 to 1 range
+    targetX = ((e.clientX - rect.left) / rect.width - 0.5) * 2;
+    targetY = ((e.clientY - rect.top) / rect.height - 0.5) * 2;
+    active = true;
+  }, { passive: true });
+
+  hero.addEventListener('mouseleave', () => {
+    targetX = 0; targetY = 0;
+    active = true;
+  });
+
+  (function loop() {
+    const ease = 0.06;
+    currentX += (targetX - currentX) * ease;
+    currentY += (targetY - currentY) * ease;
+
+    if (Math.abs(currentX) > 0.0005 || Math.abs(currentY) > 0.0005 || active) {
+      const tx = currentX * 10;
+      const ty = currentY * 8;
+      const tx2 = currentX * 6;
+      const ty2 = currentY * 5;
+
+      title.style.transform = `translate(${tx}px, ${ty}px)`;
+      if (sub) sub.style.transform = `translate(${tx2 * .6}px, ${ty2 * .6}px)`;
+      if (eyebrow) eyebrow.style.transform = `translate(${tx2 * .3}px, ${ty2 * .3}px)`;
+      if (ticker) ticker.style.transform = `translate(${tx2 * .2}px, ${ty2 * .2}px)`;
+
+      if (Math.abs(currentX - targetX) < 0.0001 && Math.abs(currentY - targetY) < 0.0001) {
+        active = false;
+      }
+    }
+    requestAnimationFrame(loop);
+  })();
+})();
+
+/* ── MOBILE BOTTOM NAV ACTIVE STATE ──────────────────────── */
+(function initMobileBottomNav() {
+  const items = document.querySelectorAll('.mbn-item[data-section]');
+  if (!items.length) return;
+
+  const sections = document.querySelectorAll('section[id]');
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        items.forEach(item => {
+          item.classList.toggle('active', item.dataset.section === e.target.id);
+        });
+      }
+    });
+  }, { rootMargin: '-30% 0px -60% 0px' });
+
+  sections.forEach(s => obs.observe(s));
+})();
+
+/* ── SCROLL-DRIVEN HERO PARALLAX ─────────────────────────── */
+(function initScrollParallax() {
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  if (window.matchMedia('(pointer: coarse)').matches) return; // skip mobile
+
+  const hero = document.querySelector('.hero');
+  const canvas = document.getElementById('particle-canvas');
+  if (!hero) return;
+
+  window.addEventListener('scroll', () => {
+    const y = window.scrollY;
+    const heroH = hero.offsetHeight;
+    if (y > heroH) return;
+    const ratio = y / heroH; // 0–1
+
+    // Particles drift up
+    if (canvas) canvas.style.transform = `translateY(${y * 0.3}px)`;
+    // Subtle opacity fade on scroll
+    hero.style.opacity = 1 - ratio * 0.4;
+  }, { passive: true });
+})();

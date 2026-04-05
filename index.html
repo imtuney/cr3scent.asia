@@ -36,7 +36,7 @@
   <meta name="mobile-web-app-capable" content="yes">
   <link rel="manifest" href="manifest.json">
 
-  <!-- SVG favicon — no HTTP request needed -->
+  <!-- SVG favicon -->
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%23c9a84c'/><text x='16' y='22' text-anchor='middle' font-size='20' fill='%230a0a0c'>&#9790;</text></svg>">
 
   <!-- ─── FONTS ─────────────────────────────────────────────── -->
@@ -48,10 +48,10 @@
   <!-- ─── ICONS ─────────────────────────────────────────────── -->
   <script src="https://unpkg.com/@phosphor-icons/web@2.1.1/src/index.js" defer></script>
 
-  <!-- ─── CLOUDFLARE ANALYTICS (privacy-first, no cookies) ──── -->
+  <!-- ─── CLOUDFLARE ANALYTICS ──── -->
   <script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "GANTI_DENGAN_TOKEN_ANALYTICS_KAMU"}'></script>
 
-  <!-- ─── STYLES & SCRIPTS ────────────────────────────────────── -->
+  <!-- ─── STYLES ────────────────────────────────────────────── -->
   <link rel="stylesheet" href="style.css">
 
 </head>
@@ -84,7 +84,7 @@
     </a>
     <div class="nav-links" role="list">
       <a href="#home" role="listitem">Home</a>
-      <a href="#features" role="listitem">Features</a>
+      <a href="#" role="listitem" onclick="openInfoPanel('features');return false;">Features</a>
       <a href="#preview" role="listitem">Preview</a>
       <a href="#changelog" role="listitem">Updates</a>
       <a href="#faq" role="listitem">FAQ</a>
@@ -113,7 +113,7 @@
 <div class="mobile-drawer" id="mobileDrawer" role="dialog" aria-label="Navigation" aria-modal="true">
   <nav class="drawer-links">
     <a href="#home" class="drawer-link"><i class="ph ph-house" aria-hidden="true"></i>Home</a>
-    <a href="#features" class="drawer-link"><i class="ph ph-star" aria-hidden="true"></i>Features</a>
+    <a href="#" class="drawer-link" onclick="openInfoPanel('features');closeDrawer();return false;"><i class="ph ph-star" aria-hidden="true"></i>Features</a>
     <a href="#preview" class="drawer-link"><i class="ph ph-video" aria-hidden="true"></i>Preview</a>
     <a href="#changelog" class="drawer-link"><i class="ph ph-clock-counter-clockwise" aria-hidden="true"></i>Updates</a>
     <a href="#staff" class="drawer-link"><i class="ph ph-users" aria-hidden="true"></i>Team</a>
@@ -145,6 +145,17 @@
       Server Live &middot; Since 19 Mar 2026
     </div>
 
+    <!-- LIVE AGE TICKER -->
+    <div class="hero-age-ticker" aria-live="off" aria-label="Server uptime">
+      <span class="hat-unit"><span class="hat-num" id="tickDays">0</span><span class="hat-lbl">hari</span></span>
+      <span class="hat-sep">:</span>
+      <span class="hat-unit"><span class="hat-num" id="tickHours">00</span><span class="hat-lbl">jam</span></span>
+      <span class="hat-sep">:</span>
+      <span class="hat-unit"><span class="hat-num" id="tickMins">00</span><span class="hat-lbl">menit</span></span>
+      <span class="hat-sep">:</span>
+      <span class="hat-unit"><span class="hat-num" id="tickSecs">00</span><span class="hat-lbl">detik</span></span>
+    </div>
+
     <h1 class="hero-title" id="hero-h">
       <span class="dim" aria-hidden="true">SURVIVAL &middot; NO CIRCLE &middot; SOCIAL</span>
       <span class="gold">Cr3scent</span>
@@ -165,6 +176,9 @@
       </button>
       <button class="btn btn-ghost" onclick="openSpecsModal()">
         <i class="ph ph-cpu" aria-hidden="true"></i>Server Specs
+      </button>
+      <button class="btn btn-ghost btn-share" id="shareBtn" onclick="shareServer()" aria-label="Bagikan server">
+        <i class="ph ph-share-network" aria-hidden="true"></i>Share
       </button>
     </div>
 
@@ -210,74 +224,61 @@
         </div>
       </div>
     </div>
+
+    <!-- HERO ONLINE PLAYERS (below IP card) -->
+    <div class="hero-players-wrap" id="heroPlayersWrap" aria-label="Pemain sedang online" aria-live="polite"></div>
+
   </section>
 
-  <!-- FEATURES -->
-  <section id="features" class="features-section" aria-labelledby="feat-h">
-    <div class="section-divider" aria-hidden="true"></div>
+  <!-- INFO TILES STRIP — replaces features & stats sections -->
+  <section class="info-tiles-section" aria-label="Informasi server">
     <div class="section-inner">
-      <div class="reveal">
-        <div class="section-label" aria-hidden="true">Fitur Utama</div>
-        <h2 class="section-heading" id="feat-h">One World,<br><em>Three Souls.</em></h2>
-        <p class="section-body">Tiga gaya bermain dalam satu server. Survival murni, komunitas SMP, dan roleplay organik &mdash; semua tersedia di dunia yang sama.</p>
-      </div>
-      <div class="features-layout">
-        <div class="feature-cards">
-          <article class="feature-card reveal" data-d="1">
-            <div class="feature-card-header">
-              <div class="feature-icon-wrap" aria-hidden="true"><i class="ph ph-tree-evergreen"></i></div>
-              <h3>Survival Murni</h3>
-            </div>
-            <p>Eksplorasi, farming, dan building bebas dengan sistem claim tanah yang adil. Tidak ada griefing.</p>
-          </article>
-          <article class="feature-card reveal" data-d="2">
-            <div class="feature-card-header">
-              <div class="feature-icon-wrap" aria-hidden="true"><i class="ph ph-users-three"></i></div>
-              <h3>SMP Komunitas</h3>
-            </div>
-            <p>Ekonomi player-driven, trading, auction house, dan event bersama. Bangun bisnis dan kolaborasi.</p>
-          </article>
-          <article class="feature-card reveal" data-d="3">
-            <div class="feature-card-header">
-              <div class="feature-icon-wrap" aria-hidden="true"><i class="ph ph-mask-happy"></i></div>
-              <h3>Roleplay Organik</h3>
-            </div>
-            <p>Bangun kota, kerajaan, dan faksi secara natural. Cerita tercipta dari interaksi pemain.</p>
-          </article>
-          <article class="feature-card reveal" data-d="4">
-            <div class="feature-card-header">
-              <div class="feature-icon-wrap" aria-hidden="true"><i class="ph ph-devices"></i></div>
-              <h3>Full Crossplay</h3>
-            </div>
-            <p>Java &amp; Bedrock terhubung di satu dunia via Geyser + Floodgate. Main dari platform manapun.</p>
-          </article>
-        </div>
-        <div class="features-visual reveal" aria-label="Plugin stack">
-          <div class="vis-header">
-            <div class="vis-title">Plugin Stack</div>
-            <div class="vis-badge">All Free &amp; OSS</div>
-          </div>
-          <div class="plugin-list" role="list">
-            <div class="plugin-row" role="listitem"><i class="ph ph-shield-check"></i><div><div class="plugin-name">LuckPerms</div><div class="plugin-desc">Permission management</div></div></div>
-            <div class="plugin-row" role="listitem"><i class="ph ph-map-pin"></i><div><div class="plugin-name">WorldGuard</div><div class="plugin-desc">Region protection</div></div></div>
-            <div class="plugin-row" role="listitem"><i class="ph ph-chart-line-up"></i><div><div class="plugin-name">AuraSkills</div><div class="plugin-desc">RPG skill progression</div></div></div>
-            <div class="plugin-row" role="listitem"><i class="ph ph-storefront"></i><div><div class="plugin-name">AuctionHouse</div><div class="plugin-desc">Player marketplace</div></div></div>
-            <div class="plugin-row" role="listitem"><i class="ph ph-briefcase"></i><div><div class="plugin-name">Jobs Reborn</div><div class="plugin-desc">Professions &amp; economy</div></div></div>
-            <div class="plugin-row" role="listitem"><i class="ph ph-plugs-connected"></i><div><div class="plugin-name">Geyser + Floodgate</div><div class="plugin-desc">Bedrock crossplay</div></div></div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
+      <div class="info-tiles-grid">
 
-  <!-- STATS -->
-  <section class="stats-section" aria-label="Server statistics">
-    <div class="section-inner">
-      <div class="stats-grid">
-        <div class="stat-card reveal" data-d="1"><div class="stat-num" data-target="100">0</div><div class="stat-lbl">Max Players</div></div>
-        <div class="stat-card reveal" data-d="2"><div class="stat-num" data-target="8" data-suffix="GB">0GB</div><div class="stat-lbl">DDR5 RAM</div></div>
-        <div class="stat-card reveal" data-d="3"><div class="stat-num" data-target="20">0</div><div class="stat-lbl">Stable TPS</div></div>
-        <div class="stat-card reveal" data-d="4"><div class="stat-num">24/7</div><div class="stat-lbl">Uptime</div></div>
+        <div class="info-tile" onclick="openInfoPanel('features')"
+             role="button" tabindex="0" aria-label="Lihat fitur server"
+             onkeydown="if(event.key==='Enter'||event.key===' '){openInfoPanel('features');event.preventDefault();}">
+          <div class="info-tile-icon" aria-hidden="true"><i class="ph ph-tree-evergreen"></i></div>
+          <div class="info-tile-body">
+            <div class="info-tile-title">Fitur Utama</div>
+            <div class="info-tile-sub">Survival · SMP · Roleplay · Crossplay</div>
+          </div>
+          <i class="ph ph-arrow-right info-tile-arrow" aria-hidden="true"></i>
+        </div>
+
+        <div class="info-tile" onclick="openInfoPanel('plugins')"
+             role="button" tabindex="0" aria-label="Lihat plugin stack"
+             onkeydown="if(event.key==='Enter'||event.key===' '){openInfoPanel('plugins');event.preventDefault();}">
+          <div class="info-tile-icon" aria-hidden="true"><i class="ph ph-plugs-connected"></i></div>
+          <div class="info-tile-body">
+            <div class="info-tile-title">Plugin Stack</div>
+            <div class="info-tile-sub">All Free &amp; Open Source</div>
+          </div>
+          <i class="ph ph-arrow-right info-tile-arrow" aria-hidden="true"></i>
+        </div>
+
+        <div class="info-tile" onclick="openInfoPanel('specs')"
+             role="button" tabindex="0" aria-label="Lihat spesifikasi server"
+             onkeydown="if(event.key==='Enter'||event.key===' '){openInfoPanel('specs');event.preventDefault();}">
+          <div class="info-tile-icon" aria-hidden="true"><i class="ph ph-cpu"></i></div>
+          <div class="info-tile-body">
+            <div class="info-tile-title">Server Specs</div>
+            <div class="info-tile-sub">8GB DDR5 · 20 TPS · 24/7</div>
+          </div>
+          <i class="ph ph-arrow-right info-tile-arrow" aria-hidden="true"></i>
+        </div>
+
+        <div class="info-tile" onclick="openInfoPanel('stats')"
+             role="button" tabindex="0" aria-label="Lihat statistik server"
+             onkeydown="if(event.key==='Enter'||event.key===' '){openInfoPanel('stats');event.preventDefault();}">
+          <div class="info-tile-icon" aria-hidden="true"><i class="ph ph-chart-bar"></i></div>
+          <div class="info-tile-body">
+            <div class="info-tile-title">Statistik</div>
+            <div class="info-tile-sub">100 slots · Rp 179k/mo</div>
+          </div>
+          <i class="ph ph-arrow-right info-tile-arrow" aria-hidden="true"></i>
+        </div>
+
       </div>
     </div>
   </section>
@@ -285,7 +286,7 @@
   <!-- VIDEO -->
   <section id="preview" class="video-section" aria-labelledby="vid-h">
     <div class="section-inner">
-      <div class="reveal">
+      <div>
         <div class="section-label" aria-hidden="true">Preview &amp; Tutorial</div>
         <h2 class="section-heading" id="vid-h">Tonton &amp; Langsung<br><em>Join.</em></h2>
         <p class="section-body">Tutorial cara join tersedia di YouTube. Gameplay &amp; konten server ada di TikTok kami.</p>
@@ -294,7 +295,7 @@
       <div class="video-dual">
 
         <!-- Tutorial Card — HIGHLIGHTED -->
-        <div class="video-card tutorial reveal" data-d="1"
+        <div class="video-card tutorial"
              onclick="openTutorialVideo()"
              role="button" tabindex="0"
              aria-label="Tonton tutorial cara join Cr3scent di YouTube"
@@ -306,7 +307,6 @@
             <div class="video-card-badge">
               <i class="ph ph-book-open-text"></i> TUTORIAL
             </div>
-            <!-- Real YouTube thumbnail via maxresdefault -->
             <img src="https://i.ytimg.com/vi/IcPVN8Zms3E/hqdefault.jpg"
                  alt="Tutorial Cara Join Cr3scent"
                  style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.6;"
@@ -321,7 +321,7 @@
         </div>
 
         <!-- TikTok Gameplay Card -->
-        <div class="video-card tiktok reveal" data-d="2"
+        <div class="video-card tiktok"
              onclick="openTikTok()"
              role="button" tabindex="0"
              aria-label="Tonton gameplay Cr3scent di TikTok @cr3scentdc"
@@ -346,18 +346,17 @@
   <!-- LIVE MAP -->
   <section id="map" class="map-section" aria-labelledby="map-h">
     <div class="section-inner">
-      <div class="reveal">
+      <div>
         <div class="section-label" aria-hidden="true">Dunia Cr3scent</div>
         <h2 class="section-heading" id="map-h">Live<br><em>World Map.</em></h2>
         <p class="section-body">Peta dunia Cr3scent secara real-time. Lihat posisi pemain, biome, dan bangunan yang sudah dibuat komunitas.</p>
       </div>
 
       <!-- MAP CARD -->
-      <div class="map-card reveal" id="mapCard">
+      <div class="map-card" id="mapCard">
         <div class="map-preview" id="mapPreview" onclick="openMapFull()" role="button" tabindex="0"
              aria-label="Buka peta dunia Cr3scent" onkeydown="if(event.key==='Enter'||event.key===' '){openMapFull();event.preventDefault();}">
 
-          <!-- LIVE mini iframe — real dynmap tiles, dimmed as background -->
           <div class="map-preview-bg" aria-hidden="true">
             <iframe
               id="mapMiniIframe"
@@ -369,7 +368,6 @@
               sandbox="allow-scripts allow-same-origin"
               style="position:absolute;inset:0;width:100%;height:100%;border:none;pointer-events:none;opacity:0;transition:opacity 1.2s ease;"
             ></iframe>
-            <!-- fallback grid shown until iframe loads -->
             <div class="map-grid-lines" id="mapPreviewGrid" aria-hidden="true"></div>
             <div class="map-dot pulsing" style="top:48%;left:50%" aria-hidden="true"></div>
             <div class="map-coord-label" style="top:47%;left:51%" aria-hidden="true">Spawn</div>
@@ -395,6 +393,9 @@
           <div class="map-preview-corner br" aria-hidden="true"></div>
         </div>
 
+        <!-- Online Player List — right below map preview -->
+        <div class="map-players" id="mapPlayerList" aria-label="Pemain online" aria-live="polite"></div>
+
         <div class="map-meta">
           <div class="map-meta-item">
             <i class="ph ph-users" aria-hidden="true"></i>
@@ -414,8 +415,6 @@
             Buka di Tab Baru
           </a>
         </div>
-        <!-- Online Player List -->
-        <div class="map-players" id="mapPlayerList" aria-label="Pemain online" aria-live="polite"></div>
       </div>
     </div>
   </section>
@@ -463,12 +462,12 @@
   <!-- JOIN -->
   <section id="join" class="join-section" aria-labelledby="join-h">
     <div class="section-inner">
-      <div class="reveal">
+      <div>
         <div class="section-label" aria-hidden="true">Gabung Sekarang</div>
         <h2 class="section-heading" id="join-h">Mulai<br><em>Petualanganmu.</em></h2>
       </div>
       <div class="join-grid">
-        <article class="join-card reveal" data-d="1"
+        <article class="join-card"
                  onclick="window.open('https://discord.gg/sSEARcnb2T','_blank','noopener')"
                  role="button" tabindex="0">
           <div class="join-card-icon discord" aria-hidden="true"><i class="ph ph-discord-logo"></i></div>
@@ -479,8 +478,7 @@
             <i class="ph ph-arrow-right" aria-hidden="true"></i>Gabung
           </a>
         </article>
-        <article class="join-card reveal" data-d="2"
-                 onclick="copyIP()" role="button" tabindex="0">
+        <article class="join-card" onclick="copyIP()" role="button" tabindex="0">
           <div class="join-card-icon mc" aria-hidden="true"><i class="ph ph-game-controller"></i></div>
           <h3>Main Minecraft</h3>
           <p>Connect ke mc.cr3scent.asia dan mulai petualanganmu. Java &amp; Bedrock tersupport.</p>
@@ -488,7 +486,7 @@
             <i class="ph ph-copy" aria-hidden="true"></i>Copy IP
           </button>
         </article>
-        <article class="join-card reveal" data-d="3"
+        <article class="join-card"
                  onclick="window.open('https://minecraft-mp.com/server-s355797','_blank','noopener')"
                  role="button" tabindex="0">
           <div class="join-card-icon vote" aria-hidden="true"><i class="ph ph-star"></i></div>
@@ -506,12 +504,12 @@
   <!-- STAFF -->
   <section id="staff" class="staff-section" aria-labelledby="staff-h">
     <div class="section-inner">
-      <div class="reveal">
+      <div>
         <div class="section-label" aria-hidden="true">Tim Kami</div>
         <h2 class="section-heading" id="staff-h">Di Balik<br><em>Cr3scent.</em></h2>
       </div>
       <div class="staff-grid">
-        <article class="staff-card reveal" data-d="1">
+        <article class="staff-card">
           <div class="staff-avatar" aria-hidden="true"><i class="ph ph-crown"></i></div>
           <div class="staff-info">
             <div class="staff-name">Muhammad Daffy Ramadhan</div>
@@ -519,7 +517,7 @@
             <div class="staff-desc">Bertanggung jawab atas visi, arah, dan keberlangsungan Cr3scent Network.</div>
           </div>
         </article>
-        <article class="staff-card reveal" data-d="2">
+        <article class="staff-card">
           <div class="staff-avatar" aria-hidden="true"><i class="ph ph-bank"></i></div>
           <div class="staff-info">
             <div class="staff-name">Stevadi</div>
@@ -527,7 +525,7 @@
             <div class="staff-desc">Mendukung pertumbuhan infrastruktur dan pengembangan server.</div>
           </div>
         </article>
-        <article class="staff-card reveal" data-d="3">
+        <article class="staff-card">
           <div class="staff-avatar" aria-hidden="true"><i class="ph ph-code"></i></div>
           <div class="staff-info">
             <div class="staff-name">Sanopalz</div>
@@ -535,7 +533,7 @@
             <div class="staff-desc">Mengelola plugin, konfigurasi server, dan pengembangan teknis.</div>
           </div>
         </article>
-        <article class="staff-card reveal" data-d="4">
+        <article class="staff-card">
           <div class="staff-avatar" aria-hidden="true"><i class="ph ph-code"></i></div>
           <div class="staff-info">
             <div class="staff-name">Kevin</div>
@@ -550,12 +548,12 @@
   <!-- CHANGELOG -->
   <section id="changelog" class="changelog-section" aria-labelledby="cl-h">
     <div class="section-inner">
-      <div class="reveal">
+      <div>
         <div class="section-label" aria-hidden="true">Update Log</div>
         <h2 class="section-heading" id="cl-h">Riwayat<br><em>Pembaruan.</em></h2>
         <p class="section-body">Semua perubahan dan pembaruan yang telah diterapkan pada server dan website Cr3scent.</p>
       </div>
-      <div class="changelog-list reveal">
+      <div class="changelog-list">
 
         <div class="cl-item">
           <div class="cl-dot new" aria-hidden="true"></div>
@@ -563,14 +561,37 @@
             <div class="cl-header" onclick="toggleCL(this)" role="button" tabindex="0" aria-expanded="true"
                  onkeydown="if(event.key==='Enter'||event.key===' '){toggleCL(this);event.preventDefault();}">
               <div class="cl-meta">
-                <span class="cl-version">v1.3</span>
+                <span class="cl-version">v1.4</span>
                 <span class="cl-badge new-badge">Terbaru</span>
+              </div>
+              <div class="cl-title">Website Rebuild &amp; UX Overhaul</div>
+              <div class="cl-date"><i class="ph ph-calendar-blank"></i> Apr 2026</div>
+              <i class="ph ph-caret-down cl-chevron"></i>
+            </div>
+            <div class="cl-body open">
+              <div class="cl-entry add"><i class="ph ph-plus-circle"></i> Info Panel — fitur, plugin, specs &amp; stats dalam satu panel slide-up</div>
+              <div class="cl-entry add"><i class="ph ph-plus-circle"></i> Online player list dipindah ke bawah IP card di hero</div>
+              <div class="cl-entry add"><i class="ph ph-plus-circle"></i> Player list juga muncul langsung di bawah map preview</div>
+              <div class="cl-entry fix"><i class="ph ph-wrench"></i> Custom cursor PC di-rewrite: fix lag, bug, dan event delegation</div>
+              <div class="cl-entry fix"><i class="ph ph-wrench"></i> Scroll reveal dihapus — semua konten langsung tampil</div>
+              <div class="cl-entry change"><i class="ph ph-pencil-simple"></i> Sections dioptimasi untuk semua ukuran device</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="cl-item">
+          <div class="cl-dot" aria-hidden="true"></div>
+          <div class="cl-content">
+            <div class="cl-header" onclick="toggleCL(this)" role="button" tabindex="0" aria-expanded="false"
+                 onkeydown="if(event.key==='Enter'||event.key===' '){toggleCL(this);event.preventDefault();}">
+              <div class="cl-meta">
+                <span class="cl-version">v1.3</span>
               </div>
               <div class="cl-title">Live World Map &amp; Website Optimization</div>
               <div class="cl-date"><i class="ph ph-calendar-blank"></i> Mar 2026</div>
               <i class="ph ph-caret-down cl-chevron"></i>
             </div>
-            <div class="cl-body open">
+            <div class="cl-body">
               <div class="cl-entry add"><i class="ph ph-plus-circle"></i> Live World Map — Dynmap real-time via Cloudflare Worker HTTPS</div>
               <div class="cl-entry add"><i class="ph ph-plus-circle"></i> Preview peta langsung di website dengan player tracking</div>
               <div class="cl-entry add"><i class="ph ph-plus-circle"></i> Online player list di map section</div>
@@ -659,11 +680,11 @@
   <!-- FAQ -->
   <section id="faq" class="faq-section" aria-labelledby="faq-h">
     <div class="section-inner">
-      <div class="reveal">
+      <div>
         <div class="section-label" aria-hidden="true">FAQ</div>
         <h2 class="section-heading" id="faq-h">Pertanyaan<br><em>Umum.</em></h2>
       </div>
-      <div class="faq-list reveal">
+      <div class="faq-list">
 
         <div class="faq-item">
           <button class="faq-q" onclick="toggleFAQ(this)" aria-expanded="false">
@@ -766,7 +787,7 @@
         <h5>Navigation</h5>
         <ul>
           <li><a href="#home">Home</a></li>
-          <li><a href="#features">Features</a></li>
+          <li><a href="#" onclick="openInfoPanel('features');return false;">Features</a></li>
           <li><a href="#preview">Preview</a></li>
           <li><a href="#changelog">Updates</a></li>
           <li><a href="#staff">Team</a></li>
@@ -796,6 +817,138 @@
     </div>
   </div>
 </footer>
+
+<!-- ═══ INFO PANEL (replaces features/stats sections) ═══════════════ -->
+<div class="info-panel-backdrop" id="infoPanelBackdrop" aria-hidden="true" onclick="closeInfoPanel()"></div>
+<div class="info-panel" id="infoPanel" role="dialog" aria-modal="true" aria-label="Informasi Server">
+  <div class="info-panel-handle" aria-hidden="true"></div>
+  <div class="info-panel-header">
+    <div class="info-panel-title">
+      <i class="ph ph-info" aria-hidden="true"></i>
+      <span>Info Server</span>
+    </div>
+    <button class="info-panel-close" onclick="closeInfoPanel()" aria-label="Tutup panel">
+      <i class="ph ph-x"></i>
+    </button>
+  </div>
+  <div class="info-panel-tabs" role="tablist" id="infoPanelTabs">
+    <button class="ipt active" data-tab="features" role="tab" aria-selected="true" onclick="switchInfoTab('features')">
+      <i class="ph ph-star-four"></i> Fitur
+    </button>
+    <button class="ipt" data-tab="plugins" role="tab" aria-selected="false" onclick="switchInfoTab('plugins')">
+      <i class="ph ph-plugs-connected"></i> Plugins
+    </button>
+    <button class="ipt" data-tab="specs" role="tab" aria-selected="false" onclick="switchInfoTab('specs')">
+      <i class="ph ph-cpu"></i> Specs
+    </button>
+    <button class="ipt" data-tab="stats" role="tab" aria-selected="false" onclick="switchInfoTab('stats')">
+      <i class="ph ph-chart-bar"></i> Stats
+    </button>
+  </div>
+  <div class="info-panel-body">
+
+    <!-- TAB: Features -->
+    <div class="ip-tab active" id="iptab-features">
+      <div class="ip-tab-intro">
+        <div class="section-label">Fitur Utama</div>
+        <h3 class="ip-tab-heading">One World,<br><em>Three Souls.</em></h3>
+        <p class="ip-tab-body">Tiga gaya bermain dalam satu server. Survival murni, komunitas SMP, dan roleplay organik — semua tersedia di dunia yang sama.</p>
+      </div>
+      <div class="ip-feature-cards">
+        <div class="ip-feature-card">
+          <div class="feature-icon-wrap"><i class="ph ph-tree-evergreen"></i></div>
+          <div>
+            <h4>Survival Murni</h4>
+            <p>Eksplorasi, farming, dan building bebas dengan sistem claim tanah yang adil. Tidak ada griefing.</p>
+          </div>
+        </div>
+        <div class="ip-feature-card">
+          <div class="feature-icon-wrap"><i class="ph ph-users-three"></i></div>
+          <div>
+            <h4>SMP Komunitas</h4>
+            <p>Ekonomi player-driven, trading, auction house, dan event bersama. Bangun bisnis dan kolaborasi.</p>
+          </div>
+        </div>
+        <div class="ip-feature-card">
+          <div class="feature-icon-wrap"><i class="ph ph-mask-happy"></i></div>
+          <div>
+            <h4>Roleplay Organik</h4>
+            <p>Bangun kota, kerajaan, dan faksi secara natural. Cerita tercipta dari interaksi pemain.</p>
+          </div>
+        </div>
+        <div class="ip-feature-card">
+          <div class="feature-icon-wrap"><i class="ph ph-devices"></i></div>
+          <div>
+            <h4>Full Crossplay</h4>
+            <p>Java &amp; Bedrock terhubung di satu dunia via Geyser + Floodgate. Main dari platform manapun.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB: Plugins -->
+    <div class="ip-tab" id="iptab-plugins">
+      <div class="ip-tab-intro">
+        <div class="section-label">Plugin Stack</div>
+        <h3 class="ip-tab-heading">Semua <em>Open Source.</em></h3>
+        <p class="ip-tab-body">Plugin-plugin yang menjalankan Cr3scent — semua free, battle-tested, dan dioptimasi untuk performa terbaik.</p>
+      </div>
+      <div class="ip-plugin-grid">
+        <div class="plugin-row"><i class="ph ph-shield-check"></i><div><div class="plugin-name">LuckPerms</div><div class="plugin-desc">Permission management</div></div></div>
+        <div class="plugin-row"><i class="ph ph-map-pin"></i><div><div class="plugin-name">WorldGuard</div><div class="plugin-desc">Region protection</div></div></div>
+        <div class="plugin-row"><i class="ph ph-chart-line-up"></i><div><div class="plugin-name">AuraSkills</div><div class="plugin-desc">RPG skill progression</div></div></div>
+        <div class="plugin-row"><i class="ph ph-storefront"></i><div><div class="plugin-name">AuctionHouse</div><div class="plugin-desc">Player marketplace</div></div></div>
+        <div class="plugin-row"><i class="ph ph-briefcase"></i><div><div class="plugin-name">Jobs Reborn</div><div class="plugin-desc">Professions &amp; economy</div></div></div>
+        <div class="plugin-row"><i class="ph ph-plugs-connected"></i><div><div class="plugin-name">Geyser + Floodgate</div><div class="plugin-desc">Bedrock crossplay</div></div></div>
+        <div class="plugin-row"><i class="ph ph-shield-star"></i><div><div class="plugin-name">GrimAC</div><div class="plugin-desc">Advanced anti-cheat</div></div></div>
+        <div class="plugin-row"><i class="ph ph-lock"></i><div><div class="plugin-name">AuthMe</div><div class="plugin-desc">Login authentication</div></div></div>
+        <div class="plugin-row"><i class="ph ph-arrows-counter-clockwise"></i><div><div class="plugin-name">CoreProtect</div><div class="plugin-desc">Rollback &amp; logging</div></div></div>
+        <div class="plugin-row"><i class="ph ph-discord-logo"></i><div><div class="plugin-name">DiscordSRV</div><div class="plugin-desc">Discord-Minecraft bridge</div></div></div>
+        <div class="plugin-row"><i class="ph ph-compass"></i><div><div class="plugin-name">EssentialsX</div><div class="plugin-desc">Core commands &amp; features</div></div></div>
+        <div class="plugin-row"><i class="ph ph-map-trifold"></i><div><div class="plugin-name">Dynmap</div><div class="plugin-desc">Live world map</div></div></div>
+      </div>
+    </div>
+
+    <!-- TAB: Specs -->
+    <div class="ip-tab" id="iptab-specs">
+      <div class="ip-tab-intro">
+        <div class="section-label">Server Specs</div>
+        <h3 class="ip-tab-heading">Infrastruktur<br><em>Terpercaya.</em></h3>
+      </div>
+      <div class="modal-specs-grid">
+        <div class="modal-spec"><i class="ph ph-server"></i><div class="ms-val">Raehost</div><div class="ms-lbl">Provider</div></div>
+        <div class="modal-spec"><i class="ph ph-memory"></i><div class="ms-val">8GB DDR5</div><div class="ms-lbl">RAM</div></div>
+        <div class="modal-spec"><i class="ph ph-hard-drive"></i><div class="ms-val">24GB NVMe</div><div class="ms-lbl">Storage</div></div>
+        <div class="modal-spec"><i class="ph ph-cpu"></i><div class="ms-val">400% CPU</div><div class="ms-lbl">Priority</div></div>
+        <div class="modal-spec"><i class="ph ph-battery-high"></i><div class="ms-val">Stable 20</div><div class="ms-lbl">TPS</div></div>
+        <div class="modal-spec"><i class="ph ph-users"></i><div class="ms-val">100</div><div class="ms-lbl">Max Players</div></div>
+        <div class="modal-spec"><i class="ph ph-code"></i><div class="ms-val">1.21.1</div><div class="ms-lbl">Java</div></div>
+        <div class="modal-spec"><i class="ph ph-plugs-connected"></i><div class="ms-val">Geyser</div><div class="ms-lbl">Crossplay</div></div>
+      </div>
+      <div class="ip-invest-box">
+        <div class="ip-invest-label">Monthly Investment</div>
+        <div class="plugin-item"><i class="ph ph-currency-circle-dollar"></i><span><strong>Rp 179.200</strong> &mdash; Raehost hosting (8GB DDR5)</span></div>
+        <div class="plugin-item"><i class="ph ph-lightbulb"></i><span>Semua core plugin gratis &amp; open-source</span></div>
+        <div class="plugin-item"><i class="ph ph-trend-up"></i><span>Upgrade path tersedia seiring pertumbuhan komunitas</span></div>
+      </div>
+    </div>
+
+    <!-- TAB: Stats -->
+    <div class="ip-tab" id="iptab-stats">
+      <div class="ip-tab-intro">
+        <div class="section-label">Statistik</div>
+        <h3 class="ip-tab-heading">Angka yang<br><em>Bicara.</em></h3>
+      </div>
+      <div class="stats-grid">
+        <div class="stat-card"><div class="stat-num" data-target="100">0</div><div class="stat-lbl">Max Players</div></div>
+        <div class="stat-card"><div class="stat-num" data-target="8" data-suffix="GB">0GB</div><div class="stat-lbl">DDR5 RAM</div></div>
+        <div class="stat-card"><div class="stat-num" data-target="20">0</div><div class="stat-lbl">Stable TPS</div></div>
+        <div class="stat-card"><div class="stat-num">24/7</div><div class="stat-lbl">Uptime</div></div>
+      </div>
+    </div>
+
+  </div>
+</div>
 
 <!-- SPECS MODAL -->
 <div class="modal-backdrop" id="modalBackdrop" aria-hidden="true"></div>
@@ -855,7 +1008,6 @@
   <div class="welcome-body">
     <div class="tut-heading">Tutorial Bergabung</div>
 
-    <!-- Platform Tabs -->
     <div class="tut-tabs" role="tablist" aria-label="Platform">
       <button class="tut-tab active" id="tab-java" role="tab" aria-selected="true" aria-controls="panel-java" onclick="switchTab('java')">
         <i class="ph ph-monitor" aria-hidden="true"></i> Java
@@ -865,7 +1017,6 @@
       </button>
     </div>
 
-    <!-- Java Panel -->
     <div class="tut-panel active" id="panel-java" role="tabpanel" aria-labelledby="tab-java">
       <div class="tut-step">
         <div class="tut-step-num">1</div>
@@ -894,7 +1045,6 @@
       </div>
     </div>
 
-    <!-- Bedrock Panel -->
     <div class="tut-panel" id="panel-bedrock" role="tabpanel" aria-labelledby="tab-bedrock">
       <div class="tut-warn">
         <i class="ph ph-warning" aria-hidden="true"></i>
@@ -938,7 +1088,6 @@
       </div>
     </div>
 
-    <!-- Tutorial Video -->
     <div>
       <div class="tut-heading" style="margin-bottom:10px;">Video Tutorial</div>
       <div class="tut-video-wrap" onclick="openTutorialVideo()" role="button" tabindex="0"
@@ -952,7 +1101,6 @@
       </div>
     </div>
 
-    <!-- Actions -->
     <div class="welcome-actions">
       <button class="btn btn-gold" onclick="closeWelcome()" style="flex:1;justify-content:center;">
         <i class="ph ph-game-controller" aria-hidden="true"></i> Siap, Main Sekarang!
@@ -980,6 +1128,78 @@
 <button class="back-to-top" id="backToTop" aria-label="Kembali ke atas" onclick="window.scrollTo({top:0,behavior:'smooth'})">
   <i class="ph ph-arrow-up" aria-hidden="true"></i>
 </button>
+
+<!-- ═══ FLOATING QUICK BAR (muncul setelah scroll past hero) ═══ -->
+<div class="float-bar" id="floatBar" aria-label="Quick actions">
+  <button class="fb-btn fb-ip" onclick="copyIP()" aria-label="Copy IP Server">
+    <i class="ph ph-copy"></i>
+    <span>Copy IP</span>
+  </button>
+  <div class="fb-divider" aria-hidden="true"></div>
+  <a class="fb-btn fb-discord" href="https://discord.gg/sSEARcnb2T" target="_blank" rel="noopener noreferrer" aria-label="Join Discord">
+    <i class="ph ph-discord-logo"></i>
+    <span>Discord</span>
+  </a>
+  <div class="fb-divider" aria-hidden="true"></div>
+  <button class="fb-btn fb-map" onclick="openMapFull()" aria-label="Buka Live Map">
+    <i class="ph ph-map-trifold"></i>
+    <span>Live Map</span>
+  </button>
+  <div class="fb-divider" aria-hidden="true"></div>
+  <button class="fb-btn fb-share" onclick="shareServer()" aria-label="Share server">
+    <i class="ph ph-share-network"></i>
+    <span>Share</span>
+  </button>
+</div>
+
+<!-- ═══ MOBILE BOTTOM NAV ═══════════════════════════════════ -->
+<nav class="mobile-bottom-nav" id="mobileBottomNav" aria-label="Mobile navigation">
+  <a href="#home" class="mbn-item active" data-section="home">
+    <i class="ph ph-house"></i>
+    <span>Home</span>
+  </a>
+  <button class="mbn-item" onclick="openMapFull()">
+    <i class="ph ph-map-trifold"></i>
+    <span>Map</span>
+  </button>
+  <button class="mbn-item mbn-cta" onclick="copyIP()">
+    <i class="ph ph-copy"></i>
+    <span>Copy IP</span>
+  </button>
+  <button class="mbn-item" onclick="openInfoPanel('features')">
+    <i class="ph ph-star-four"></i>
+    <span>Info</span>
+  </button>
+  <a href="https://discord.gg/sSEARcnb2T" target="_blank" rel="noopener noreferrer" class="mbn-item">
+    <i class="ph ph-discord-logo"></i>
+    <span>Discord</span>
+  </a>
+</nav>
+
+<!-- ═══ KEYBOARD SHORTCUT HINT (desktop only) ══════════════ -->
+<div class="kb-hint" id="kbHint" aria-hidden="true">
+  <i class="ph ph-keyboard"></i>
+  <span>Press <kbd>?</kbd> for shortcuts</span>
+</div>
+
+<!-- ═══ KEYBOARD SHORTCUT MODAL ═════════════════════════════ -->
+<div class="kb-backdrop" id="kbBackdrop" aria-hidden="true" onclick="closeKbModal()"></div>
+<div class="kb-modal" id="kbModal" role="dialog" aria-modal="true" aria-label="Keyboard shortcuts">
+  <div class="kb-modal-head">
+    <div class="kb-modal-title"><i class="ph ph-keyboard"></i> Keyboard Shortcuts</div>
+    <button class="modal-close" onclick="closeKbModal()"><i class="ph ph-x"></i></button>
+  </div>
+  <div class="kb-modal-body">
+    <div class="kb-row"><kbd>C</kbd><span>Copy IP Server</span></div>
+    <div class="kb-row"><kbd>D</kbd><span>Join Discord</span></div>
+    <div class="kb-row"><kbd>M</kbd><span>Buka Live Map</span></div>
+    <div class="kb-row"><kbd>S</kbd><span>Share Server</span></div>
+    <div class="kb-row"><kbd>F</kbd><span>Features / Info Panel</span></div>
+    <div class="kb-row"><kbd>T</kbd><span>Toggle Dark/Light Mode</span></div>
+    <div class="kb-row"><kbd>Esc</kbd><span>Tutup semua modal</span></div>
+    <div class="kb-row"><kbd>?</kbd><span>Show/hide shortcuts</span></div>
+  </div>
+</div>
 
 <script src="script.js"></script>
 </body>
