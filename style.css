@@ -2155,3 +2155,388 @@ footer { padding: 44px 24px calc(28px + env(safe-area-inset-bottom)); }
   .map-cs-desc { font-size: .8rem; }
   .map-cs-meta { padding: 12px 16px; }
 }
+
+/* ═══════════════════════════════════════════════════════════════
+   v1.6 — Dynamic Status Pill · iOS 26 Glass · Compact Android
+   Mini Game · Event Countdown · Bug Fixes
+═══════════════════════════════════════════════════════════════ */
+
+/* ── DYNAMIC STATUS PILL (replaces eyebrow) ─────────────────── */
+.hero-status-pill {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 7px 16px; border-radius: 100px;
+  border: 1px solid var(--border2);
+  font-size: .73rem; font-weight: 600; letter-spacing: .6px; text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 18px;
+  animation: fadeUp .7s var(--ease) .15s both;
+  transition: border-color .3s, background .3s;
+  position: relative; overflow: hidden;
+}
+/* iOS 26 glass */
+@supports (backdrop-filter: blur(1px)) {
+  .hero-status-pill {
+    background: rgba(255,255,255,.04);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+  }
+}
+.hero-status-pill.online  { border-color: rgba(48,209,88,.3); }
+.hero-status-pill.offline { border-color: rgba(255,69,58,.2); }
+
+.hsp-dot {
+  width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0;
+  background: var(--muted2); transition: background .3s, box-shadow .3s;
+}
+.hero-status-pill.online  .hsp-dot { background: var(--green); box-shadow: 0 0 8px var(--green); animation: pDot 2.2s infinite; }
+.hero-status-pill.offline .hsp-dot { background: var(--red); box-shadow: 0 0 6px var(--red); }
+.hsp-text  { color: var(--text); font-weight: 700; }
+.hsp-sep   { opacity: .35; }
+.hsp-players { color: var(--green); font-weight: 700; }
+.hsp-ver   { color: var(--gold); font-weight: 700; }
+
+@media (max-width: 380px) {
+  .hsp-ver { display: none; }
+  .hsp-sep:last-of-type { display: none; }
+}
+
+/* ── iOS 26 LIQUID GLASS — comprehensive ────────────────────── */
+/* Following Apple's iOS 26 Liquid Glass design language:
+   - Multi-layer backdrop filter
+   - Specular highlight on top edge
+   - Subtle inner glow
+   - High roundedness
+*/
+
+/* Navbar glass */
+.navbar {
+  background: rgba(9,9,11,.55) !important;
+  border-color: rgba(255,255,255,.1) !important;
+  box-shadow:
+    0 1px 0 rgba(255,255,255,.06) inset,
+    0 -1px 0 rgba(0,0,0,.2) inset;
+}
+@supports (backdrop-filter: blur(1px)) {
+  .navbar {
+    backdrop-filter: blur(48px) saturate(220%) brightness(1.05);
+    -webkit-backdrop-filter: blur(48px) saturate(220%) brightness(1.05);
+  }
+}
+[data-theme="light"] .navbar {
+  background: rgba(245,245,247,.6) !important;
+}
+
+/* Cards glass */
+@supports (backdrop-filter: blur(1px)) {
+  .ip-card,
+  .feature-card,
+  .join-card,
+  .staff-card,
+  .stat-card,
+  .cl-header,
+  .faq-item,
+  .info-tile,
+  .engage-card,
+  .map-cs-card {
+    backdrop-filter: blur(12px) saturate(160%);
+    -webkit-backdrop-filter: blur(12px) saturate(160%);
+  }
+}
+
+/* Mobile drawer glass */
+@supports (backdrop-filter: blur(1px)) {
+  .mobile-drawer {
+    backdrop-filter: blur(56px) saturate(220%) brightness(1.06);
+    -webkit-backdrop-filter: blur(56px) saturate(220%) brightness(1.06);
+  }
+}
+
+/* Float bar glass */
+@supports (backdrop-filter: blur(1px)) {
+  .float-bar {
+    backdrop-filter: blur(40px) saturate(200%) brightness(1.08);
+    -webkit-backdrop-filter: blur(40px) saturate(200%) brightness(1.08);
+    box-shadow:
+      0 20px 60px rgba(0,0,0,.5),
+      0 1px 0 rgba(255,255,255,.08) inset,
+      0 0 0 1px rgba(201,168,76,.15) inset;
+  }
+}
+
+/* Mobile bottom nav glass */
+@supports (backdrop-filter: blur(1px)) {
+  .mobile-bottom-nav {
+    backdrop-filter: blur(48px) saturate(220%) brightness(1.06);
+    -webkit-backdrop-filter: blur(48px) saturate(220%) brightness(1.06);
+    box-shadow: 0 -1px 0 rgba(255,255,255,.07) inset;
+  }
+}
+
+/* Info panel glass */
+@supports (backdrop-filter: blur(1px)) {
+  .info-panel {
+    backdrop-filter: blur(52px) saturate(220%) brightness(1.06);
+    -webkit-backdrop-filter: blur(52px) saturate(220%) brightness(1.06);
+  }
+}
+
+/* ── COMPACT ANDROID — global tightening ────────────────────── */
+/* All sizes tuned for ~393px (Pixel 7, S24) */
+
+/* Tighter hero */
+.hero { padding-top: calc(var(--nav-h) + 32px); padding-bottom: 48px; }
+.hero-title {
+  font-size: clamp(3.2rem, 9.5vw, 9rem);
+  margin-bottom: 14px; letter-spacing: -1.5px;
+}
+.hero-sub {
+  font-size: clamp(.86rem, 2vw, 1rem);
+  margin-bottom: 24px; line-height: 1.65;
+  max-width: 400px;
+}
+.hero-actions { margin-bottom: 28px; gap: 7px; }
+.btn { padding: 10px 20px; font-size: .83rem; border-radius: 11px; gap: 6px; }
+
+/* Status strip tighter */
+.status-strip { max-width: 480px; border-radius: 14px; }
+.strip-item { padding: 10px 8px; }
+.strip-label { font-size: .62rem; margin-bottom: 3px; }
+.strip-value { font-size: 1rem; }
+
+/* IP card tighter */
+.ip-card { padding: 16px 16px; margin-top: 8px; border-radius: 16px; max-width: 480px; }
+.ip-label { font-size: .68rem; margin-bottom: 8px; }
+.ip-address { font-size: clamp(1.05rem, 3.2vw, 1.6rem); gap: 8px; margin-bottom: 3px; }
+.ip-hint { font-size: .72rem; margin-bottom: 8px; }
+.ip-divider { margin: 8px 0; }
+.ip-badge { font-size: .72rem; }
+
+/* Hero age ticker tighter */
+.hero-age-ticker { margin-bottom: 16px; gap: 5px; }
+.hat-unit { padding: 6px 10px; min-width: 46px; border-radius: 10px; }
+.hat-num { font-size: 1.35rem; }
+.hat-lbl { font-size: .57rem; }
+.hat-sep { font-size: 1.1rem; }
+
+/* Section spacings */
+.video-section { padding: 44px 0 72px; }
+.join-section  { padding: 0 0 72px; }
+.engage-section { padding: 0 0 72px; }
+.staff-section { padding: 72px 0 0; }
+.changelog-section { padding: 72px 0 0; }
+.faq-section   { padding: 72px 0; }
+.map-section   { padding: 52px 0; }
+
+/* Video dual cards */
+.video-card-info { padding: 14px 16px 16px; }
+.video-card-title { font-size: .9rem; }
+.video-card-sub { font-size: .77rem; }
+
+/* Join cards */
+.join-card { padding: 20px 16px; border-radius: 18px; }
+.join-card-icon { width: 44px; height: 44px; border-radius: 14px; font-size: 1.25rem; margin-bottom: 12px; }
+.join-card h3 { font-size: .9rem; }
+.join-card p  { font-size: .79rem; margin-bottom: 14px; }
+
+/* Staff */
+.staff-section { padding-top: 72px; }
+.staff-card { padding: 16px 12px; gap: 10px; border-radius: 14px; }
+.staff-avatar { width: 42px; height: 42px; border-radius: 13px; font-size: 1.1rem; }
+.staff-name { font-size: .84rem; }
+.staff-role { font-size: .68rem; }
+.staff-desc { font-size: .76rem; }
+
+/* Info tiles */
+.info-tile { padding: 12px 12px; gap: 10px; border-radius: 14px; }
+.info-tile-icon { width: 36px; height: 36px; font-size: 1rem; border-radius: 10px; }
+.info-tile-title { font-size: .81rem; }
+.info-tile-sub { font-size: .67rem; }
+
+/* Changelog */
+.cl-header { padding: 11px 13px; }
+.cl-title { font-size: .84rem; }
+
+/* FAQ */
+.faq-q { padding: 14px 16px; font-size: .88rem; }
+
+/* Section headings */
+.section-heading { font-size: clamp(1.85rem, 4.2vw, 3rem); margin-bottom: 12px; }
+.section-body { font-size: .9rem; }
+.section-label { font-size: .67rem; margin-bottom: 9px; }
+
+/* ── STATUS STRIP: 4 items on Android ──────────────────────── */
+.strip-java-otw { border-left: 1px solid var(--border); }
+@media (max-width: 400px) {
+  .strip-java-otw { display: none; }
+  .status-strip { flex-direction: row !important; }
+}
+@media (min-width: 401px) {
+  .status-strip { flex-direction: row !important; }
+  .strip-item { border-bottom: none !important; border-right: 1px solid var(--border); }
+  .strip-item:last-child { border-right: none; }
+}
+
+/* ── ENGAGE SECTION ─────────────────────────────────────────── */
+.engage-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 14px;
+  margin-top: 0;
+}
+@media (max-width: 680px) { .engage-grid { grid-template-columns: 1fr; } }
+
+.engage-card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 22px; padding: 22px 20px;
+  display: flex; flex-direction: column; gap: 12px;
+  transition: border-color .25s var(--ease), transform .25s var(--ease);
+}
+.engage-card:hover { border-color: var(--border2); transform: translateY(-3px); }
+
+.engage-card-header {
+  display: flex; align-items: center; justify-content: space-between; gap: 8px;
+}
+.engage-btn { font-size: .79rem; padding: 9px 16px; align-self: flex-start; }
+
+/* Event card */
+.event-live-badge {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: var(--gold-dim); border: 1px solid rgba(201,168,76,.2);
+  border-radius: 100px; padding: 4px 10px;
+  font-size: .64rem; font-weight: 700; letter-spacing: 1px; color: var(--gold);
+}
+.event-title { font-family: 'Cormorant Garamond', serif; font-size: 1.15rem; font-weight: 600; font-style: italic; color: var(--text); line-height: 1.25; }
+.event-desc { font-size: .81rem; color: var(--muted); line-height: 1.6; }
+.event-countdown {
+  display: flex; align-items: center; gap: 6px;
+}
+.ecd-unit { display: flex; flex-direction: column; align-items: center; }
+.ecd-num {
+  font-family: 'Cormorant Garamond', serif; font-size: 1.65rem;
+  font-weight: 600; font-style: italic; color: var(--gold); line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+.ecd-lbl { font-size: .58rem; color: var(--muted); text-transform: uppercase; letter-spacing: .8px; margin-top: 2px; }
+.ecd-sep { font-size: 1.2rem; color: var(--muted2); padding-bottom: 10px; }
+
+/* Trivia game */
+.trivia-q {
+  font-size: .92rem; font-weight: 600; color: var(--text); line-height: 1.5;
+  min-height: 48px;
+}
+.trivia-options {
+  display: flex; flex-direction: column; gap: 7px;
+}
+.trivia-opt {
+  width: 100%; padding: 10px 14px; border-radius: 11px;
+  background: var(--surface2); border: 1px solid var(--border);
+  color: var(--text); font-family: inherit; font-size: .83rem; font-weight: 500;
+  cursor: pointer; text-align: left; transition: all .18s;
+  -webkit-tap-highlight-color: transparent;
+}
+.trivia-opt:hover:not(:disabled) { background: var(--surface3); border-color: var(--border2); }
+.trivia-opt.correct { background: rgba(48,209,88,.12); border-color: rgba(48,209,88,.35); color: var(--green); }
+.trivia-opt.wrong   { background: rgba(255,69,58,.1);  border-color: rgba(255,69,58,.3);  color: var(--red); opacity: .7; }
+.trivia-opt:disabled { cursor: not-allowed; }
+
+.trivia-result {
+  font-size: .82rem; font-weight: 600; line-height: 1.5;
+  min-height: 0; color: var(--muted);
+}
+.trivia-result.correct { color: var(--green); }
+.trivia-result.wrong   { color: var(--red); }
+
+.trivia-score-badge {
+  display: inline-flex; align-items: center; gap: 5px;
+  background: var(--gold-dim); border: 1px solid rgba(201,168,76,.2);
+  border-radius: 100px; padding: 4px 10px;
+  font-size: .7rem; font-weight: 700; color: var(--gold);
+}
+.trivia-score-badge i { font-size: .75rem; }
+
+/* ── MOBILE-SPECIFIC COMPACT FIXES ─────────────────────────── */
+@media (max-width: 560px) {
+  .hero { padding-top: calc(var(--nav-h) + 22px); padding-bottom: 36px; }
+  .hero-title { font-size: clamp(2.9rem, 9vw, 4rem); letter-spacing: -1px; }
+  .hero-sub { font-size: .84rem; margin-bottom: 20px; }
+  .hero-actions { margin-bottom: 22px; gap: 6px; }
+  .btn { padding: 10px 18px; font-size: .82rem; }
+  .hero-actions .btn { width: 100%; justify-content: center; }
+  .hero-age-ticker { gap: 4px; margin-bottom: 12px; }
+  .hat-unit { min-width: 40px; padding: 5px 7px; border-radius: 9px; }
+  .hat-num { font-size: 1.15rem; }
+  .hat-sep { font-size: .95rem; }
+  .status-strip { border-radius: 13px; }
+  .strip-item { padding: 9px 7px; }
+  .strip-label { font-size: .6rem; }
+  .strip-value { font-size: .95rem; }
+  .ip-card { padding: 14px 14px; border-radius: 15px; }
+  .section-inner { padding: 0 14px; }
+  .section-heading { font-size: clamp(1.7rem, 7.5vw, 2.4rem); }
+  .info-tiles-section { padding: 20px 0 32px; }
+  .info-tiles-grid { grid-template-columns: 1fr 1fr; gap: 7px; }
+  .engage-section { padding: 0 0 56px; }
+  .engage-card { padding: 16px 14px; border-radius: 18px; gap: 10px; }
+  .event-title { font-size: 1rem; }
+  .ecd-num { font-size: 1.35rem; }
+  .trivia-q { font-size: .87rem; }
+  .trivia-opt { padding: 9px 12px; font-size: .8rem; }
+}
+
+/* ── BUG FIXES ──────────────────────────────────────────────── */
+/* Fix: hero sub text orphan on small screens */
+.hero-sub { text-wrap: balance; }
+
+/* Fix: status strip flex direction collision */
+.status-strip { flex-direction: row !important; }
+@media (max-width: 360px) {
+  .status-strip { flex-direction: column !important; border-radius: 13px; }
+  .strip-item { border-right: none !important; border-bottom: 1px solid var(--border); }
+  .strip-item:last-child { border-bottom: none; }
+  .strip-java-otw { display: none; }
+}
+
+/* Fix: iOS 26 scroll bounce showing bg gap */
+html { background: var(--bg); }
+
+/* Fix: map section always has correct height */
+.map-cs-visual { min-height: 160px; }
+
+/* Fix: info panel z-index above everything */
+.info-panel { z-index: 10001; }
+.info-panel-backdrop { z-index: 10000; }
+
+/* Fix: modal close button cursor on iOS */
+.modal-close, .info-panel-close, .map-lb-btn { cursor: pointer; }
+
+/* Fix: scroll jank on iOS */
+.info-panel-body,
+.mobile-drawer,
+.modal { -webkit-overflow-scrolling: touch; }
+
+/* Fix: text rendering artifacts on Android */
+@media (max-width: 768px) {
+  .hero-title { transform: translateZ(0); }
+}
+
+/* Fix: back-to-top z-index below bottom nav on mobile */
+@media (max-width: 768px) {
+  .back-to-top { z-index: 8400; }
+}
+
+/* Fix: float bar never shows on mobile even if JS triggers it */
+@media (max-width: 768px) {
+  .float-bar { display: none !important; }
+}
+
+/* Fix: kb-hint never shows on mobile */
+@media (max-width: 768px) {
+  .kb-hint { display: none !important; }
+}
+
+/* iOS 26: reduce transparency when user prefers it */
+@media (prefers-reduced-transparency: reduce) {
+  .navbar, .float-bar, .mobile-bottom-nav, .info-panel, .mobile-drawer {
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    background: var(--bg) !important;
+  }
+}

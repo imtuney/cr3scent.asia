@@ -140,12 +140,14 @@
   <section id="home" class="hero" aria-labelledby="hero-h">
     <canvas id="particle-canvas" aria-hidden="true"></canvas>
 
-    <div class="hero-eyebrow" role="status">
-      <span class="pulse-dot" aria-hidden="true"></span>
-      Bedrock Live &middot; Java <em style="font-style:normal;opacity:.7">OTW</em>
-      <span class="eyebrow-sep" aria-hidden="true">·</span>
-      <i class="ph ph-star-fill" style="color:#f5c842;font-size:.8em" aria-hidden="true"></i>
-      <span style="color:var(--gold-hi);font-weight:700">1046</span>
+    <!-- DYNAMIC STATUS PILL -->
+    <div class="hero-status-pill" id="heroStatusPill" role="status" aria-live="polite">
+      <span class="hsp-dot" id="hspDot" aria-hidden="true"></span>
+      <span class="hsp-text" id="hspText">Checking…</span>
+      <span class="hsp-sep" aria-hidden="true">·</span>
+      <span class="hsp-players" id="hspPlayers">— online</span>
+      <span class="hsp-sep" aria-hidden="true">·</span>
+      <span class="hsp-ver">v1.26.12</span>
     </div>
 
     <!-- LIVE AGE TICKER -->
@@ -178,10 +180,7 @@
         <i class="ph ph-copy" aria-hidden="true"></i>Copy IP
       </button>
       <button class="btn btn-ghost" onclick="openSpecsModal()">
-        <i class="ph ph-cpu" aria-hidden="true"></i>Server Specs
-      </button>
-      <button class="btn btn-ghost btn-share" id="shareBtn" onclick="shareServer()" aria-label="Bagikan server">
-        <i class="ph ph-share-network" aria-hidden="true"></i>Share
+        <i class="ph ph-cpu" aria-hidden="true"></i>Specs
       </button>
     </div>
 
@@ -192,17 +191,21 @@
         <div class="strip-label">Status</div>
         <div class="strip-value strip-status-row">
           <span class="status-dot" id="statusDot" aria-hidden="true"></span>
-          <span id="statusText">Checking&hellip;</span>
+          <span id="statusText">Checking…</span>
         </div>
       </div>
       <div class="strip-item loading" id="si-players"
            onclick="checkServerStatus()" role="button" tabindex="0">
         <div class="strip-label">Players Online</div>
-        <div class="strip-value" id="playerCount" style="color:var(--green)">&mdash;</div>
+        <div class="strip-value" id="playerCount" style="color:var(--green)">—</div>
       </div>
       <div class="strip-item" onclick="calculateUptime()" role="button" tabindex="0">
         <div class="strip-label">Uptime</div>
-        <div class="strip-value" id="uptimeValue">&mdash;</div>
+        <div class="strip-value" id="uptimeValue">—</div>
+      </div>
+      <div class="strip-item strip-java-otw" aria-label="Java Edition status">
+        <div class="strip-label">Java</div>
+        <div class="strip-value" style="font-size:.82rem;color:var(--muted)">OTW 🔧</div>
       </div>
     </div>
 
@@ -399,6 +402,56 @@
 
         <!-- Player list still works via API -->
         <div class="map-players" id="mapPlayerList" aria-label="Pemain online" aria-live="polite"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- EVENT COUNTDOWN + MINI GAME -->
+  <section class="engage-section" aria-label="Event & Trivia">
+    <div class="section-inner">
+      <div class="engage-grid">
+
+        <!-- Event Countdown -->
+        <div class="engage-card event-card">
+          <div class="engage-card-header">
+            <div class="section-label" style="margin-bottom:0">Event Mendatang</div>
+            <div class="event-live-badge" id="eventBadge">
+              <span class="pulse-dot" style="background:var(--gold);box-shadow:0 0 8px var(--gold-glow)"></span>
+              SOON
+            </div>
+          </div>
+          <div class="event-title" id="eventTitle">Building Contest — Season 2</div>
+          <div class="event-desc" id="eventDesc">Build terbaik menangkan reward in-game eksklusif. Open untuk semua pemain.</div>
+          <div class="event-countdown" id="eventCountdown">
+            <div class="ecd-unit"><span class="ecd-num" id="ecdDays">--</span><span class="ecd-lbl">hari</span></div>
+            <span class="ecd-sep">:</span>
+            <div class="ecd-unit"><span class="ecd-num" id="ecdHours">--</span><span class="ecd-lbl">jam</span></div>
+            <span class="ecd-sep">:</span>
+            <div class="ecd-unit"><span class="ecd-num" id="ecdMins">--</span><span class="ecd-lbl">menit</span></div>
+          </div>
+          <a href="https://discord.gg/sSEARcnb2T" target="_blank" rel="noopener noreferrer"
+             class="btn btn-ghost engage-btn">
+            <i class="ph ph-bell" aria-hidden="true"></i>Get Notified
+          </a>
+        </div>
+
+        <!-- Server Trivia Mini Game -->
+        <div class="engage-card trivia-card" id="triviaCard">
+          <div class="engage-card-header">
+            <div class="section-label" style="margin-bottom:0">Quick Trivia</div>
+            <div class="trivia-score-badge" id="triviaBadge">
+              <i class="ph ph-star" aria-hidden="true"></i>
+              <span id="triviaScore">0</span> pts
+            </div>
+          </div>
+          <div class="trivia-q" id="triviaQ">Loading…</div>
+          <div class="trivia-options" id="triviaOptions" role="group" aria-label="Pilihan jawaban"></div>
+          <div class="trivia-result" id="triviaResult" aria-live="polite"></div>
+          <button class="btn btn-ghost engage-btn" id="triviaNext" onclick="nextTrivia()" style="display:none">
+            <i class="ph ph-arrow-right" aria-hidden="true"></i>Pertanyaan Berikutnya
+          </button>
+        </div>
+
       </div>
     </div>
   </section>
