@@ -356,51 +356,42 @@
       <div>
         <div class="section-label" aria-hidden="true">Dunia Cr3scent</div>
         <h2 class="section-heading" id="map-h">Live<br><em>World Map.</em></h2>
-        <p class="section-body">Peta dunia real-time akan hadir segera. Saat ini dalam proses setup untuk Season 2.</p>
+        <p class="section-body">Peta dunia real-time Cr3scent powered by BlueMap. Pantau posisi pemain, biome, dan bangunan secara real-time.</p>
       </div>
 
-      <div class="map-cs-card" id="mapCard">
-        <div class="map-cs-visual" aria-hidden="true">
-          <!-- animated placeholder grid -->
-          <div class="map-cs-grid"></div>
-          <div class="map-cs-orb orb1"></div>
-          <div class="map-cs-orb orb2"></div>
-          <div class="map-cs-dot pulsing" style="top:45%;left:50%"></div>
-          <div class="map-cs-label" style="top:44%;left:51%">Spawn</div>
-          <!-- corner brackets -->
-          <div class="map-preview-corner tl"></div>
-          <div class="map-preview-corner tr"></div>
-          <div class="map-preview-corner bl"></div>
-          <div class="map-preview-corner br"></div>
-        </div>
+      <!-- BlueMap Live Iframe -->
+      <div class="map-iframe-wrap" id="mapCard" style="position:relative;width:100%;border-radius:16px;overflow:hidden;border:1px solid var(--border);box-shadow:0 8px 40px rgba(0,0,0,.4);">
 
-        <div class="map-cs-body">
-          <div class="map-cs-badge">
-            <i class="ph ph-clock" aria-hidden="true"></i>
-            SEGERA HADIR
+        <!-- Top bar -->
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 16px;background:var(--surface1);border-bottom:1px solid var(--border);">
+          <div style="display:flex;align-items:center;gap:8px;font-size:.82rem;color:var(--muted);">
+            <span style="width:8px;height:8px;border-radius:50%;background:#22c55e;display:inline-block;box-shadow:0 0 6px #22c55e;animation:pulse 2s infinite;"></span>
+            <span style="color:var(--text);font-weight:500;">BlueMap Live</span>
+            <span>· Cr3scent World</span>
           </div>
-          <div class="map-cs-title">Dynmap sedang dalam setup</div>
-          <p class="map-cs-desc">Live Map akan aktif setelah konfigurasi Dynmap selesai untuk Season 2. Kamu bisa pantau posisi pemain, biome, dan bangunan secara real-time.</p>
-
-          <a href="https://map.cr3scent.asia" target="_blank" rel="noopener noreferrer"
-             class="btn btn-ghost map-cs-btn" id="mapExternalBtn">
-            <i class="ph ph-arrow-square-out" aria-hidden="true"></i>
-            Cek Status Map
-          </a>
-        </div>
-
-        <div class="map-cs-meta">
-          <div class="map-meta-item">
-            <i class="ph ph-users" aria-hidden="true"></i>
-            <span id="mapPlayerCount">— pemain online</span>
-          </div>
-          <div class="map-meta-item">
-            <i class="ph ph-globe-hemisphere-east" aria-hidden="true"></i>
-            <span>Overworld · Nether · End</span>
+          <div style="display:flex;align-items:center;gap:8px;">
+            <span style="font-size:.78rem;color:var(--muted);" id="mapPlayerCount">— online</span>
+            <a href="https://map.cr3scent.asia" target="_blank" rel="noopener noreferrer"
+               style="display:flex;align-items:center;gap:4px;font-size:.78rem;color:var(--gold);text-decoration:none;padding:4px 10px;border:1px solid var(--gold);border-radius:6px;transition:all .2s;"
+               onmouseover="this.style.background='rgba(201,168,76,.1)'" onmouseout="this.style.background='transparent'">
+              <i class="ph ph-arrow-square-out" aria-hidden="true"></i> Fullscreen
+            </a>
           </div>
         </div>
 
-        <!-- Player list still works via API -->
+        <!-- Iframe -->
+        <iframe
+          src="https://map.cr3scent.asia"
+          title="Cr3scent Live Map"
+          width="100%"
+          height="520"
+          style="display:block;border:none;background:#0a0a0c;"
+          loading="lazy"
+          allowfullscreen
+          aria-label="BlueMap live world map Cr3scent">
+        </iframe>
+
+        <!-- Player list -->
         <div class="map-players" id="mapPlayerList" aria-label="Pemain online" aria-live="polite"></div>
       </div>
     </div>
