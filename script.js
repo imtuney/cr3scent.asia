@@ -4,7 +4,7 @@
    CONFIG — edit di sini untuk setup map nanti
    Set MAP_ENABLED = true dan isi MAP_URL setelah Dynmap siap
 ════════════════════════════════════════════════════════════ */
-const MAP_ENABLED = false;                        // ← ganti true kalau map sudah aktif
+const MAP_ENABLED = true;                        // ← ganti true kalau map sudah aktif
 const MAP_URL     = 'https://map.cr3scent.asia';  // ← URL Dynmap kamu
 /* ═══════════════════════════════════════════════════════════ */
 
