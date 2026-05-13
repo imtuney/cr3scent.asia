@@ -150,17 +150,6 @@
       <span class="hsp-ver">v1.26.12</span>
     </div>
 
-    <!-- LIVE AGE TICKER -->
-    <div class="hero-age-ticker" aria-live="off" aria-label="Server uptime">
-      <span class="hat-unit"><span class="hat-num" id="tickDays">0</span><span class="hat-lbl">hari</span></span>
-      <span class="hat-sep">:</span>
-      <span class="hat-unit"><span class="hat-num" id="tickHours">00</span><span class="hat-lbl">jam</span></span>
-      <span class="hat-sep">:</span>
-      <span class="hat-unit"><span class="hat-num" id="tickMins">00</span><span class="hat-lbl">menit</span></span>
-      <span class="hat-sep">:</span>
-      <span class="hat-unit"><span class="hat-num" id="tickSecs">00</span><span class="hat-lbl">detik</span></span>
-    </div>
-
     <h1 class="hero-title" id="hero-h">
       <span class="dim" aria-hidden="true">SURVIVAL &middot; NO CIRCLE &middot; SOCIAL</span>
       <span class="gold">Cr3scent</span>
@@ -197,15 +186,15 @@
       <div class="strip-item loading" id="si-players"
            onclick="checkServerStatus()" role="button" tabindex="0">
         <div class="strip-label">Players Online</div>
-        <div class="strip-value" id="playerCount" style="color:var(--green)">—</div>
+        <div class="strip-value strip-players" id="playerCount">—</div>
       </div>
       <div class="strip-item" onclick="calculateUptime()" role="button" tabindex="0">
         <div class="strip-label">Uptime</div>
         <div class="strip-value" id="uptimeValue">—</div>
       </div>
-      <div class="strip-item strip-java-otw" aria-label="Java Edition status">
+      <div class="strip-item" aria-label="Java Edition status">
         <div class="strip-label">Java</div>
-        <div class="strip-value" style="font-size:.82rem;color:var(--muted)">OTW 🔧</div>
+        <div class="strip-value strip-soon">Segera</div>
       </div>
     </div>
 
@@ -223,11 +212,11 @@
       <div class="ip-meta">
         <div class="ip-badge">
           <i class="ph ph-plug" aria-hidden="true"></i>Port: 25655
-          <span class="tag tag-o">Bedrock ✓</span>
+          <span class="tag tag-o">Bedrock</span>
         </div>
         <div class="ip-badge">
           <i class="ph ph-clock" aria-hidden="true"></i>
-          Java<span class="tag" style="background:rgba(255,255,255,.07);color:var(--muted);border:1px solid var(--border)">OTW</span>
+          Java<span class="tag tag-muted">Segera</span>
         </div>
       </div>
     </div>
@@ -242,7 +231,7 @@
     <div class="section-inner">
       <div class="info-tiles-grid">
 
-        <div class="info-tile" onclick="openInfoPanel('features')"
+        <div class="info-tile reveal" data-d="1" onclick="openInfoPanel('features')"
              role="button" tabindex="0" aria-label="Lihat fitur server"
              onkeydown="if(event.key==='Enter'||event.key===' '){openInfoPanel('features');event.preventDefault();}">
           <div class="info-tile-icon" aria-hidden="true"><i class="ph ph-tree-evergreen"></i></div>
@@ -253,7 +242,7 @@
           <i class="ph ph-arrow-right info-tile-arrow" aria-hidden="true"></i>
         </div>
 
-        <div class="info-tile" onclick="openInfoPanel('plugins')"
+        <div class="info-tile reveal" data-d="2" onclick="openInfoPanel('plugins')"
              role="button" tabindex="0" aria-label="Lihat plugin stack"
              onkeydown="if(event.key==='Enter'||event.key===' '){openInfoPanel('plugins');event.preventDefault();}">
           <div class="info-tile-icon" aria-hidden="true"><i class="ph ph-plugs-connected"></i></div>
@@ -264,7 +253,7 @@
           <i class="ph ph-arrow-right info-tile-arrow" aria-hidden="true"></i>
         </div>
 
-        <div class="info-tile" onclick="openInfoPanel('specs')"
+        <div class="info-tile reveal" data-d="3" onclick="openInfoPanel('specs')"
              role="button" tabindex="0" aria-label="Lihat spesifikasi server"
              onkeydown="if(event.key==='Enter'||event.key===' '){openInfoPanel('specs');event.preventDefault();}">
           <div class="info-tile-icon" aria-hidden="true"><i class="ph ph-cpu"></i></div>
@@ -275,7 +264,7 @@
           <i class="ph ph-arrow-right info-tile-arrow" aria-hidden="true"></i>
         </div>
 
-        <div class="info-tile" onclick="openInfoPanel('stats')"
+        <div class="info-tile reveal" data-d="4" onclick="openInfoPanel('stats')"
              role="button" tabindex="0" aria-label="Lihat statistik server"
              onkeydown="if(event.key==='Enter'||event.key===' '){openInfoPanel('stats');event.preventDefault();}">
           <div class="info-tile-icon" aria-hidden="true"><i class="ph ph-chart-bar"></i></div>
@@ -293,7 +282,7 @@
   <!-- VIDEO -->
   <section id="preview" class="video-section" aria-labelledby="vid-h">
     <div class="section-inner">
-      <div>
+      <div class="reveal">
         <div class="section-label" aria-hidden="true">Preview &amp; Tutorial</div>
         <h2 class="section-heading" id="vid-h">Tonton &amp; Langsung<br><em>Join.</em></h2>
         <p class="section-body">Tutorial cara join tersedia di YouTube. Gameplay &amp; konten server ada di TikTok kami.</p>
@@ -302,7 +291,7 @@
       <div class="video-dual">
 
         <!-- Tutorial Card — HIGHLIGHTED -->
-        <div class="video-card tutorial"
+        <div class="video-card tutorial reveal" data-d="1"
              onclick="openTutorialVideo()"
              role="button" tabindex="0"
              aria-label="Tonton tutorial cara join Cr3scent di YouTube"
@@ -328,7 +317,7 @@
         </div>
 
         <!-- TikTok Gameplay Card -->
-        <div class="video-card tiktok"
+        <div class="video-card tiktok reveal" data-d="2"
              onclick="openTikTok()"
              role="button" tabindex="0"
              aria-label="Tonton gameplay Cr3scent di TikTok @cr3scentdc"
@@ -353,27 +342,26 @@
   <!-- LIVE MAP -->
   <section id="map" class="map-section" aria-labelledby="map-h">
     <div class="section-inner">
-      <div>
+      <div class="reveal">
         <div class="section-label" aria-hidden="true">Dunia Cr3scent</div>
         <h2 class="section-heading" id="map-h">Live<br><em>World Map.</em></h2>
         <p class="section-body">Peta dunia real-time Cr3scent powered by BlueMap. Pantau posisi pemain, biome, dan bangunan secara real-time.</p>
       </div>
 
       <!-- BlueMap Live Iframe -->
-      <div class="map-iframe-wrap" id="mapCard" style="position:relative;width:100%;border-radius:16px;overflow:hidden;border:1px solid var(--border);box-shadow:0 8px 40px rgba(0,0,0,.4);">
+      <div class="map-iframe-wrap reveal" id="mapCard">
 
         <!-- Top bar -->
-        <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 16px;background:var(--surface1);border-bottom:1px solid var(--border);">
-          <div style="display:flex;align-items:center;gap:8px;font-size:.82rem;color:var(--muted);">
-            <span style="width:8px;height:8px;border-radius:50%;background:#22c55e;display:inline-block;box-shadow:0 0 6px #22c55e;animation:pulse 2s infinite;"></span>
-            <span style="color:var(--text);font-weight:500;">BlueMap Live</span>
-            <span>· Cr3scent World</span>
+        <div class="map-topbar">
+          <div class="map-topbar-left">
+            <span class="map-live-dot" aria-hidden="true"></span>
+            <span class="map-topbar-title">BlueMap Live</span>
+            <span class="map-topbar-sub">· Cr3scent World</span>
           </div>
-          <div style="display:flex;align-items:center;gap:8px;">
-            <span style="font-size:.78rem;color:var(--muted);" id="mapPlayerCount">— online</span>
+          <div class="map-topbar-right">
+            <span class="map-topbar-players" id="mapPlayerCount">— online</span>
             <a href="https://map.cr3scent.asia" target="_blank" rel="noopener noreferrer"
-               style="display:flex;align-items:center;gap:4px;font-size:.78rem;color:var(--gold);text-decoration:none;padding:4px 10px;border:1px solid var(--gold);border-radius:6px;transition:all .2s;"
-               onmouseover="this.style.background='rgba(201,168,76,.1)'" onmouseout="this.style.background='transparent'">
+               class="map-fullscreen-btn">
               <i class="ph ph-arrow-square-out" aria-hidden="true"></i> Fullscreen
             </a>
           </div>
@@ -397,65 +385,30 @@
     </div>
   </section>
 
-  <!-- EVENT COUNTDOWN + MINI GAME -->
-  <section class="engage-section" aria-label="Event & Trivia">
+  <!-- MANIFESTO -->
+  <section class="manifesto-section" aria-label="Brand statement">
     <div class="section-inner">
-      <div class="engage-grid">
-
-        <!-- Event Countdown -->
-        <div class="engage-card event-card">
-          <div class="engage-card-header">
-            <div class="section-label" style="margin-bottom:0">Event Mendatang</div>
-            <div class="event-live-badge" id="eventBadge">
-              <span class="pulse-dot" style="background:var(--gold);box-shadow:0 0 8px var(--gold-glow)"></span>
-              SOON
-            </div>
-          </div>
-          <div class="event-title" id="eventTitle">Building Contest — Season 2</div>
-          <div class="event-desc" id="eventDesc">Build terbaik menangkan reward in-game eksklusif. Open untuk semua pemain.</div>
-          <div class="event-countdown" id="eventCountdown">
-            <div class="ecd-unit"><span class="ecd-num" id="ecdDays">--</span><span class="ecd-lbl">hari</span></div>
-            <span class="ecd-sep">:</span>
-            <div class="ecd-unit"><span class="ecd-num" id="ecdHours">--</span><span class="ecd-lbl">jam</span></div>
-            <span class="ecd-sep">:</span>
-            <div class="ecd-unit"><span class="ecd-num" id="ecdMins">--</span><span class="ecd-lbl">menit</span></div>
-          </div>
-          <a href="https://discord.gg/sSEARcnb2T" target="_blank" rel="noopener noreferrer"
-             class="btn btn-ghost engage-btn">
-            <i class="ph ph-bell" aria-hidden="true"></i>Get Notified
-          </a>
-        </div>
-
-        <!-- Server Trivia Mini Game -->
-        <div class="engage-card trivia-card" id="triviaCard">
-          <div class="engage-card-header">
-            <div class="section-label" style="margin-bottom:0">Quick Trivia</div>
-            <div class="trivia-score-badge" id="triviaBadge">
-              <i class="ph ph-star" aria-hidden="true"></i>
-              <span id="triviaScore">0</span> pts
-            </div>
-          </div>
-          <div class="trivia-q" id="triviaQ">Loading…</div>
-          <div class="trivia-options" id="triviaOptions" role="group" aria-label="Pilihan jawaban"></div>
-          <div class="trivia-result" id="triviaResult" aria-live="polite"></div>
-          <button class="btn btn-ghost engage-btn" id="triviaNext" onclick="nextTrivia()" style="display:none">
-            <i class="ph ph-arrow-right" aria-hidden="true"></i>Pertanyaan Berikutnya
-          </button>
-        </div>
-
-      </div>
+      <blockquote class="manifesto reveal">
+        <p class="manifesto-q">Bukan server biasa.</p>
+        <p class="manifesto-body">
+          Cr3scent dibangun bukan untuk siapa saja — tapi untuk yang mencari
+          komunitas yang nyata. Tempat nongkrong, bertumbuh, dan meninggalkan
+          sesuatu yang berarti di dunia yang kita bangun bersama.
+        </p>
+        <cite class="manifesto-cite">— Cr3scent Network, Season 2</cite>
+      </blockquote>
     </div>
   </section>
 
   <!-- JOIN -->
   <section id="join" class="join-section" aria-labelledby="join-h">
     <div class="section-inner">
-      <div>
+      <div class="reveal">
         <div class="section-label" aria-hidden="true">Gabung Sekarang</div>
         <h2 class="section-heading" id="join-h">Mulai<br><em>Petualanganmu.</em></h2>
       </div>
       <div class="join-grid">
-        <article class="join-card"
+        <article class="join-card reveal" data-d="1"
                  onclick="window.open('https://discord.gg/sSEARcnb2T','_blank','noopener')"
                  role="button" tabindex="0">
           <div class="join-card-icon discord" aria-hidden="true"><i class="ph ph-discord-logo"></i></div>
@@ -466,7 +419,7 @@
             <i class="ph ph-arrow-right" aria-hidden="true"></i>Gabung
           </a>
         </article>
-        <article class="join-card" onclick="copyIP()" role="button" tabindex="0">
+        <article class="join-card reveal" data-d="2" onclick="copyIP()" role="button" tabindex="0">
           <div class="join-card-icon mc" aria-hidden="true"><i class="ph ph-game-controller"></i></div>
           <h3>Main Minecraft</h3>
           <p>Connect ke mc.cr3scent.asia dan mulai petualanganmu. Java &amp; Bedrock tersupport.</p>
@@ -474,7 +427,7 @@
             <i class="ph ph-copy" aria-hidden="true"></i>Copy IP
           </button>
         </article>
-        <article class="join-card"
+        <article class="join-card reveal" data-d="3"
                  onclick="window.open('https://minecraft-mp.com/server-s355797','_blank','noopener')"
                  role="button" tabindex="0">
           <div class="join-card-icon vote" aria-hidden="true"><i class="ph ph-star"></i></div>
@@ -492,12 +445,12 @@
   <!-- STAFF -->
   <section id="staff" class="staff-section" aria-labelledby="staff-h">
     <div class="section-inner">
-      <div>
+      <div class="reveal">
         <div class="section-label" aria-hidden="true">Tim Kami</div>
         <h2 class="section-heading" id="staff-h">Di Balik<br><em>Cr3scent.</em></h2>
       </div>
       <div class="staff-grid">
-        <article class="staff-card">
+        <article class="staff-card reveal" data-d="1">
           <div class="staff-avatar" aria-hidden="true"><i class="ph ph-crown"></i></div>
           <div class="staff-info">
             <div class="staff-name">Muhammad Daffy Ramadhan</div>
@@ -505,7 +458,7 @@
             <div class="staff-desc">Bertanggung jawab atas visi, arah, dan keberlangsungan Cr3scent Network.</div>
           </div>
         </article>
-        <article class="staff-card">
+        <article class="staff-card reveal" data-d="2">
           <div class="staff-avatar" aria-hidden="true"><i class="ph ph-bank"></i></div>
           <div class="staff-info">
             <div class="staff-name">Stevadi</div>
@@ -513,7 +466,7 @@
             <div class="staff-desc">Mendukung pertumbuhan infrastruktur dan pengembangan server.</div>
           </div>
         </article>
-        <article class="staff-card">
+        <article class="staff-card reveal" data-d="3">
           <div class="staff-avatar" aria-hidden="true"><i class="ph ph-code"></i></div>
           <div class="staff-info">
             <div class="staff-name">Sanopalz</div>
@@ -521,7 +474,7 @@
             <div class="staff-desc">Mengelola plugin, konfigurasi server, dan pengembangan teknis.</div>
           </div>
         </article>
-        <article class="staff-card">
+        <article class="staff-card reveal" data-d="4">
           <div class="staff-avatar" aria-hidden="true"><i class="ph ph-code"></i></div>
           <div class="staff-info">
             <div class="staff-name">Kevin</div>
@@ -536,7 +489,7 @@
   <!-- CHANGELOG -->
   <section id="changelog" class="changelog-section" aria-labelledby="cl-h">
     <div class="section-inner">
-      <div>
+      <div class="reveal">
         <div class="section-label" aria-hidden="true">Update Log</div>
         <h2 class="section-heading" id="cl-h">Riwayat<br><em>Pembaruan.</em></h2>
         <p class="section-body">Semua perubahan dan pembaruan yang telah diterapkan pada server dan website Cr3scent.</p>

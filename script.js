@@ -11,11 +11,29 @@ const MAP_URL     = 'https://map.cr3scent.asia';  // ← URL Dynmap kamu
 /* ── PAGE LOAD ──────────────────────────────────────────────── */
 document.addEventListener('DOMContentLoaded', () => {
   document.documentElement.classList.add('ready');
-  setTimeout(() => {
-    const l = document.getElementById('loader');
-    if (l) l.classList.add('gone');
-  }, 1050);
+
+  // Promise-based loader: minimum 650ms OR window.load, whichever longer
+  const loaderMin  = new Promise(r => setTimeout(r, 650));
+  const pageReady  = new Promise(r => window.addEventListener('load', r, { once: true }));
+  Promise.all([loaderMin, pageReady]).then(() => {
+    requestAnimationFrame(() => {
+      const l = document.getElementById('loader');
+      if (l) l.classList.add('gone');
+    });
+  });
 });
+
+/* ── SCROLL REVEAL ──────────────────────────────────────────── */
+const revealObserver = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.classList.add('visible');
+      revealObserver.unobserve(e.target);
+    }
+  });
+}, { rootMargin: '0px 0px -6% 0px', threshold: 0.04 });
+
+document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
 
 /* ── THEME ──────────────────────────────────────────────────── */
 const HTML = document.documentElement;
@@ -724,34 +742,6 @@ window.addEventListener('scroll', () => {
    – Discord member count
 ════════════════════════════════════════════════════════════ */
 
-/* ── LIVE AGE TICKER ─────────────────────────────────────── */
-(function initAgeTicker() {
-  const LAUNCH = new Date('2026-03-19T00:00:00+07:00').getTime();
-  const elDays  = document.getElementById('tickDays');
-  const elHours = document.getElementById('tickHours');
-  const elMins  = document.getElementById('tickMins');
-  const elSecs  = document.getElementById('tickSecs');
-  if (!elDays) return;
-
-  function pad(n) { return String(n).padStart(2, '0'); }
-
-  function tick() {
-    const diff = Date.now() - LAUNCH;
-    if (diff < 0) return;
-    const totalSecs = Math.floor(diff / 1000);
-    const days  = Math.floor(totalSecs / 86400);
-    const hours = Math.floor((totalSecs % 86400) / 3600);
-    const mins  = Math.floor((totalSecs % 3600) / 60);
-    const secs  = totalSecs % 60;
-    elDays.textContent  = days;
-    elHours.textContent = pad(hours);
-    elMins.textContent  = pad(mins);
-    elSecs.textContent  = pad(secs);
-  }
-  tick();
-  setInterval(tick, 1000);
-})();
-
 /* ── WEB SHARE API ───────────────────────────────────────── */
 (function initShare() {
   const btn = document.getElementById('shareBtn');
@@ -999,145 +989,6 @@ checkServerStatus = async function() {
 updateStatusPill(null, 0);
 
 /* ── EVENT COUNTDOWN ────────────────────────────────────────── */
-(function initEventCountdown() {
-  // Next event date — edit this when ada event baru
-  const EVENT_DATE  = new Date('2026-05-01T20:00:00+07:00');
-  const EVENT_NAME  = 'Building Contest — Season 2';
-  const EVENT_DESC  = 'Build terbaik menangkan reward in-game eksklusif. Open untuk semua pemain.';
-
-  const elTitle = document.getElementById('eventTitle');
-  const elDesc  = document.getElementById('eventDesc');
-  const ecdD    = document.getElementById('ecdDays');
-  const ecdH    = document.getElementById('ecdHours');
-  const ecdM    = document.getElementById('ecdMins');
-  const badge   = document.getElementById('eventBadge');
-
-  if (!ecdD) return;
-  if (elTitle) elTitle.textContent = EVENT_NAME;
-  if (elDesc)  elDesc.textContent  = EVENT_DESC;
-
-  function pad(n) { return String(Math.max(0,n)).padStart(2,'0'); }
-
-  function tick() {
-    const diff = EVENT_DATE.getTime() - Date.now();
-    if (diff <= 0) {
-      ecdD.textContent = '00'; ecdH.textContent = '00'; ecdM.textContent = '00';
-      if (badge) badge.innerHTML = '<span class="pulse-dot" style="background:var(--green);box-shadow:0 0 8px var(--green)"></span>LIVE';
-      return;
-    }
-    const d = Math.floor(diff / 86400000);
-    const h = Math.floor((diff % 86400000) / 3600000);
-    const m = Math.floor((diff % 3600000)  / 60000);
-    ecdD.textContent = d;
-    ecdH.textContent = pad(h);
-    ecdM.textContent = pad(m);
-  }
-  tick();
-  setInterval(tick, 60000);
-})();
-
-/* ── SERVER TRIVIA MINI GAME ────────────────────────────────── */
-(function initTrivia() {
-  const QUESTIONS = [
-    {
-      q: 'Berapa port yang dipakai untuk connect Bedrock ke Cr3scent?',
-      options: ['19132', '25565', '25655', '19321'],
-      answer: 2,
-      fact: '25655 adalah port Bedrock Cr3scent. Tanpa port ini, kamu tidak bisa connect!'
-    },
-    {
-      q: 'Apa nama server address Cr3scent?',
-      options: ['play.cr3scent.id', 'mc.cr3scent.asia', 'cr3scent.net', 'bedrock.cr3scent.com'],
-      answer: 1,
-      fact: 'mc.cr3scent.asia bisa dipakai di Java maupun Bedrock.'
-    },
-    {
-      q: 'Versi Minecraft berapa yang sedang berjalan di Cr3scent Season 2?',
-      options: ['1.21.1', '1.20.4', '1.26.12', '1.19.4'],
-      answer: 2,
-      fact: '1.26.12 adalah update "Tiny Takeover" — Season 2 Cr3scent!'
-    },
-    {
-      q: 'Command apa untuk registrasi pertama kali di Cr3scent?',
-      options: ['/register [pw] [pw]', '/signup [pw]', '/auth [pw]', '/join [pw]'],
-      answer: 0,
-      fact: 'Gunakan /register lalu /login setiap kali join. Jangan lupa password-mu!'
-    },
-    {
-      q: 'Siapa Owner & Founder Cr3scent?',
-      options: ['Stevadi', 'Sanopalz', 'Kevin', 'Muhammad Daffy'],
-      answer: 3,
-      fact: 'Muhammad Daffy Ramadhan adalah Owner & Founder Cr3scent Network.'
-    },
-    {
-      q: 'Apa plugin yang dipakai Cr3scent untuk crossplay Java & Bedrock?',
-      options: ['ViaVersion', 'Geyser + Floodgate', 'BungeeCord', 'Waterfall'],
-      answer: 1,
-      fact: 'Geyser + Floodgate memungkinkan pemain Bedrock main di server Java!'
-    },
-    {
-      q: 'Cr3scent berjalan di hosting provider mana?',
-      options: ['GreenCloud', 'Hostinger VPS', 'Raehost', 'BisectHosting'],
-      answer: 2,
-      fact: 'Raehost dengan 8GB DDR5 RAM dan 24GB NVMe SSD untuk performa optimal.'
-    },
-  ];
-
-  let current = -1;
-  let score   = 0;
-  let answered = false;
-  const shuffled = [...QUESTIONS].sort(() => Math.random() - .5);
-
-  const elQ      = document.getElementById('triviaQ');
-  const elOpts   = document.getElementById('triviaOptions');
-  const elResult = document.getElementById('triviaResult');
-  const elNext   = document.getElementById('triviaNext');
-  const elScore  = document.getElementById('triviaScore');
-  if (!elQ) return;
-
-  function showQuestion() {
-    current = (current + 1) % shuffled.length;
-    const q = shuffled[current];
-    answered = false;
-
-    elQ.textContent = q.q;
-    elResult.textContent = '';
-    elResult.className = 'trivia-result';
-    if (elNext) elNext.style.display = 'none';
-
-    elOpts.innerHTML = q.options.map((opt, i) =>
-      `<button class="trivia-opt" onclick="window._triviaAnswer(${i})" data-idx="${i}">${opt}</button>`
-    ).join('');
-  }
-
-  window._triviaAnswer = function(idx) {
-    if (answered) return;
-    answered = true;
-    const q    = shuffled[current];
-    const btns = elOpts.querySelectorAll('.trivia-opt');
-    btns.forEach(b => b.disabled = true);
-
-    if (idx === q.answer) {
-      btns[idx].classList.add('correct');
-      score++;
-      if (elScore) elScore.textContent = score;
-      elResult.textContent = '✓ Betul! ' + q.fact;
-      elResult.className = 'trivia-result correct';
-      if (window._launchConfetti && score % 3 === 0) window._launchConfetti();
-    } else {
-      btns[idx].classList.add('wrong');
-      btns[q.answer].classList.add('correct');
-      elResult.textContent = '✗ Salah. ' + q.fact;
-      elResult.className = 'trivia-result wrong';
-    }
-
-    if (elNext) elNext.style.display = 'inline-flex';
-  };
-
-  window.nextTrivia = showQuestion;
-  showQuestion();
-})();
-
 /* ── BUG FIX: openMapFull from bottom nav shows toast on mobile ── */
 const _origOpenMap = openMapFull;
 openMapFull = function() {
